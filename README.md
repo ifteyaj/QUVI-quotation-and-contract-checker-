@@ -21,6 +21,39 @@ QUVI is being built to make those checks more consistent and explainable.
 - Show the evidence and reasons supporting each finding.
 - Escalate uncertain or unreadable information instead of guessing.
 
+
+
+
+## Documents
+1. [Project overview](docs/project-overview.md) — purpose, scope, users, principles, and success criteria.
+2. [Technical architecture](docs/architecture.md) — components, fixed pipeline, stack, persistence, safety, and architecture decisions.
+3. [Implementation specification](docs/implementation-spec.md) — screens, states, fields, API outline, and implementation requirements.
+4. [Business rules](docs/business-rules.md) — supplied policy, threshold interpretation, decision precedence, and purchase request.
+5. [Evaluation and test plan](docs/evaluation-test-plan.md) — ground truth, metrics, test cases, acceptance criteria, and reporting.
+6. [Batch workflow](docs/batch-workflow.md) — batch lifecycle, file isolation, statuses, resilience, and UI.
+7. [API and data model](docs/api-and-data-model.md) — endpoint inventory and conceptual entities.
+8. [Architecture diagrams](docs/architecture-diagrams.md) — Mermaid diagrams for pipeline, state, batch, and review flows.
+9. [Data dictionary](docs/data-dictionary.md) — field definitions, types, validation rules, and PR reference data.
+10. [Decision log](docs/decisions.md) — architecture and policy decision records.
+11. [Product requirements](docs/prd.md) — product goals, functional requirements, and acceptance criteria.
+12. [Prompt design](docs/prompt-design.md) — LLM extraction prompt, safety, and validation approach.
+13. [Submission note](docs/assessment/submission-note.md) — challenge submission summary and outcomes.
+14. [Test report](docs/assessment/test-report.md) — test execution template and evaluation records.
+
+## Important source-data note
+The challenge brief/README describes ten supplier packs. At the time these documents were prepared, only `supplier-pack-01.pdf` and `supplier-pack-02.pdf` were present in the working files. Do not claim a full ten-file evaluation until packs 03–10 are available and evaluated.
+
+## Suggested build order
+1. Repository skeleton, configuration, typed models, and policy tests.
+2. PDF intake and text extraction.
+3. Structured extraction adapter and Pydantic validation.
+4. Purchase request matching and deterministic rule engine.
+5. Evidence/result persistence and single-document API.
+6. Batch workflow and resilient status aggregation.
+7. Frontend screens and human review.
+8. Evaluation harness, sample run, README, demo, and one-page submission note.
+
+
 ## Design principles
 
 - **Evidence over assumptions:** retain source details for extracted values and findings.
@@ -45,12 +78,16 @@ This is the intended stack; components may change as development and evaluation 
 
 ## Project structure
 
-The repository structure will be introduced incrementally. The planned application areas are:
+Current high-level layout:
 
-- `apps/web` — web interface
-- `services/api` — document processing and verification API
-- `tests` — automated tests and evaluation cases
-- `docs/` — project and implementation documentation
+- `README.md` — project overview and documentation index
+- `AGENTS.md` — AI coding assistant instructions for the repository root
+- `docs/` — project, architecture, API, policy, and assessment documentation
+- `quvi/` — Next.js frontend application
+- `quvi/backend/` — FastAPI backend, Python virtual environment, and backend entrypoint
+- `quvi/AGENTS.md` — Next.js-specific AI coding instructions for the app directory
+
+Planned or future application areas described in earlier planning included `apps/web`, `services/api`, and `tests/`; the current implementation uses `quvi/` and `quvi/backend/` instead. Update this section if the physical layout changes.
 
 ## Getting started
 
