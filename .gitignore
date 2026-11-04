@@ -9,3 +9,6 @@ frontend/.next/
 .env*
 
 .next/
+
+# Local-only submission notes
+docs/assessment/submission-note.md
