@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSyncExternalStore, useState } from "react";
@@ -115,18 +116,14 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <>
       <div className="flex h-16 items-center border-b border-border px-4">
-        <div className="flex items-center gap-2.5">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <ShieldCheck className="size-5" />
-          </div>
-          <div className="leading-tight">
-            <span className="block text-[15px] font-bold tracking-tight text-foreground">
-              QUVI
-            </span>
-            <span className="block text-[10px] text-muted-foreground">
-              Clarity in every quote.
-            </span>
-          </div>
+        <div className="flex flex-col justify-center gap-1">
+          <Image
+            src="/QUVI_logo.svg"
+            alt="QUVI"
+            width={220}
+            height={80}
+            className="h-10 w-auto max-w-[200px] object-contain"
+          />
         </div>
       </div>
 
