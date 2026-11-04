@@ -179,11 +179,11 @@ function VerificationsContent() {
     key === "all" ? statusFilter === null : statusFilter === key;
 
   return (
-    <section className="mx-auto w-full max-w-6xl space-y-4 overflow-x-hidden px-4 py-4 md:px-6 md:py-6">
+    <section className="mx-auto w-full max-w-6xl space-y-3 overflow-x-hidden px-4 py-4 md:px-6 md:py-6">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="space-y-1">
+        <div className="space-y-0">
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-            Verifications
+            Verification List
           </h1>
           <p className="text-sm text-muted-foreground">
             View and manage all supplier quotation verifications.
