@@ -40,9 +40,7 @@ const primaryNavigation: NavigationItem[] = [
   { label: "Rules & Policies", href: "/rules-policy", icon: ShieldCheck },
 ];
 
-const secondaryNavigation: NavigationItem[] = [
-  { label: "Settings", icon: Settings, comingSoon: true },
-];
+const secondaryNavigation: NavigationItem[] = [];
 
 function isActive(pathname: string, href: string) {
   if (href === "/") {
@@ -149,7 +147,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
         ))}
       </nav>
 
-      <div className="px-3 py-2">
+      <div className="flex items-center gap-1 px-3 py-2">
         <button
           type="button"
           aria-label="Toggle colour theme"
@@ -162,6 +160,13 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
             <Moon className="size-4" />
           )}
         </button>
+        <span
+          aria-disabled="true"
+          title="Settings (coming soon)"
+          className="inline-flex size-9 cursor-not-allowed items-center justify-center rounded-lg text-muted-foreground/60"
+        >
+          <Settings className="size-4 shrink-0" />
+        </span>
       </div>
 
       <div className="border-t border-border px-3 py-2">
