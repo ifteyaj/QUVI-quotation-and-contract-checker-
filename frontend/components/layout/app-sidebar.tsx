@@ -2,23 +2,39 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import {
-  Building2,
   ClipboardList,
-  LayoutDashboard,
-  Scale,
+  FileText,
+  House,
+  Menu,
+  MessagesSquare,
   Settings,
   ShieldCheck,
+  X,
+  Zap,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-const navigation = [
-  { label: "Dashboard", href: "/", icon: LayoutDashboard },
-  { label: "Verifications", href: "/verifications", icon: ShieldCheck },
-  { label: "Purchase Requests", href: "/purchase-requests", icon: ClipboardList },
-  { label: "Rules & Policy", href: "/rules-policy", icon: Scale },
-  { label: "Settings", href: "/settings", icon: Settings },
+type NavigationItem = {
+  label: string;
+  icon: typeof House;
+  href?: string;
+  comingSoon?: boolean;
+};
+
+const primaryNavigation: NavigationItem[] = [
+  { label: "Overview", href: "/", icon: House },
+  { label: "New Verification", href: "/verifications/new", icon: Zap },
+  { label: "Quotations", icon: FileText, comingSoon: true },
+  { label: "Review Queue", icon: MessagesSquare, comingSoon: true },
+  { label: "Purchase Requisitions", href: "/purchase-requests", icon: ClipboardList },
+  { label: "Rules & Policies", href: "/rules-policy", icon: ShieldCheck },
+];
+
+const secondaryNavigation: NavigationItem[] = [
+  { label: "Settings", icon: Settings, comingSoon: true },
 ];
 
 function isActive(pathname: string, href: string) {
@@ -29,60 +45,152 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function AppSidebar() {
+function NavigationRow({
+  item,
+  active,
+  onNavigate,
+}: {
+  item: NavigationItem;
+  active: boolean;
+  onNavigate?: () => void;
+}) {
+  const Icon = item.icon;
+
+  if (item.comingSoon || !item.href) {
+    return (
+      <div
+        aria-disabled="true"
+        className="flex cursor-not-allowed items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground/60"
+      >
+        <Icon className="size-[18px] shrink-0" />
+        <span className="whitespace-nowrap">{item.label}</span>
+        <span className="ml-auto shrink-0 whitespace-nowrap rounded-full bg-muted px-1.5 py-0.5 text-[9px] font-medium tracking-wide text-muted-foreground">
+          Coming soon
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      href={item.href}
+      onClick={onNavigate}
+      aria-current={active ? "page" : undefined}
+      className={cn(
+        "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+        active
+          ? "bg-primary-light text-primary"
+          : "text-foreground hover:bg-muted"
+      )}
+    >
+      <Icon className="size-[18px]" />
+      <span>{item.label}</span>
+    </Link>
+  );
+}
+
+function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
 
   return (
-    <aside className="flex w-64 shrink-0 flex-col border-r border-border bg-card">
-      <div className="flex h-16 items-center gap-3 border-b border-border px-6">
-        <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-          <ShieldCheck className="size-4" />
+    <>
+      <div className="px-6 pb-7 pt-7">
+        <div className="flex items-center gap-3">
+          <div className="flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
+            <ShieldCheck className="size-6" />
+          </div>
+          <span className="text-2xl font-bold tracking-tight text-foreground">
+            QUVI
+          </span>
         </div>
-        <div>
-          <p className="text-sm font-semibold text-foreground">QUVI</p>
-          <p className="text-xs text-muted-foreground">Quotation checker</p>
-        </div>
+        <p className="mt-3 text-sm text-muted-foreground">
+          Clarity in every quote.
+        </p>
       </div>
 
-      <nav className="flex-1 space-y-1 px-3 py-4" aria-label="Primary navigation">
-        {navigation.map((item) => {
-          const active = isActive(pathname, item.href);
+      <nav className="flex-1 space-y-1 px-3" aria-label="Primary navigation">
+        {primaryNavigation.map((item) => (
+          <NavigationRow
+            key={item.label}
+            item={item}
+            active={Boolean(item.href && isActive(pathname, item.href))}
+            onNavigate={onNavigate}
+          />
+        ))}
 
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                active
-                  ? "bg-primary-light text-primary"
-                  : "text-foreground hover:bg-muted"
-              )}
-              aria-current={active ? "page" : undefined}
-            >
-              <item.icon className="size-4" />
-              <span>{item.label}</span>
-            </Link>
-          );
-        })}
+        <div className="my-3 border-t border-border" />
+
+        {secondaryNavigation.map((item) => (
+          <NavigationRow
+            key={item.label}
+            item={item}
+            active={false}
+            onNavigate={onNavigate}
+          />
+        ))}
       </nav>
+    </>
+  );
+}
 
-      <div className="border-t border-border p-4">
-        <div className="flex items-center gap-3 rounded-lg bg-muted/40 p-3">
-          <div className="flex size-9 items-center justify-center rounded-full bg-primary-light text-sm font-semibold text-primary">
-            GC
-          </div>
-          <div className="min-w-0">
-            <p className="truncate text-sm font-medium text-foreground">
-              Garment Co. Ltd.
-            </p>
-            <p className="truncate text-xs text-muted-foreground">
-              Business Account
-            </p>
-          </div>
-          <Building2 className="ml-auto size-4 text-muted-foreground" />
-        </div>
-      </div>
+export function AppSidebar() {
+  return (
+    <aside className="hidden w-[258px] shrink-0 flex-col border-r border-border bg-card lg:flex">
+      <SidebarContent />
     </aside>
+  );
+}
+
+export function MobileSidebar() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <header className="flex h-16 items-center justify-between border-b border-border bg-card px-4 lg:hidden">
+        <Link href="/" className="flex items-center gap-2.5">
+          <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <ShieldCheck className="size-5" />
+          </div>
+          <span className="text-lg font-bold tracking-tight text-foreground">
+            QUVI
+          </span>
+        </Link>
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-label="Open navigation"
+          className="inline-flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        >
+          <Menu className="size-5" />
+        </button>
+      </header>
+
+      {open ? (
+        <div
+          className="fixed inset-0 z-50 lg:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation"
+        >
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            aria-label="Close navigation"
+            className="absolute inset-0 bg-black/30"
+          />
+          <div className="absolute inset-y-0 left-0 flex w-[280px] flex-col overflow-y-auto border-r border-border bg-card shadow-xl">
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="Close navigation"
+              className="absolute right-3 top-3 z-10 inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
+            >
+              <X className="size-4" />
+            </button>
+            <SidebarContent onNavigate={() => setOpen(false)} />
+          </div>
+        </div>
+      ) : null}
+    </>
   );
 }

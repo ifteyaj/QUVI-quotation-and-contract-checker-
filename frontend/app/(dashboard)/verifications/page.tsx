@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { ArrowRight, FileText } from "lucide-react";
 import { listBatches } from "@/lib/api";
 import type { BatchUploadResult } from "@/lib/api";
@@ -10,7 +11,34 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatBytes } from "@/lib/purchase-requests";
 
+const statusFilters = {
+  approve: { label: "Approved", decision: "APPROVE" },
+  reject: { label: "Rejected", decision: "REJECT" },
+  review: { label: "Needs review", decision: "NEEDS_HUMAN_REVIEW" },
+} as const;
+
+type StatusFilterKey = keyof typeof statusFilters;
+
+function isStatusFilter(value: string | null): value is StatusFilterKey {
+  return value !== null && value in statusFilters;
+}
+
 export default function VerificationsPage() {
+  return (
+    <Suspense
+      fallback={<p className="p-8 text-sm text-muted-foreground">Loading verifications...</p>}
+    >
+      <VerificationsContent />
+    </Suspense>
+  );
+}
+
+function VerificationsContent() {
+  const searchParams = useSearchParams();
+  const statusParam = searchParams.get("status");
+  const statusFilter = isStatusFilter(statusParam) ? statusParam : null;
+  const filter = statusFilter ? statusFilters[statusFilter] : null;
+
   const [batches, setBatches] = useState<BatchUploadResult[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -34,6 +62,17 @@ export default function VerificationsPage() {
     };
   }, []);
 
+  const visibleBatches = filter
+    ? batches
+        .map((batch) => ({
+          ...batch,
+          documents: batch.documents.filter(
+            (document) => document.verification_result.decision.decision === filter.decision
+          ),
+        }))
+        .filter((batch) => batch.documents.length > 0)
+    : batches;
+
   return (
     <section className="mx-auto w-full max-w-6xl space-y-6 p-6 md:p-8">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -51,6 +90,20 @@ export default function VerificationsPage() {
           </Link>
         </Button>
       </header>
+
+      {filter ? (
+        <div className="flex flex-wrap items-center gap-3 text-sm">
+          <span className="inline-flex items-center rounded-full bg-primary-light px-3 py-1 font-medium text-primary">
+            Showing: {filter.label}
+          </span>
+          <Link
+            href="/verifications"
+            className="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+          >
+            Clear filter
+          </Link>
+        </div>
+      ) : null}
 
       {error ? (
         <div className="rounded-md border border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger">
@@ -74,9 +127,24 @@ export default function VerificationsPage() {
             </Button>
           </CardContent>
         </Card>
+      ) : visibleBatches.length === 0 ? (
+        <Card className="rounded-xl border-border shadow-sm">
+          <CardContent className="py-8 text-center">
+            <FileText className="mx-auto mb-3 size-8 text-muted-foreground" />
+            <p className="text-sm font-medium text-foreground">
+              No documents match this filter
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Clear the filter to see every verification in this session.
+            </p>
+            <Button asChild className="mt-4 bg-primary text-primary-foreground hover:bg-primary/90">
+              <Link href="/verifications">Clear filter</Link>
+            </Button>
+          </CardContent>
+        </Card>
       ) : (
         <div className="space-y-4">
-          {batches.map((batch) => (
+          {visibleBatches.map((batch) => (
             <Card key={batch.batch_id} className="rounded-xl border-border shadow-sm">
               <CardHeader className="flex flex-row items-start justify-between gap-4">
                 <div>
