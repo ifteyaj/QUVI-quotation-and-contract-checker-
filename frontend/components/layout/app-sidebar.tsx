@@ -153,18 +153,35 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
         <button
           type="button"
           aria-label="Toggle colour theme"
+          aria-pressed={mounted && resolvedTheme === "dark"}
           onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-          className="flex h-10 w-full items-center gap-3 rounded-lg border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+          className="flex h-10 w-full items-center justify-between gap-3 rounded-lg border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
         >
-          <span className="flex size-5 shrink-0 items-center justify-center text-muted-foreground">
-            {mounted && resolvedTheme === "dark" ? (
-              <Sun className="size-4" />
-            ) : (
-              <Moon className="size-4" />
-            )}
+          <span className="flex items-center gap-2">
+            <span className="flex size-5 shrink-0 items-center justify-center text-muted-foreground">
+              {mounted && resolvedTheme === "dark" ? (
+                <Sun className="size-4" />
+              ) : (
+                <Moon className="size-4" />
+              )}
+            </span>
+            <span>
+              {mounted && resolvedTheme === "dark" ? "Dark mode" : "Light mode"}
+            </span>
           </span>
-          <span className="min-w-0 truncate text-left">
-            {mounted && resolvedTheme === "dark" ? "Light mode" : "Dark mode"}
+          <span
+            aria-hidden="true"
+            className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full border border-border transition-colors ${
+              mounted && resolvedTheme === "dark" ? "bg-primary" : "bg-muted"
+            }`}
+          >
+            <span
+              className={`inline-block size-4 rounded-full bg-card shadow transition-transform ${
+                mounted && resolvedTheme === "dark"
+                  ? "translate-x-4"
+                  : "translate-x-0.5"
+              }`}
+            />
           </span>
         </button>
       </div>
