@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 
 function HeroIllustration() {
   return (
@@ -7,7 +6,7 @@ function HeroIllustration() {
       viewBox="0 0 150 150"
       role="img"
       aria-label="Document with a verified shield"
-      className="h-[72px] w-[72px] shrink-0 md:h-[80px] md:w-[80px]"
+      className="h-24 w-24 shrink-0"
     >
       <path
         d="M35 18h58l22 22v82a8 8 0 0 1-8 8H35a8 8 0 0 1-8-8V26a8 8 0 0 1 8-8Z"
@@ -41,7 +40,7 @@ function HeroIllustration() {
 
 export function OverviewHero() {
   return (
-    <section className="relative max-h-[120px] h-[120px] overflow-hidden rounded-2xl bg-gradient-to-r from-[#EEF4FF] via-[#E7F0FF] to-[#DCE9FF] px-6 py-4 md:px-8">
+    <section className="relative h-[180px] shrink-0 overflow-hidden rounded-2xl bg-gradient-to-r from-[#EEF4FF] via-[#E7F0FF] to-[#DCE9FF] px-8 py-0">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-24 -top-40 size-[420px] rounded-full bg-[#C6DAFF]/70"
@@ -55,25 +54,25 @@ export function OverviewHero() {
         className="pointer-events-none absolute -bottom-32 right-40 size-[300px] rounded-full bg-[#D7E5FF]/60"
       />
 
-      <div className="relative z-10 flex h-full flex-col items-center gap-6 sm:flex-row sm:items-center md:gap-8">
+      <div className="relative z-10 flex h-full items-center gap-6">
         <HeroIllustration />
 
-        <div className="max-w-xl">
+        <div className="min-w-0 flex-1">
           <h2 className="text-[22px] font-semibold tracking-tight text-foreground">
             Ready to verify a quotation?
           </h2>
-          <p className="mt-2 max-w-md text-[14px] leading-5 text-slate-600">
+          <p className="mt-2 max-w-2xl text-[14px] leading-6 text-slate-600">
             Upload a supplier quotation and check it against your purchase
             requirements and company rules.
           </p>
-          <Link
-            href="/verifications/new"
-            className="mt-3 inline-flex h-10 items-center gap-2 rounded-lg bg-primary px-5 text-[14px] font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-2"
-          >
-            Start New Verification
-            <ArrowRight className="size-4" />
-          </Link>
         </div>
+
+        <Link
+          href="/verifications/new"
+          className="inline-flex h-11 shrink-0 items-center gap-2 rounded-lg bg-primary px-6 text-[14px] font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-2"
+        >
+          Start New Verification →
+        </Link>
       </div>
     </section>
   );
