@@ -53,11 +53,11 @@ Run the relevant tests and report the exact command and outcome. Never claim tes
 
 ## Commands
 Use the implemented setup paths:
-- Backend tests: `cd quvi/backend && .venv/bin/pytest` (after backend tests are added)
-- Backend development server: `cd quvi/backend && source .venv/bin/activate && uvicorn main:app --reload --host 127.0.0.1 --port 8000`
-- Frontend development server: `cd quvi && npm run dev`
+- Backend tests: `cd frontend/backend && .venv/bin/pytest`
+- Backend development server: `cd frontend/backend && source .venv/bin/activate && uvicorn main:app --reload --host 127.0.0.1 --port 8000`
+- Frontend development server: `cd frontend && npm run dev`
 
-The documented backend entrypoint is `quvi/backend/main.py`. Replace commands when packaging scripts change.
+The documented backend entrypoint is `frontend/backend/main.py`. Replace commands when packaging scripts change.
 
 ## Avoid
 - Do not add real supplier/customer data.

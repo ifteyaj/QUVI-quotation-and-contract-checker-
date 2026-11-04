@@ -83,9 +83,9 @@ Current high-level layout:
 - `README.md` — project overview and documentation index
 - `AGENTS.md` — AI coding assistant instructions for the repository root
 - `docs/` — project, architecture, API, policy, and assessment documentation
-- `quvi/` — Next.js frontend application
-- `quvi/backend/` — FastAPI backend, Python virtual environment, and backend entrypoint
-- `quvi/AGENTS.md` — Next.js-specific AI coding instructions for the app directory
+- `frontend/` — Next.js frontend application and FastAPI backend
+- `frontend/backend/` — FastAPI backend, Python virtual environment, and backend entrypoint
+- `frontend/AGENTS.md` — Next.js-specific AI coding instructions for the app directory
 
 Planned or future application areas described in earlier planning included `apps/web`, `services/api`, and `tests/`; the current implementation uses `quvi/` and `quvi/backend/` instead. Update this section if the physical layout changes.
 

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { listPurchaseRequests, getPurchaseRequest } from "@/lib/api";
 import type { PurchaseRequestResponse } from "@/lib/api";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function PurchaseRequestsPage() {
   const [availableRequests, setAvailableRequests] = useState<Array<{ pr_number: string; title: string; item_count: number }>>([]);
@@ -73,18 +74,18 @@ export default function PurchaseRequestsPage() {
         <>
           <div className="flex items-center gap-3">
             <span className="text-sm text-muted-foreground">Request</span>
-            <select
-              aria-label="Purchase request"
-              className="h-10 rounded-md border border-input bg-input/20 px-3 text-sm"
-              value={selectedPr}
-              onChange={(event) => setSelectedPr(event.target.value)}
-            >
-              {availableRequests.map((request) => (
-                <option key={request.pr_number} value={request.pr_number}>
-                  {request.pr_number} ({request.item_count} items)
-                </option>
-              ))}
-            </select>
+            <Select value={selectedPr} onValueChange={setSelectedPr}>
+              <SelectTrigger className="w-[260px]">
+                <SelectValue placeholder="Select a purchase request" />
+              </SelectTrigger>
+              <SelectContent>
+                {availableRequests.map((request) => (
+                  <SelectItem key={request.pr_number} value={request.pr_number}>
+                    {request.pr_number} ({request.item_count} items)
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <Card className="rounded-xl border-border shadow-sm">
             <CardHeader>
