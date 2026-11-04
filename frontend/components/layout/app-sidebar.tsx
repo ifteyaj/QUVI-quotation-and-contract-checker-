@@ -122,7 +122,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
             alt="QUVI"
             width={220}
             height={80}
-            className="h-10 w-auto max-w-[200px] object-contain"
+            className="h-10 w-auto max-w-[200px] object-contain dark:brightness-0 dark:invert"
           />
         </div>
       </div>
