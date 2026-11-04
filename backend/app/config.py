@@ -7,8 +7,20 @@ REPO_ROOT = BACKEND_DIR.parent
 QUVI_DATA_DIR = Path(os.environ.get("QUVI_DATA_DIR", str(BACKEND_DIR)))
 DATA_DIR = QUVI_DATA_DIR
 UPLOAD_DIR = DATA_DIR / "uploads"
-ASSESSMENT_DATA_DIR = Path(
-    os.environ.get("QUVI_ASSESSMENT_DATA_DIR", str(REPO_ROOT / "docs" / "assessment"))
+
+ASSESSMENT_DATA_DIR_CANDIDATES = [
+    Path(os.environ.get("QUVI_ASSESSMENT_DATA_DIR", "")),
+    REPO_ROOT / "docs" / "assessment",
+    BACKEND_DIR / "assessment",
+]
+
+ASSESSMENT_DATA_DIR = next(
+    (
+        candidate
+        for candidate in ASSESSMENT_DATA_DIR_CANDIDATES
+        if candidate and (candidate / "purchase-request.csv").is_file()
+    ),
+    REPO_ROOT / "docs" / "assessment",
 )
 
 # Keep these limits explicit and conservative for the initial upload slice.
