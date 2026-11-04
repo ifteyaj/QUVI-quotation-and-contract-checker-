@@ -66,7 +66,7 @@ function NavigationRow({
     return (
       <div
         aria-disabled="true"
-        className="flex cursor-not-allowed items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground/60"
+        className="flex h-9 cursor-not-allowed items-center gap-3 rounded-lg px-3 text-sm font-medium text-muted-foreground/60"
       >
         <Icon className="size-[18px] shrink-0" />
         <span className="whitespace-nowrap">{item.label}</span>
@@ -83,7 +83,7 @@ function NavigationRow({
       onClick={onNavigate}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+        "flex h-9 items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors",
         active
           ? "bg-primary-light text-primary"
           : "text-foreground hover:bg-muted"
@@ -106,21 +106,23 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <>
-      <div className="px-6 pb-7 pt-7">
-        <div className="flex items-center gap-3">
-          <div className="flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-            <ShieldCheck className="size-6" />
+      <div className="flex h-14 items-center border-b border-border px-4">
+        <div className="flex items-center gap-2.5">
+          <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <ShieldCheck className="size-5" />
           </div>
-          <span className="text-2xl font-bold tracking-tight text-foreground">
-            QUVI
-          </span>
+          <div className="leading-tight">
+            <span className="block text-[15px] font-bold tracking-tight text-foreground">
+              QUVI
+            </span>
+            <span className="block text-[10px] text-muted-foreground">
+              Clarity in every quote.
+            </span>
+          </div>
         </div>
-        <p className="mt-3 text-sm text-muted-foreground">
-          Clarity in every quote.
-        </p>
       </div>
 
-      <nav className="flex-1 space-y-1 px-3" aria-label="Primary navigation">
+      <nav className="flex-1 space-y-0 px-3 py-0" aria-label="Primary navigation">
         {primaryNavigation.map((item) => (
           <NavigationRow
             key={item.label}
@@ -130,7 +132,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           />
         ))}
 
-        <div className="my-3 border-t border-border" />
+        <div className="my-1 border-t border-border" />
 
         {secondaryNavigation.map((item) => (
           <NavigationRow
@@ -142,12 +144,12 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
         ))}
       </nav>
 
-      <div className="border-t border-border px-3 py-3">
+      <div className="border-t border-border px-3 py-2">
         <button
           type="button"
           aria-label="Toggle colour theme"
           onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-          className="flex h-9 w-full items-center gap-3 rounded-lg border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+          className="flex h-8 w-full items-center gap-3 rounded-lg border border-border bg-card px-3 text-[13px] font-medium text-foreground transition-colors hover:bg-muted"
         >
           <span className="flex size-5 shrink-0 items-center justify-center text-muted-foreground">
             {mounted && resolvedTheme === "dark" ? (
@@ -162,16 +164,16 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
         </button>
       </div>
 
-      <div className="border-t border-border px-3 py-4">
-        <div className="flex items-center gap-3 rounded-lg bg-muted/50 px-3 py-2.5">
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground">
+      <div className="border-t border-border px-3 py-2">
+        <div className="flex items-center gap-2.5 rounded-lg bg-muted/50 px-3 py-1.5">
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground mt-0">
             <Building2 className="size-4" />
           </div>
           <div className="min-w-0">
-            <p className="text-xs font-semibold leading-snug text-foreground">
+            <p className="text-[12px] font-semibold leading-tight text-foreground">
               Aamar Garments Ltd (fictional)
             </p>
-            <p className="mt-0.5 text-[11px] text-muted-foreground">
+            <p className="text-[10px] text-muted-foreground">
               Business Account
             </p>
           </div>
@@ -194,7 +196,7 @@ export function MobileSidebar() {
 
   return (
     <>
-      <header className="flex h-16 items-center justify-between border-b border-border bg-card px-4 lg:hidden">
+      <header className="flex h-14 items-center justify-between border-b border-border bg-card px-4 lg:hidden">
         <Link href="/" className="flex items-center gap-2.5">
           <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <ShieldCheck className="size-5" />

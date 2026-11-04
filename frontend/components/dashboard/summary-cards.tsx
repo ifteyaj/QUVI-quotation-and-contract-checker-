@@ -85,25 +85,25 @@ export function SummaryCards({
         return (
           <div
             key={card.label}
-            className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm md:gap-4 md:p-5"
+            className="flex h-24 items-center gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm"
           >
             <div
               className={cn(
-                "flex size-10 shrink-0 items-center justify-center rounded-full md:size-12",
+                "flex size-10 shrink-0 items-center justify-center rounded-full",
                 card.iconSurfaceClassName
               )}
             >
-              <Icon className={cn("size-5 md:size-6", card.iconClassName)} />
+              <Icon className={cn("size-4", card.iconClassName)} />
             </div>
 
             <div className="min-w-0 flex-1">
-              <p className="text-[13px] font-medium text-foreground md:text-sm">
+              <p className="text-[13px] font-medium text-foreground">
                 {card.label}
               </p>
-              <p className="mt-1 text-2xl font-semibold leading-none tracking-tight text-foreground md:text-3xl">
+              <p className="mt-0.5 text-[24px] font-semibold leading-none tracking-tight text-foreground">
                 {card.value}
               </p>
-              <p className="mt-2 text-[11px] text-muted-foreground md:text-xs">
+              <p className="mt-1 text-[11px] text-muted-foreground">
                 {card.subtitle}
               </p>
             </div>
@@ -111,7 +111,7 @@ export function SummaryCards({
             <Link
               href={card.href}
               aria-label={`View ${card.label.toLowerCase()}`}
-              className="flex size-7 shrink-0 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 md:size-8"
+              className="flex size-6 shrink-0 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
             >
               <ArrowRight className="size-3.5 md:size-4" />
             </Link>
