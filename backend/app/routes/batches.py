@@ -162,4 +162,5 @@ async def get_document_file(batch_id: str, document_id: str):
         path=file_path,
         media_type="application/pdf",
         filename=file_path.name,
+        content_disposition_type="inline",
     )
