@@ -64,6 +64,7 @@ export interface MatchResultResponse {
   quoted_unit: string | null;
   quoted_unit_price: string | null;
   quoted_line_total: string | null;
+  quoted_currency: string | null;
   matched_pr_item_code: string | null;
   matched_pr_description: string | null;
   matched_pr_unit: string | null;
@@ -74,6 +75,7 @@ export interface MatchResultResponse {
   line_total_calculation_expected: string | null;
   line_total_matches: boolean | null;
   currency_matches: boolean | null;
+  evidence: FieldEvidenceResponse[];
   notes: string[];
 }
 

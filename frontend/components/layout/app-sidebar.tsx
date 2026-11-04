@@ -4,7 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
+  Building2,
   ClipboardList,
+  FileSearch,
   FileText,
   House,
   Menu,
@@ -27,6 +29,7 @@ type NavigationItem = {
 const primaryNavigation: NavigationItem[] = [
   { label: "Overview", href: "/", icon: House },
   { label: "New Verification", href: "/verifications/new", icon: Zap },
+  { label: "Verifications", href: "/verifications", icon: FileSearch },
   { label: "Quotations", icon: FileText, comingSoon: true },
   { label: "Review Queue", icon: MessagesSquare, comingSoon: true },
   { label: "Purchase Requisitions", href: "/purchase-requests", icon: ClipboardList },
@@ -129,6 +132,22 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           />
         ))}
       </nav>
+
+      <div className="border-t border-border px-3 py-4">
+        <div className="flex items-center gap-3 rounded-lg bg-muted/50 px-3 py-2.5">
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground">
+            <Building2 className="size-4" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-xs font-semibold leading-snug text-foreground">
+              Aamar Garments Ltd (fictional)
+            </p>
+            <p className="mt-0.5 text-[11px] text-muted-foreground">
+              Business Account
+            </p>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
