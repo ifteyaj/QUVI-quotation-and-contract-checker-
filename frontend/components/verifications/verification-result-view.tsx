@@ -9,6 +9,7 @@ import {
   CalendarDays,
   Check,
   FileText,
+  Hash,
   Info,
   TriangleAlert,
   X,
@@ -103,24 +104,27 @@ function MetaItem({
   label,
   value,
   warning,
+  title,
   className,
 }: {
   icon: typeof FileText;
   label: string;
   value: string;
   warning?: boolean;
+  title?: string;
   className?: string;
 }) {
   return (
-    <div className={cn("flex items-center gap-4", className)}>
-      <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary">
+    <div className={cn("flex items-center gap-3", className)}>
+      <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary-light text-primary">
         <Icon className="size-4" />
       </div>
       <div className="min-w-0">
-        <p className="text-[11px] font-medium text-muted-foreground">{label}</p>
+        <p className="truncate text-[11px] font-medium text-muted-foreground">{label}</p>
         <p
+          title={title}
           className={cn(
-            "mt-0.5 truncate text-sm font-semibold",
+            "truncate text-[13px] font-semibold",
             warning ? "text-warning" : "text-foreground"
           )}
         >
@@ -194,7 +198,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
             className="mt-4 inline-flex h-10 items-center gap-2 rounded-lg border border-border bg-card px-4 text-sm font-medium text-foreground hover:bg-muted"
           >
             <ArrowLeft className="size-4" />
-            Back to Verifications
+            Back to Verification List
           </Link>
         </div>
       </section>
@@ -211,7 +215,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
           className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground"
         >
           <ArrowLeft className="size-4" />
-          Back to Verifications
+          Back to Verification List
         </Link>
         <div className="rounded-2xl border border-warning/30 bg-warning/5 p-6">
           <p className="text-sm font-medium text-warning">
@@ -255,6 +259,8 @@ export default function VerificationResultView({ batchId }: { batchId: string })
 
   const quotationNumber = extractedFieldValue(extraction.quotation_number);
   const supplierName = extractedFieldValue(extraction.supplier_name);
+  const supplierTin = extractedFieldValue(extraction.supplier_tin);
+  const supplierBin = extractedFieldValue(extraction.supplier_bin);
 
   const thresholds = parseRuleThresholds(rules);
   const rows = buildComparisonRows(verification, extraction, thresholds);
@@ -275,7 +281,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
           className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="size-4" />
-          Back to Verifications
+          Back to Verification List
         </Link>
       </header>
 
@@ -310,26 +316,41 @@ export default function VerificationResultView({ batchId }: { batchId: string })
         </span>
       </div>
 
-      <div className="grid h-16 shrink-0 items-center gap-4 rounded-2xl border border-border bg-card px-4 sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-border">
+      <div className="flex h-16 shrink-0 items-center divide-x divide-border rounded-2xl border border-border bg-card px-4">
         <MetaItem
           icon={FileText}
           label="Quotation"
           value={quotationNumber.text}
           warning={quotationNumber.missing}
-          className="sm:pr-6"
+          className="flex-1 min-w-0 px-2"
         />
         <MetaItem
           icon={CalendarDays}
           label="Checked on"
           value={formatCheckedOn(document.created_at)}
-          className="sm:px-6"
+          className="flex-1 min-w-0 px-2"
         />
         <MetaItem
           icon={Building2}
           label="Supplier"
           value={supplierName.text}
           warning={supplierName.missing}
-          className="sm:pl-6"
+          title={supplierName.missing ? undefined : supplierName.text}
+          className="flex-1 min-w-0 px-2"
+        />
+        <MetaItem
+          icon={Hash}
+          label="Supplier TIN"
+          value={supplierTin.text}
+          warning={supplierTin.missing}
+          className="flex-1 min-w-0 px-2"
+        />
+        <MetaItem
+          icon={Hash}
+          label="Supplier BIN"
+          value={supplierBin.text}
+          warning={supplierBin.missing}
+          className="flex-1 min-w-0 px-2"
         />
       </div>
 
