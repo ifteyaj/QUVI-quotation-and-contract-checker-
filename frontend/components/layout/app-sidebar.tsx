@@ -11,12 +11,12 @@ import {
   FileSearch,
   FileText,
   House,
-
-
   Menu,
   MessagesSquare,
+  Moon,
   Settings,
   ShieldCheck,
+  Sun,
   X,
   Zap,
 } from "lucide-react";
@@ -105,7 +105,7 @@ function NavigationRow({
 }
 
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
-  const { resolvedTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const mounted = useSyncExternalStore(
     () => () => {},
     () => true,
@@ -148,6 +148,21 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           />
         ))}
       </nav>
+
+      <div className="px-3 py-2">
+        <button
+          type="button"
+          aria-label="Toggle colour theme"
+          onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+          className="inline-flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        >
+          {mounted && resolvedTheme === "dark" ? (
+            <Sun className="size-4" />
+          ) : (
+            <Moon className="size-4" />
+          )}
+        </button>
+      </div>
 
       <div className="border-t border-border px-3 py-2">
         <div className="flex items-center gap-2.5 rounded-lg bg-muted/50 px-3 py-1.5">
