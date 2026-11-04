@@ -33,7 +33,7 @@ type NavigationItem = {
 const primaryNavigation: NavigationItem[] = [
   { label: "Overview", href: "/", icon: House },
   { label: "New Verification", href: "/verifications/new", icon: Zap },
-  { label: "Verifications", href: "/verifications", icon: FileSearch },
+  { label: "Verification List", href: "/verifications", icon: FileSearch },
   { label: "Quotations", icon: FileText, comingSoon: true },
   { label: "Review Queue", icon: MessagesSquare, comingSoon: true },
   { label: "Purchase Requisitions", href: "/purchase-requests", icon: ClipboardList },
@@ -120,9 +120,9 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           <Image
             src={mounted && resolvedTheme === "dark" ? "/QUVI_logo_2.svg" : "/QUVI_logo.svg"}
             alt="QUVI"
-            width={220}
-            height={80}
-            className="h-10 w-auto max-w-[200px] object-contain "
+            width={242}
+            height={88}
+            className="h-11 w-auto max-w-[215px] object-contain"
           />
         </div>
       </div>
