@@ -1,4 +1,7 @@
 import uuid
+from pathlib import Path
+
+from fastapi.responses import FileResponse
 from datetime import datetime, timezone
 from typing import List, Optional
 
@@ -10,6 +13,7 @@ from app.quotation_extraction import extract_quotation_from_pages
 from app.verification import build_verification_result
 from app.schemas import BatchUploadResponse, DocumentUploadResult, ExtractedPageResult, RejectedFileResult
 from app.storage import read_and_validate_pdf, sha256_bytes, store_pdf
+from app.batch_store import batch_store
 
 router = APIRouter(prefix="/api/batches", tags=["batches"])
 
@@ -38,6 +42,7 @@ async def create_batch(
 
     accepted_documents: list[DocumentUploadResult] = []
     rejected_files: list[RejectedFileResult] = []
+    stored_file_paths: dict[str, Path] = {}
 
     for upload in files:
         original_filename = upload.filename or "unnamed.pdf"
@@ -67,7 +72,7 @@ async def create_batch(
             )
             continue
 
-        stored_filename, _destination = store_pdf(batch_id, raw)
+        stored_filename, destination = store_pdf(batch_id, raw)
         processing_status = (
             "TEXT_EXTRACTED" if extracted.text_char_count > 0 else "OCR_REQUIRED"
         )
@@ -100,6 +105,7 @@ async def create_batch(
                 created_at=created_at,
             )
         )
+        stored_file_paths[accepted_documents[-1].document_id] = destination
 
     if not accepted_documents:
         first_error = rejected_files[0] if rejected_files else None
@@ -111,10 +117,49 @@ async def create_batch(
             },
         )
 
-    return BatchUploadResponse(
+    response = BatchUploadResponse(
         batch_id=batch_id,
         purchase_request_id=purchase_request_id,
         created_at=created_at,
         documents=accepted_documents,
         rejected_files=rejected_files,
+    )
+    batch_store.save(response, stored_file_paths)
+    return response
+
+
+@router.get("", response_model=List[BatchUploadResponse])
+async def list_batches(limit: int = 25) -> List[BatchUploadResponse]:
+    return batch_store.list_recent(limit=min(max(limit, 1), 100))
+
+
+@router.get("/{batch_id}", response_model=BatchUploadResponse)
+async def get_batch(batch_id: str) -> BatchUploadResponse:
+    batch = batch_store.get(batch_id)
+    if batch is None:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "code": "BATCH_NOT_FOUND",
+                "message": "The requested verification was not found in this server session.",
+            },
+        )
+    return batch
+
+
+@router.get("/{batch_id}/documents/{document_id}/file")
+async def get_document_file(batch_id: str, document_id: str):
+    file_path = batch_store.get_file_path(batch_id, document_id)
+    if file_path is None or not file_path.exists():
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "code": "DOCUMENT_FILE_NOT_FOUND",
+                "message": "The requested document file is no longer available.",
+            },
+        )
+    return FileResponse(
+        path=file_path,
+        media_type="application/pdf",
+        filename=file_path.name,
     )

@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 
 from app.routes.batches import router as batches_router
 from app.routes.purchase_requests import router as purchase_requests_router
+from app.routes.policy import router as policy_router
 
 app = FastAPI(title="QUVI", description="Explainable supplier quotation checker backend")
 
@@ -17,6 +18,7 @@ app.add_middleware(
 
 app.include_router(batches_router)
 app.include_router(purchase_requests_router)
+app.include_router(policy_router)
 
 
 @app.exception_handler(Exception)

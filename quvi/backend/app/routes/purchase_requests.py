@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, HTTPException
 
 from app.purchase_request_data import PURCHASE_REQUESTS
@@ -18,3 +20,11 @@ def get_purchase_request(pr_number: str) -> dict:
         )
 
     return purchase_request.model_dump(mode="json")
+
+
+@router.get("")
+async def list_purchase_requests() -> List[dict]:
+    return [
+        {"pr_number": pr_number, "title": purchase_request.title, "item_count": len(purchase_request.items)}
+        for pr_number, purchase_request in PURCHASE_REQUESTS.items()
+    ]

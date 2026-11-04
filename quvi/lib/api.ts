@@ -240,3 +240,48 @@ export async function getPurchaseRequest(
 
   return response.json() as Promise<PurchaseRequestResponse>;
 }
+
+export async function listBatches(): Promise<BatchUploadResult[]> {
+  const response = await fetch(`${API_BASE_URL}/api/batches`);
+  if (!response.ok) {
+    throw new Error(await getApiErrorMessage(response));
+  }
+  return response.json() as Promise<BatchUploadResult[]>;
+}
+
+export async function getBatch(batchId: string): Promise<BatchUploadResult> {
+  const response = await fetch(`${API_BASE_URL}/api/batches/${encodeURIComponent(batchId)}`);
+  if (!response.ok) {
+    throw new Error(await getApiErrorMessage(response));
+  }
+  return response.json() as Promise<BatchUploadResult>;
+}
+
+export interface PolicyRuleGroupResponse {
+  rule_version: string;
+  source: string;
+  approval: string;
+  reject_rules: string[];
+  review_rules: string[];
+  notes: string[];
+}
+
+export async function getPolicyRules(): Promise<PolicyRuleGroupResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/rules`);
+  if (!response.ok) {
+    throw new Error(await getApiErrorMessage(response));
+  }
+  return response.json() as Promise<PolicyRuleGroupResponse>;
+}
+
+export async function listPurchaseRequests(): Promise<
+  Array<{ pr_number: string; title: string; item_count: number }>
+> {
+  const response = await fetch(`${API_BASE_URL}/api/purchase-requests`);
+  if (!response.ok) {
+    throw new Error(await getApiErrorMessage(response));
+  }
+  return response.json() as Promise<
+    Array<{ pr_number: string; title: string; item_count: number }>
+  >;
+}
