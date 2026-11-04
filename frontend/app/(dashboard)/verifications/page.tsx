@@ -371,7 +371,7 @@ function VerificationsContent() {
                       </td>
                       <td className="px-4 py-4 text-right">
                         <Link
-                          href={`/verifications/${row.batchId}`}
+                          href={`/verifications/${row.batchId}?document=${encodeURIComponent(row.document.document_id)}`}
                           className="font-medium text-foreground hover:text-primary"
                         >
                           View Details →

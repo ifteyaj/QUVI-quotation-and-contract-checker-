@@ -50,7 +50,7 @@ export function NeedsAttention({ rows }: { rows: DashboardDocument[] }) {
                   </p>
                 </div>
                 <Link
-                  href={`/verifications/${row.batchId}`}
+                  href={`/verifications/${row.batchId}?document=${encodeURIComponent(row.document.document_id)}`}
                   className="inline-flex shrink-0 items-center justify-center rounded-lg border border-primary/30 bg-card px-3 py-1 text-[13px] font-medium text-primary transition-colors hover:bg-primary-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
                 >
                   Review

@@ -119,7 +119,7 @@ export function RecentQuotations({
                     </td>
                     <td className="px-4 py-2.5 text-right">
                       <Link
-                        href={`/verifications/${row.batchId}`}
+                        href={`/verifications/${row.batchId}?document=${encodeURIComponent(row.document.document_id)}`}
                         className="inline-flex items-center gap-1.5 font-medium text-primary hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
                       >
                         View

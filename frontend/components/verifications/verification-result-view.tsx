@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   ArrowLeft,
   ArrowRight,
@@ -136,6 +137,9 @@ function MetaItem({
 }
 
 export default function VerificationResultView({ batchId }: { batchId: string }) {
+  const searchParams = useSearchParams();
+  const requestedDocumentId = searchParams.get("document");
+
   const [batch, setBatch] = useState<BatchUploadResult | null>(null);
   const [rules, setRules] = useState<PolicyRuleGroupResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -205,7 +209,12 @@ export default function VerificationResultView({ batchId }: { batchId: string })
     );
   }
 
-  const document = batch.documents[0];
+  const document =
+    (requestedDocumentId
+      ? batch.documents.find(
+          (candidate) => candidate.document_id === requestedDocumentId
+        )
+      : null) ?? batch.documents[0];
 
   if (!document) {
     return (
