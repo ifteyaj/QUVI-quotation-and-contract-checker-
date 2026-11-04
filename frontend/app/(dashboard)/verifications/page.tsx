@@ -180,24 +180,25 @@ function VerificationsContent() {
 
   return (
     <section className="mx-auto w-full max-w-6xl space-y-4 overflow-x-hidden px-4 py-4 md:px-6 md:py-6">
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-            Verification List
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            View and manage all supplier quotation verifications.
-          </p>
-        </div>
-        <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
-          <Link href="/verifications/new">
-            + New Verification
-            <ArrowRight className="size-4" />
-          </Link>
-        </Button>
-      </header>
+      <div className="space-y-6">
+        <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1">
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+              Verification List
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              View and manage all supplier quotation verifications.
+            </p>
+          </div>
+          <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
+            <Link href="/verifications/new">
+              + New Verification
+              <ArrowRight className="size-4" />
+            </Link>
+          </Button>
+        </header>
 
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="relative w-full md:max-w-md">
           <Search
             aria-hidden="true"
@@ -243,6 +244,7 @@ function VerificationsContent() {
             </Link>
           ))}
         </div>
+      </div>
       </div>
 
       {error ? (
