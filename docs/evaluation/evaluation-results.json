@@ -1,8 +1,8 @@
 {
   "evaluation_version": "1.0.0",
   "rule_version": "aamar-garments-rules-v1",
-  "generated_at": "2026-11-04T08:43:16.250042+00:00",
-  "source_revision": "5ff73e9",
+  "generated_at": "2026-11-04T08:45:05.864488+00:00",
+  "source_revision": "d7ab421",
   "ground_truth_path": "/Users/ifteyajahmed/Desktop/BIAI-AI-Engineer-Round2-Pack/QUVI/QUVI-quotation-and-contract-checker-/docs/evaluation/ground-truth.json",
   "assessment_directory": "/Users/ifteyajahmed/Desktop/BIAI-AI-Engineer-Round2-Pack/QUVI/QUVI-quotation-and-contract-checker-/docs/assessment",
   "ground_truth_name": "QUVI supplier quotation verification assessment samples",
