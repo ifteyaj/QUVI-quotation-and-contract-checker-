@@ -64,7 +64,7 @@ function requestOptionLabel(request: PurchaseRequestOption): string {
 export function NewVerificationForm() {
   const router = useRouter();
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [fileError, setFileError] = useState<string | null>(null);
   const [requestList, setRequestList] = useState<{
     items: PurchaseRequestOption[];
@@ -156,28 +156,34 @@ export function NewVerificationForm() {
   const purchaseRequestData = currentRequest?.data ?? null;
   const purchaseRequestError = currentRequest?.error ?? null;
 
-  const acceptFile = useCallback((file: File) => {
-    const validationError = validateFile(file);
+  const acceptFiles = useCallback((files: File[]) => {
+    const validationError = files.map(validateFile).find(Boolean);
 
     if (validationError) {
-      setSelectedFile(null);
+      setSelectedFiles([]);
       setFileError(validationError);
       return;
     }
 
-    setSelectedFile(file);
+    setSelectedFiles((previous) => [...previous, ...files]);
     setFileError(null);
     setSubmitError(null);
   }, []);
 
+  const removeFile = useCallback((index: number) => {
+    setSelectedFiles((previous) =>
+      previous.filter((_, itemIndex) => itemIndex !== index)
+    );
+  }, []);
+
   const handleFileChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (file) {
-        acceptFile(file);
+      const files = Array.from(event.target.files ?? []);
+      if (files.length > 0) {
+        acceptFiles(files);
       }
     },
-    [acceptFile]
+    [acceptFiles]
   );
 
   const handleDragEnter = useCallback((event: React.DragEvent<HTMLDivElement>) => {
@@ -204,12 +210,12 @@ export function NewVerificationForm() {
       event.stopPropagation();
       setIsDragging(false);
 
-      const file = event.dataTransfer.files?.[0];
-      if (file) {
-        acceptFile(file);
+      const files = Array.from(event.dataTransfer.files ?? []);
+      if (files.length > 0) {
+        acceptFiles(files);
       }
     },
-    [acceptFile]
+    [acceptFiles]
   );
 
   const openFilePicker = useCallback(() => {
@@ -218,18 +224,8 @@ export function NewVerificationForm() {
     }
   }, [isSubmitting]);
 
-  const handleRemoveFile = useCallback(() => {
-    setSelectedFile(null);
-    setFileError(null);
-    setSubmitError(null);
-
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  }, []);
-
   const handleStartVerification = useCallback(async () => {
-    if (!selectedFile || !purchaseRequestNumber || isSubmitting) {
+    if (!selectedFiles.length || !purchaseRequestNumber || isSubmitting) {
       return;
     }
 
@@ -238,7 +234,7 @@ export function NewVerificationForm() {
 
     try {
       const response = await uploadQuotationBatch(
-        [selectedFile],
+        selectedFiles,
         purchaseRequestNumber
       );
 
@@ -260,9 +256,9 @@ export function NewVerificationForm() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [isSubmitting, purchaseRequestNumber, router, selectedFile]);
+  }, [isSubmitting, purchaseRequestNumber, router, selectedFiles]);
 
-  const currentStep = selectedFile ? 2 : 1;
+  const currentStep = selectedFiles.length ? 2 : 1;
 
   return (
     <div className="mx-auto w-full max-w-6xl space-y-8 p-6 md:p-8">
@@ -305,6 +301,7 @@ export function NewVerificationForm() {
           <Input
             ref={fileInputRef}
             type="file"
+            multiple
             accept="application/pdf,.pdf"
             className="hidden"
             onChange={handleFileChange}
@@ -312,26 +309,42 @@ export function NewVerificationForm() {
             aria-label="Select quotation PDF"
           />
 
-          {selectedFile ? (
-            <div className="flex w-full items-center gap-3 rounded-lg border border-border bg-muted/30 px-4 py-3">
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary-light">
-                <FileText className="size-4 text-primary" />
-              </div>
-              <p className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">
-                {selectedFile.name}
-              </p>
-              <span className="shrink-0 text-xs text-muted-foreground">
-                {formatBytes(selectedFile.size)}
-              </span>
+          {selectedFiles.length > 0 ? (
+            <div className="w-full space-y-2">
+              {selectedFiles.map((file, index) => (
+                <div
+                  key={`${file.name}-${file.size}-${index}`}
+                  className="flex w-full items-center gap-3 rounded-lg border border-border bg-muted/30 px-4 py-3"
+                >
+                  <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary-light">
+                    <FileText className="size-4 text-primary" />
+                  </div>
+                  <p className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">
+                    {file.name}
+                  </p>
+                  <span className="shrink-0 text-xs text-muted-foreground">
+                    {formatBytes(file.size)}
+                  </span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={() => removeFile(index)}
+                    disabled={isSubmitting}
+                    aria-label="Remove selected file"
+                  >
+                    <Trash2 className="size-4" />
+                  </Button>
+                </div>
+              ))}
               <Button
                 type="button"
-                variant="ghost"
-                size="icon-sm"
-                onClick={handleRemoveFile}
+                variant="outline"
+                onClick={openFilePicker}
                 disabled={isSubmitting}
-                aria-label="Remove selected file"
               >
-                <Trash2 className="size-4" />
+                <Plus className="size-4" />
+                Add more PDFs
               </Button>
             </div>
           ) : (
@@ -363,7 +376,7 @@ export function NewVerificationForm() {
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm font-medium text-foreground">
-                    Drag and drop your document here
+                    Drag and drop your supplier documents here
                   </p>
                   <p className="text-xs text-muted-foreground">
                     or browse files from your computer
@@ -524,7 +537,7 @@ export function NewVerificationForm() {
             <Button
               type="button"
               onClick={handleStartVerification}
-              disabled={!selectedFile || !purchaseRequestNumber || isSubmitting}
+              disabled={!selectedFiles.length || !purchaseRequestNumber || isSubmitting}
               className="min-w-44 bg-primary text-primary-foreground hover:bg-primary/90"
             >
               {isSubmitting ? (
