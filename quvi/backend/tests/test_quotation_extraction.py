@@ -150,3 +150,33 @@ Supplier BIN: B1
     assert result.quoted_items[1].item_code.value == "B"
     assert result.quoted_items[1].quoted_quantity.value == Decimal("2000")
     assert result.quoted_items[1].quoted_unit_price.value == Decimal("5.50")
+
+
+def test_no_advance_payment_text_extracts_zero_percent() -> None:
+    text = """Supplier Ltd
+QUOTATION
+Quotation no.
+QT-1
+Date
+2026-01-02
+Reference
+PR-2026-114
+
+A
+Widget
+2
+piece
+3.50
+7.00
+
+Supplier TIN: 1 BIN: B1
+TERMS AND CONDITIONS
+1. Payment. No advance payment required. Balance within 30 days of delivery.
+2. Delivery. Delivery within 30 days of PO.
+3. Delay. Late delivery penalty: 1% of order value for each full week of delay.
+"""
+    result = extract_quotation_from_pages([_page(text)])
+    assert result.advance_percent.status == "EXTRACTED"
+    assert result.advance_percent.value == Decimal("0")
+    assert result.late_penalty_rate_per_week_percent.status == "EXTRACTED"
+    assert result.late_penalty_rate_per_week_percent.value == Decimal("1")
