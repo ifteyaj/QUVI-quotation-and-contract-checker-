@@ -130,8 +130,6 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           />
         ))}
 
-        <div className="my-1 border-t border-border" />
-
         {secondaryNavigation.map((item) => (
           <NavigationRow
             key={item.label}
