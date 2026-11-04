@@ -2,172 +2,95 @@
 
 **Clarity in every quote.**
 
-QUVI is an AI-assisted supplier quotation and contract verification tool for procurement teams. It helps reviewers compare supplier documents against a purchase requisition and company policy, while keeping the evidence and reasons behind each outcome visible.
+QUVI is a supplier quotation verification prototype for procurement teams. It reads supplier quotation PDFs, compares them with a purchase request, checks them against company rules, and returns one of three outcomes for each document: **Approve**, **Reject**, or **Needs a person to check**. Each outcome lists its reasons and, where available, the source text.
 
-> **Project status:** Early development. The repository currently contains the project README; implementation and setup instructions will be added as the project evolves.
+This repository was built for the BIAI AI Engineer Round 2 assessment, Task 1 (supplier document checking). It uses only the fictional sample files supplied with the brief. No real company or customer data is included.
 
-## The problem
+## What runs today
 
-Procurement teams often need to review supplier quotations and contract terms manually. Important details can be buried in PDFs, and inconsistent review processes make it easy to miss pricing, quantity, payment, tax, or delivery issues.
+- PDF text extraction (PyMuPDF) and regex-based field extraction for supplier quotes.
+- Matching of quoted items to purchase request PR-2026-114.
+- A deterministic rule engine based on `docs/assessment/company-rules.md`.
+- A FastAPI backend with batch upload, verification results and a source-file route.
+- A Next.js dashboard, upload page, verification list and verification detail page.
+- Pytest tests and a 10-pack run script.
 
-QUVI is being built to make those checks more consistent and explainable.
+No LLM or external AI API is called at runtime. The brief allowed AI coding tools during development; this project used an AI coding assistant (OpenCode with Claude) to write and review code.
 
-## What QUVI aims to do
+## Requirements
 
-- Extract supplier, item, quantity, unit price, delivery, and contract details from documents.
-- Compare quoted items and values with the purchase requisition.
-- Evaluate contract terms against configurable procurement rules.
-- Return a clear outcome for each quote: **Approve**, **Reject**, or **Needs human review**.
-- Show the evidence and reasons supporting each finding.
-- Escalate uncertain or unreadable information instead of guessing.
+- Python 3.9.6 (the version the tests were run on; newer versions may need dependency changes)
+- Node.js 22.18.0 or newer, with npm
 
+## Setup and run
 
+### Backend
 
-
-## Getting started (local prototype)
-
-Python 3.9.6 was used for backend tests and development. Using a newer Python may require dependency changes.
-
-Backend:
 ```bash
 cd backend
 python3.9 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-.venv/bin/pytest
-source .venv/bin/activate && uvicorn main:app --reload --host 127.0.0.1 --port 8000
+python -m pytest -q -p no:cacheprovider
+uvicorn main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Run the supplied evaluation samples (start the backend first; `real_run.py` expects it):
+Expected test result: `38 passed`. Deprecation warnings from PyMuPDF/SWIG are expected.
+
+### Run the 10 sample packs
+
+With the backend running, in a second terminal:
+
 ```bash
 cd backend
 source .venv/bin/activate
-.venv/bin/python scripts/real_run.py --packs ../docs/assessment
+python scripts/real_run.py --packs ../docs/assessment
 ```
-Generated run summaries are written under `backend/real-run-results/` and are ignored by Git.
 
-Frontend:
+The script uploads each pack, prints the decision and findings, and saves JSON results to `backend/real-run-results/<timestamp>_<commit>/`. This folder is generated and ignored by Git.
+
+### Frontend
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-Then open http://localhost:3000. The frontend calls the backend at http://localhost:8000 by default.
 
-## Documents
-1. [Project overview](docs/project-overview.md) — purpose, scope, users, principles, and success criteria.
-2. [Technical architecture](docs/architecture.md) — components, fixed pipeline, stack, persistence, safety, and architecture decisions.
-3. [Implementation specification](docs/implementation-spec.md) — screens, states, fields, API outline, and implementation requirements.
-4. [Business rules](docs/business-rules.md) — supplied policy, threshold interpretation, decision precedence, and purchase request.
-5. [Evaluation and test plan](docs/evaluation-test-plan.md) — ground truth, metrics, test cases, acceptance criteria, and reporting.
-6. [Batch workflow](docs/batch-workflow.md) — batch lifecycle, file isolation, statuses, resilience, and UI.
-7. [API and data model](docs/api-and-data-model.md) — endpoint inventory and conceptual entities.
-8. [Architecture diagrams](docs/architecture-diagrams.md) — Mermaid diagrams for pipeline, state, batch, and review flows.
-9. [Data dictionary](docs/data-dictionary.md) — field definitions, types, validation rules, and PR reference data.
-10. [Decision log](docs/decisions.md) — architecture and policy decision records.
-11. [Product requirements](docs/prd.md) — product goals, functional requirements, and acceptance criteria.
-12. [Prompt design](docs/prompt-design.md) — LLM extraction prompt, safety, and validation approach.
-13. [Submission note](docs/assessment/submission-note.md) — challenge submission summary and outcomes.
-14. [Test report](docs/assessment/test-report.md) — test execution template and evaluation records.
-
-## Important source-data note
-The challenge brief/README describes ten supplier packs. All ten (`supplier-pack-01.pdf` through `supplier-pack-10.pdf`) are present in `docs/assessment/`. They are fictional sample documents and are processed only when the evaluation command is explicitly run.
-
-## Evaluation status
-The evaluation harness runs the 10 supplied PDFs against `docs/evaluation/ground-truth.json` and currently reports 10/10 decisions and 10/10 rule-ID sets. The ground truth was authored by the QUVI implementer (AI coding assistant) after the rule engine existed, so this is a regression baseline, not independent human validation. See `docs/evaluation/evaluation-report.md` and `docs/decisions.md` (ADR-012).
-
-## Suggested build order
-1. Repository skeleton, configuration, typed models, and policy tests.
-2. PDF intake and text extraction.
-3. Structured extraction adapter and Pydantic validation.
-4. Purchase request matching and deterministic rule engine.
-5. Evidence/result persistence and single-document API.
-6. Batch workflow and resilient status aggregation.
-7. Frontend screens and human review.
-8. Evaluation harness, sample run, README, demo, and one-page submission note.
-
-
-## Design principles
-
-- **Evidence over assumptions:** retain source details for extracted values and findings.
-- **AI extracts; deterministic rules decide:** language models assist with document understanding, while explicit policy checks determine outcomes.
-- **Human review when uncertain:** ambiguous or insufficient information is surfaced for a person.
-- **Explainable outcomes:** reviewers should be able to understand why a document received its result.
-- **Document isolation:** processing one supplier's files should not contaminate another supplier's review.
-
-## Planned technology
-
-The implementation is planned around:
-
-- **Web app:** Next.js, TypeScript, Tailwind CSS, and shadcn/ui
-- **API:** Python and FastAPI
-- **PDF processing:** PyMuPDF, with Tesseract OCR as a fallback for scanned documents
-- **Data validation:** Pydantic
-- **Policy evaluation:** deterministic Python rules
-- **Storage:** SQLite and local file storage for the initial version
-- **Testing:** pytest
-
-This is the intended stack; components may change as development and evaluation progress.
-
-## Project structure
-
-Current high-level layout:
-
-- `README.md` — project overview and documentation index
-- `AGENTS.md` — AI coding assistant instructions for the repository root
-- `docs/` — project, architecture, API, policy, and assessment documentation
-- `frontend/` — Next.js frontend application
-- `backend/` — FastAPI backend, Python virtual environment, and backend entrypoint
-- `frontend/AGENTS.md` — Next.js-specific AI coding instructions for the app directory
-
-Planned or future application areas described in earlier planning included `apps/web`, `services/api`, and `tests/`; the current implementation uses `frontend/` and `backend/` instead. Update this section if the physical layout changes.
-
-## Getting started
-
-Backend:
-
-```bash
-cd backend
-source .venv/bin/activate
-uvicorn main:app --reload --host 127.0.0.1 --port 8000
-```
-
-Frontend:
-
-```bash
-cd frontend
-npm run dev
-```
+Open http://localhost:3000. The frontend calls the backend at http://localhost:8000 by default.
 
 Useful URLs:
-
-- Frontend: http://localhost:3000
-- New Verification: http://localhost:3000/verifications/new
+- Dashboard: http://localhost:3000
+- New verification: http://localhost:3000/verifications/new
 - Backend health: http://localhost:8000/health
-- Backend docs: http://localhost:8000/docs
+- Backend API docs: http://localhost:8000/docs
 
+## Results on the sample set
 
-## Evaluation
+On the 10 supplied packs, the system's decisions match the rule reading in `docs/evaluation/ground-truth.json`: 10 of 10 decisions and 10 of 10 rule-ID sets. The ground truth was written by the same AI assistant that built the rule engine, so this is a regression check, not independent validation. See `docs/evaluation/evaluation-report.md` and ADR-012 in `docs/decisions.md`.
 
-QUVI is intended to be evaluated against the supplied sample quotations, contracts, purchase requisition, and rule list. Evaluation should report:
+## Limits
 
-- Correctness of the final decision for each sample
-- Whether findings are supported by document evidence
-- How uncertain cases are routed to human review
-- Known limitations and next steps
+- **Extraction is tuned to these 10 layouts.** Three unseen custom quotes were tested. They did not produce false rejects, but most fields were not extracted and were routed to review.
+- **Evidence snippets can start or end mid-word** in the stored results. The frontend hides these and shows "Source line unavailable".
+- **TIN and BIN** are read only from the exact label `Supplier TIN:` / `BIN:`. Other wording is routed to review, not confirmed as absent.
+- **Late-delivery penalty** absence is confirmed only when no penalty wording appears and a readable terms section is present.
+- **Reviewer workflow** is limited to viewing results. There is no review queue, login or audit trail.
 
-Only authorized sample materials should be used during evaluation. Do not use real company or customer documents.
+## Documents
 
-## Roadmap
+1. [Project overview](docs/project-overview.md)
+2. [Technical architecture](docs/architecture.md)
+3. [Business rules](docs/business-rules.md)
+4. [Evaluation and test plan](docs/evaluation-test-plan.md)
+5. [Decision log](docs/decisions.md)
+6. [Evaluation report](docs/evaluation/evaluation-report.md)
+7. [Assessment files](docs/assessment/README.md)
 
-- [ ] Define product requirements and verification workflow
-- [ ] Implement document ingestion and extraction
-- [ ] Implement purchase requisition comparison
-- [ ] Implement deterministic policy checks
-- [ ] Build reviewer interface and evidence display
-- [ ] Add automated tests and sample-based evaluation
-- [ ] Document local setup and run a demo
+## Repository layout
 
-## License
-
-A license has not been selected yet.
+- `backend/` — FastAPI app, rule engine, extraction, tests, run script
+- `frontend/` — Next.js app
+- `docs/` — project, architecture, rules and decision documents
+- `docs/assessment/` — the 10 supplied packs, purchase request and company rules (fictional)
+- `docs/evaluation/` — ground truth and evaluation outputs
