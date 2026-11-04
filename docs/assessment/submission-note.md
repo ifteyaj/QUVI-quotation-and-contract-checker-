@@ -4,41 +4,38 @@
 **Challenge:** BIAI AI Engineer Round 2, Task 1  
 **Organization in scenario:** Aamar Garments Ltd (fictional)
 
-## What I built
-QUVI is a prototype that processes supplier quotation PDFs and compares extracted quote details against a purchase request and company policy. It uses a structured extraction step for variable document layouts, followed by deterministic Python validation and rule evaluation. The system returns Approve, Reject, or Needs Human Review with supporting evidence.
+## What was built
 
-## Workflow
-Users can upload a single PDF or multiple PDFs in a batch. Each document is processed independently through PDF text extraction, OCR fallback when needed, structured extraction, validation, purchase-request matching, policy checks, evidence assembly, and persistence. A failure in one document does not stop the remaining batch. Human review is recorded separately from the system decision.
+QUVI processes supplier quotation PDFs and compares extracted quote details against purchase request PR-2026-114 and the supplied company rules. It returns Approve, Reject, or Needs a person to check, with reasons and source text where available. Each document is processed independently; a failure in one document does not stop the rest of its batch.
 
-## Technical approach
-- Frontend: Next.js, TypeScript, Tailwind CSS, shadcn/ui.
-- Backend: Python, FastAPI, Pydantic.
-- PDF processing: PyMuPDF with Tesseract OCR fallback.
-- AI: no runtime LLM/API. Extraction is regex-based and deterministic validation; the rule engine decides.
-- Rules: deterministic Python policy engine.
-- Storage: in-memory batch store and local file storage for the prototype.
+## What runs today
 
-> Update this section to reflect the exact libraries, model/provider, and architecture actually implemented.
+- PDF text extraction with PyMuPDF.
+- Regex-based field extraction for supplier name, TIN, BIN, quotation number, prices, quantities, terms and other fields.
+- Matching of quoted items to the purchase request.
+- A deterministic Python rule engine based on `docs/assessment/company-rules.md`.
+- A FastAPI backend with batch upload, verification results and a source-file route.
+- A Next.js dashboard, upload page, verification list and verification detail page.
+
+No LLM or external AI API is called at runtime. AI coding/design tools were used during development (OpenCode with Claude).
+
+## Limits
+
+- Extraction is tuned to the supplied layouts. Three unseen custom quotes did not trigger false rejects, but most of their fields were not extracted and were routed to review.
+- TIN and BIN are read only from the exact labels `Supplier TIN:` / `BIN:`. Other wording is treated as not confirmed.
+- Evidence snippets can begin or end mid-word; the frontend hides those and shows "Source line unavailable".
+- There is no authentication, review queue, login or audit trail. Human review exists only as a decision outcome and the viewer-facing review link.
+- UI recovery from a lost backend session is not implemented.
 
 ## Testing and results
-- Backend tests: `python -m pytest -q -p no:cacheprovider` — 38 passed (warnings from PyMuPDF/SWIG only).
-- Sample evaluation: all 10 supplied packs processed; 10 of 10 decisions and 10 of 10 rule-ID sets match the regression ground truth. Three unseen custom quotes were also tested; they did not produce false rejects, but most fields were not extracted and were routed to review.
 
-## Limitations
-- Extraction quality depends on PDF readability, layout, OCR, and model behavior.
-- Ambiguous or missing information is routed to human review.
-- The prototype is not an autonomous purchasing system and does not issue purchase orders or contact suppliers.
-- The supplied policy has an ambiguity about a penalty clause that exists but is below the stated 0.5% per-week minimum; the prototype should route this to human review unless clarified.
-- All ten supplied packs were processed. On the regression ground truth the result was 10 of 10 decisions and 10 of 10 rule-ID sets, but the ground truth was written by the same implementer, so this is a regression check rather than independent validation.
-
-## Next steps
-1. Complete implementation and regression tests.
-2. Label the full sample set and run the evaluation.
-3. Review false approvals, extraction failures, and evidence coverage.
-4. Improve UI and documentation based on observed results.
-5. Prepare demo walkthrough and update this note with actual outcomes.
+- Backend tests: `python -m pytest -q -p no:cacheprovider` — 38 passed at commit `1846855` (PyMuPDF/SWIG deprecation warnings only).
+- Frontend: `npm run build` and `npm run lint` pass.
+- 10 supplied packs: 10 of 10 decisions and 10 of 10 rule-ID sets on the regression ground truth. This is a regression check only; the ground truth was written by the same implementer.
+- UI spot check: dashboard and detail pages render the extracted values, merged TIN/BIN bar, findings and pagination as expected.
 
 ## Links
+
 - Repository: https://github.com/ifteyaj/QUVI-quotation-and-contract-checker-
-- Demo: `TBD`
-- Walkthrough: `TBD`
+- Demo: TBD
+- Walkthrough: TBD
