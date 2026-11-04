@@ -10,7 +10,7 @@ ASSESSMENT_DATA_DIR = Path(
 )
 
 # Keep these limits explicit and conservative for the initial upload slice.
-MAX_UPLOAD_SIZE_BYTES = 25 * 1024 * 1024
+MAX_UPLOAD_SIZE_BYTES = 10 * 1024 * 1024
 ALLOWED_CONTENT_TYPES = {"application/pdf"}
 PDF_MAGIC_NUMBER = b"%PDF"
 

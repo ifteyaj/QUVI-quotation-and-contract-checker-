@@ -3,11 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  LayoutDashboard,
-  FileCheck2,
-  PlusCircle,
-  List,
+  Building2,
   ClipboardList,
+  LayoutDashboard,
   Scale,
   Settings,
   ShieldCheck,
@@ -15,36 +13,19 @@ import {
 
 import { cn } from "@/lib/utils";
 
-type NavChild = {
-  label: string;
-  href: string;
-  icon: React.ComponentType<{ className?: string }>;
-};
-
-type NavItem = {
-  label: string;
-  href?: string;
-  icon: React.ComponentType<{ className?: string }>;
-  children?: NavChild[];
-};
-
-const navigation: NavItem[] = [
+const navigation = [
   { label: "Dashboard", href: "/", icon: LayoutDashboard },
-  {
-    label: "Verification",
-    icon: FileCheck2,
-    children: [
-      { label: "New Verification", href: "/verifications/new", icon: PlusCircle },
-      { label: "Verification List", href: "/verifications", icon: List },
-    ],
-  },
+  { label: "Verifications", href: "/verifications", icon: ShieldCheck },
   { label: "Purchase Requests", href: "/purchase-requests", icon: ClipboardList },
   { label: "Rules & Policy", href: "/rules-policy", icon: Scale },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
 
-function isPathActive(pathname: string, href: string) {
-  if (href === "/") return pathname === "/";
+function isActive(pathname: string, href: string) {
+  if (href === "/") {
+    return pathname === "/";
+  }
+
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
@@ -65,60 +46,17 @@ export function AppSidebar() {
 
       <nav className="flex-1 space-y-1 px-3 py-4" aria-label="Primary navigation">
         {navigation.map((item) => {
-          if (item.children) {
-            const groupActive = item.children.some((child) =>
-              isPathActive(pathname, child.href),
-            );
-
-            return (
-              <div key={item.label} className="space-y-1">
-                <div
-                  className={cn(
-                    "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium",
-                    groupActive ? "text-primary" : "text-foreground",
-                  )}
-                >
-                  <item.icon className="size-4" />
-                  <span>{item.label}</span>
-                </div>
-
-                <div className="ml-4 space-y-1 border-l border-border pl-3">
-                  {item.children.map((child) => {
-                    const active = isPathActive(pathname, child.href);
-
-                    return (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        className={cn(
-                          "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
-                          active
-                            ? "bg-primary-light text-primary font-medium"
-                            : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                        )}
-                        aria-current={active ? "page" : undefined}
-                      >
-                        <child.icon className="size-4" />
-                        <span>{child.label}</span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          }
-
-          const active = item.href ? isPathActive(pathname, item.href) : false;
+          const active = isActive(pathname, item.href);
 
           return (
             <Link
-              key={item.label}
-              href={item.href ?? "#"}
+              key={item.href}
+              href={item.href}
               className={cn(
                 "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                 active
-                  ? "bg-primary text-primary-foreground"
-                  : "text-foreground hover:bg-muted",
+                  ? "bg-primary-light text-primary"
+                  : "text-foreground hover:bg-muted"
               )}
               aria-current={active ? "page" : undefined}
             >
@@ -129,10 +67,21 @@ export function AppSidebar() {
         })}
       </nav>
 
-      <div className="border-t border-border px-6 py-4">
-        <p className="text-xs text-muted-foreground">
-          Mock UI data only. Backend integration pending.
-        </p>
+      <div className="border-t border-border p-4">
+        <div className="flex items-center gap-3 rounded-lg bg-muted/40 p-3">
+          <div className="flex size-9 items-center justify-center rounded-full bg-primary-light text-sm font-semibold text-primary">
+            GC
+          </div>
+          <div className="min-w-0">
+            <p className="truncate text-sm font-medium text-foreground">
+              Garment Co. Ltd.
+            </p>
+            <p className="truncate text-xs text-muted-foreground">
+              Business Account
+            </p>
+          </div>
+          <Building2 className="ml-auto size-4 text-muted-foreground" />
+        </div>
       </div>
     </aside>
   );

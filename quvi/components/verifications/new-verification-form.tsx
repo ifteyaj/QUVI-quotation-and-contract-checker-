@@ -1,12 +1,17 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
+  ArrowLeft,
+  ArrowRight,
+  ChevronDown,
   FileText,
+  FileUp,
+  Info,
   Loader2,
   Plus,
   Trash2,
-  UploadCloud,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -22,7 +27,7 @@ import {
 import type { PurchaseRequestResponse } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
-const MAX_FILE_SIZE_BYTES = 25 * 1024 * 1024;
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
 
 function formatFieldValue(value: unknown): string {
   if (value === null || value === undefined || value === "") {
@@ -60,7 +65,7 @@ function validateFile(file: File): string | null {
   }
 
   if (file.size > MAX_FILE_SIZE_BYTES) {
-    return "The PDF must be 25 MB or smaller.";
+    return "The PDF must be 10 MB or smaller.";
   }
 
   return null;
@@ -226,25 +231,40 @@ export function NewVerificationForm() {
   }, [isSubmitting, purchaseRequestNumber, selectedFile]);
 
   return (
-    <div className="mx-auto w-full max-w-5xl space-y-6 p-6 md:p-8">
+    <div className="mx-auto w-full max-w-6xl space-y-8 p-6 md:p-8">
+      <div className="flex items-start justify-between gap-4">
+        <Link
+          href="/"
+          className="inline-flex h-9 items-center gap-2 rounded-md px-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        >
+          <ArrowLeft className="size-4" />
+          Back to Dashboard
+        </Link>
+        <span className="rounded-md border border-border bg-muted/40 px-3 py-1.5 text-xs font-medium text-muted-foreground">
+          Step 1 of 2
+        </span>
+      </div>
+
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">
           New Verification
         </h1>
         <p className="text-sm text-muted-foreground">
-          Upload a supplier quotation PDF to create a new QUVI verification request.
-          The file is validated and stored by the backend before later extraction and
-          policy checks are added.
+          Upload a supplier quotation or contract to check it against your purchase
+          request and company rules.
         </p>
       </header>
 
       <Card className="rounded-xl border-border shadow-sm">
         <CardHeader>
-          <CardTitle className="text-base font-semibold text-foreground">
+          <CardTitle className="flex items-center gap-2 text-base font-semibold text-foreground">
+            <span className="flex size-6 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
+              2
+            </span>
             Purchase Request
           </CardTitle>
           <CardDescription>
-            Select the purchase request for quotation comparison.
+            Select the request this quotation should be checked against.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -254,15 +274,19 @@ export function NewVerificationForm() {
           >
             Purchase request
           </label>
-          <select
-            id="purchase-request"
-            className="h-9 w-full rounded-md border border-input bg-input/20 px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30"
-            value={purchaseRequestNumber}
-            onChange={(event) => setPurchaseRequestNumber(event.target.value)}
-            disabled={isSubmitting}
-          >
-            <option value="PR-2026-114">PR-2026-114 — Purchase request from assessment data</option>
-          </select>
+          <div className="relative w-full">
+            <FileText className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <select
+              id="purchase-request"
+              className="h-10 w-full appearance-none rounded-md border border-input bg-input/20 pl-10 pr-10 text-sm outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30"
+              value={purchaseRequestNumber}
+              onChange={(event) => setPurchaseRequestNumber(event.target.value)}
+              disabled={isSubmitting}
+            >
+              <option value="PR-2026-114">PR-2026-114 — Supplied assessment purchase request</option>
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          </div>
 
           {isPurchaseRequestLoading && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -329,11 +353,14 @@ export function NewVerificationForm() {
 
       <Card className="rounded-xl border-border shadow-sm">
         <CardHeader>
-          <CardTitle className="text-base font-semibold text-foreground">
-            Quotation Document
+          <CardTitle className="flex items-center gap-2 text-base font-semibold text-foreground">
+            <span className="flex size-6 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
+              1
+            </span>
+            Supplier Document
           </CardTitle>
           <CardDescription>
-            Upload one supplier quotation in PDF format.
+            PDF files only. Max file size: 10MB
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -347,7 +374,8 @@ export function NewVerificationForm() {
             aria-label="Select quotation PDF"
           />
 
-          <div
+          <div className="grid gap-5 lg:grid-cols-2">
+            <div
             className={cn(
               "rounded-lg border-2 border-dashed p-8 transition-colors",
               isDragging
@@ -362,14 +390,14 @@ export function NewVerificationForm() {
           >
             <div className="flex flex-col items-center gap-3 text-center">
               <div className="flex size-12 items-center justify-center rounded-full bg-primary-light">
-                <UploadCloud className="size-6 text-primary" />
+                <FileUp className="size-6 text-primary" />
               </div>
               <div className="space-y-1">
                 <p className="text-sm font-medium text-foreground">
-                  Drag and drop a PDF quotation here
+                  Drag and drop your document here
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  or select a file from your computer
+                  or browse files from your computer
                 </p>
               </div>
               <Button
@@ -379,12 +407,52 @@ export function NewVerificationForm() {
                 onClick={() => fileInputRef.current?.click()}
               >
                 <Plus className="size-4" />
-                Browse files
+                Choose PDF
               </Button>
               <p className="text-xs text-muted-foreground">
-                PDF only, up to 25 MB.
+                PDF only, up to 10 MB.
               </p>
             </div>
+          </div>
+          </div>
+
+          <div className="min-h-[220px] rounded-lg border border-border bg-muted/30 p-6">
+            {selectedFile ? (
+              <div className="flex items-start gap-4">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary-light">
+                  <FileText className="size-5 text-primary" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium text-foreground">
+                    {selectedFile.name}
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {selectedFile.type || "application/pdf"} •{" "}
+                    {formatBytes(selectedFile.size)}
+                  </p>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    Selected PDF. Backend validation will confirm that it is a
+                    valid PDF.
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={handleRemoveFile}
+                  disabled={isSubmitting}
+                  aria-label="Remove selected file"
+                >
+                  <Trash2 className="size-4" />
+                </Button>
+              </div>
+            ) : (
+              <div className="flex h-full items-center justify-center text-center">
+                <p className="text-sm text-muted-foreground">
+                  Selected file details
+                </p>
+              </div>
+            )}
           </div>
 
           {fileError && (
@@ -393,37 +461,6 @@ export function NewVerificationForm() {
               className="rounded-md border border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger"
             >
               {fileError}
-            </div>
-          )}
-
-          {selectedFile && (
-            <div className="flex items-start gap-4 rounded-lg border border-border bg-card p-4">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary-light">
-                <FileText className="size-5 text-primary" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-foreground">
-                  {selectedFile.name}
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  {selectedFile.type || "application/pdf"} •{" "}
-                  {formatBytes(selectedFile.size)}
-                </p>
-                <p className="mt-2 text-xs text-muted-foreground">
-                  Selected PDF. Backend validation will confirm that it is a valid
-                  PDF.
-                </p>
-              </div>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
-                onClick={handleRemoveFile}
-                disabled={isSubmitting}
-                aria-label="Remove selected file"
-              >
-                <Trash2 className="size-4" />
-              </Button>
             </div>
           )}
 
@@ -437,12 +474,11 @@ export function NewVerificationForm() {
             </div>
           )}
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-xs text-muted-foreground">
-              {result
-                ? "The file has been stored and queued for later processing."
-                : "No verification decision is created at upload time."}
-            </p>
+          <div className="flex flex-col gap-3 rounded-lg border border-primary-light bg-primary-light px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Info className="size-4 text-primary" />
+              <span>Your document will be checked against QUVI&apos;s configured rules.</span>
+            </div>
             <Button
               type="button"
               onClick={handleStartVerification}
@@ -456,8 +492,8 @@ export function NewVerificationForm() {
                 </>
               ) : (
                 <>
-                  <Plus className="size-4" />
                   Start Verification
+                  <ArrowRight className="size-4" />
                 </>
               )}
             </Button>
