@@ -1,0 +1,131 @@
+{
+  "dataset_name": "QUVI supplier quotation verification assessment samples",
+  "dataset_size": 10,
+  "evaluation_version": "1.0.0",
+  "rule_version_expected": "aamar-garments-rules-v1",
+  "purchase_request_number": "PR-2026-114",
+  "reviewer": "Independent source-document assessment",
+  "notes": "Expected outcomes were reasoned directly from docs/assessment/company-rules.md, docs/assessment/purchase-request.csv, and the 10 supplier PDFs. They are not copied from QUVI output.",
+  "documents": [
+    {
+      "filename": "supplier-pack-01.pdf",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "APPROVE",
+      "expected_rule_ids": [],
+      "expected_reject_count": 0,
+      "expected_review_count": 0,
+      "decision_rationale": "Item A is priced at 472.00 BDT against a 480.00 BDT maximum; quantity is 12,000 metre; advance is 10%; delivery is 24 days; payment is 45 days after delivery; VAT is 15% shown separately; validity is 45 days; the line total, subtotal, VAT and total agree; the supplier has TIN and BIN; the 1% weekly penalty meets the 0.5% minimum.",
+      "policy_ambiguity": "None identified."
+    },
+    {
+      "filename": "supplier-pack-02.pdf",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "APPROVE",
+      "expected_rule_ids": [],
+      "expected_reject_count": 0,
+      "expected_review_count": 0,
+      "decision_rationale": "Item B is priced at 36.00 BDT against a 38.00 BDT maximum; quantity is 20,000 piece; there is no advance payment; delivery is 21 days; payment is 30 days after delivery; VAT is 15% shown separately; validity is 30 days; the 0.75% weekly penalty meets the minimum; TIN and BIN are present; calculations agree.",
+      "policy_ambiguity": "None identified."
+    },
+    {
+      "filename": "supplier-pack-03.pdf",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "REJECT",
+      "expected_rule_ids": [
+        "PRICE_ABOVE_3_PERCENT_REJECT"
+      ],
+      "expected_reject_count": 1,
+      "expected_review_count": 0,
+      "decision_rationale": "Item C is priced at 229.00 BDT against a 210.00 BDT maximum, a 9.05% increase, which is more than 3% above the maximum. Other terms are within policy.",
+      "policy_ambiguity": "None identified."
+    },
+    {
+      "filename": "supplier-pack-04.pdf",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "NEEDS_HUMAN_REVIEW",
+      "expected_rule_ids": [
+        "PRICE_ABOVE_MAX_REVIEW_BAND"
+      ],
+      "expected_reject_count": 0,
+      "expected_review_count": 1,
+      "decision_rationale": "Item D is priced at 6.65 BDT against a 6.50 BDT maximum, a 2.31% increase, within the maximum-plus-3% review band. All other checked terms are within policy.",
+      "policy_ambiguity": "None identified."
+    },
+    {
+      "filename": "supplier-pack-05.pdf",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "REJECT",
+      "expected_rule_ids": [
+        "ADVANCE_PAYMENT_ABOVE_LIMIT_REJECT"
+      ],
+      "expected_reject_count": 1,
+      "expected_review_count": 0,
+      "decision_rationale": "Item E is priced below the maximum, but the terms state a 40% advance payment, which exceeds the 20% limit.",
+      "policy_ambiguity": "The payment section repeats the advance percentages inconsistently (40% advance followed by balance 60%). The source should be interpreted as requiring a 40% advance, which triggers rejection; if the duplicated wording were intended to mean a different payment schedule, it would need clarification."
+    },
+    {
+      "filename": "supplier-pack-06.pdf",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "REJECT",
+      "expected_rule_ids": [
+        "LATE_PENALTY_MISSING_REJECT"
+      ],
+      "expected_reject_count": 1,
+      "expected_review_count": 0,
+      "decision_rationale": "Item A is below the maximum price, but the quotation has no late-delivery penalty clause, which is a reject condition.",
+      "policy_ambiguity": "None identified."
+    },
+    {
+      "filename": "supplier-pack-07.pdf",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "NEEDS_HUMAN_REVIEW",
+      "expected_rule_ids": [
+        "QUANTITY_VARIANCE_GREATER_THAN_5_REVIEW"
+      ],
+      "expected_reject_count": 0,
+      "expected_review_count": 1,
+      "decision_rationale": "Item B is priced below the maximum, but the quoted quantity is 16,500 piece against a requested 20,000 piece, a 17.5% variance, which requires review.",
+      "policy_ambiguity": "None identified."
+    },
+    {
+      "filename": "supplier-pack-08.pdf",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "REJECT",
+      "expected_rule_ids": [
+        "SUPPLIER_TIN_MISSING_REJECT",
+        "SUPPLIER_BIN_MISSING_REJECT"
+      ],
+      "expected_reject_count": 2,
+      "expected_review_count": 0,
+      "decision_rationale": "Item C is below the maximum price, but the document states that supplier registration details are available on request and provides no TIN or BIN, which triggers rejection.",
+      "policy_ambiguity": "None identified."
+    },
+    {
+      "filename": "supplier-pack-09.pdf",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "NEEDS_HUMAN_REVIEW",
+      "expected_rule_ids": [
+        "PAYMENT_DAYS_UNCLEAR_REVIEW",
+        "DELIVERY_DAYS_UNCLEAR_REVIEW",
+        "LINE_TOTAL_MISMATCH_REVIEW"
+      ],
+      "expected_reject_count": 0,
+      "expected_review_count": 3,
+      "decision_rationale": "Item D is below the maximum price at 6.40 BDT, but its payment term is a 30 to 90 day range, which is unclear/outside 30 to 60 days; delivery is stated as 4 weeks, so it needs conversion and human review; and the stated line total of 322,000.00 BDT does not equal 50,000 times 6.40 BDT, which equals 320,000.00 BDT.",
+      "policy_ambiguity": "The delivery term uses weeks while policy thresholds are in days. QUVI should not silently assume the conversion in a confirmed violation; the converted value needs human confirmation."
+    },
+    {
+      "filename": "supplier-pack-10.pdf",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "REJECT",
+      "expected_rule_ids": [
+        "DELIVERY_LATER_THAN_45_DAYS_REJECT",
+        "VAT_UNCLEAR_REVIEW"
+      ],
+      "expected_reject_count": 1,
+      "expected_review_count": 1,
+      "decision_rationale": "Item E is below the maximum price at 94.00 BDT, but delivery is promised in 60 days, which exceeds the 45-day reject limit. VAT is included in the total rather than separately shown at 15%, which is a review condition but subordinate to the reject finding.",
+      "policy_ambiguity": "The price is marked 'BDT, VAT included', so the separately shown 15% VAT rule cannot be evaluated against a standalone VAT line."
+    }
+  ]
+}

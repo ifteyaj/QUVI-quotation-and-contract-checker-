@@ -1,0 +1,523 @@
+{
+  "evaluation_version": "1.0.0",
+  "rule_version": "aamar-garments-rules-v1",
+  "generated_at": "2026-11-04T06:20:56.284636+00:00",
+  "source_revision": "ad68e55",
+  "ground_truth_path": "/Users/ifteyajahmed/Desktop/BIAI-AI-Engineer-Round2-Pack/QUVI/QUVI-quotation-and-contract-checker-/docs/evaluation/ground-truth.json",
+  "assessment_directory": "/Users/ifteyajahmed/Desktop/BIAI-AI-Engineer-Round2-Pack/QUVI/QUVI-quotation-and-contract-checker-/docs/assessment",
+  "ground_truth_name": "QUVI supplier quotation verification assessment samples",
+  "metrics": {
+    "documents_evaluated": 10,
+    "correct_decisions": 10,
+    "decision_accuracy_percent": 100.0,
+    "rule_set_exact_matches": 10,
+    "rule_set_exact_match_percent": 100.0,
+    "false_approvals": 0,
+    "false_rejections": 0,
+    "unnecessary_human_reviews": 0,
+    "missed_human_reviews": 0,
+    "correct_human_review_decisions": 3,
+    "extracted_field_status_totals": {
+      "extracted": 233,
+      "missing": 5,
+      "unclear": 2
+    },
+    "documents_with_findings_missing_evidence": 3
+  },
+  "documents": [
+    {
+      "filename": "supplier-pack-01.pdf",
+      "purchase_request_number": "PR-2026-114",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "actual_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "APPROVE",
+      "actual_decision": "APPROVE",
+      "decision_correct": true,
+      "expected_rule_ids": [],
+      "actual_rule_ids": [],
+      "missing_rule_ids": [],
+      "extra_rule_ids": [],
+      "all_expected_rules_present": true,
+      "no_extra_rules": true,
+      "page_count": 1,
+      "extracted_text_characters": 1041,
+      "extracted_quoted_items": 1,
+      "extracted_field_status_counts": {
+        "extracted": 24,
+        "missing": 0,
+        "unclear": 0
+      },
+      "all_findings_have_evidence": false,
+      "findings": [],
+      "decision_summary": "All applicable policy checks passed; no reject or review condition was triggered.",
+      "expected_decision_rationale": "Item A is priced at 472.00 BDT against a 480.00 BDT maximum; quantity is 12,000 metre; advance is 10%; delivery is 24 days; payment is 45 days after delivery; VAT is 15% shown separately; validity is 45 days; the line total, subtotal, VAT and total agree; the supplier has TIN and BIN; the 1% weekly penalty meets the 0.5% minimum.",
+      "policy_ambiguity": "None identified.",
+      "verification_notes": []
+    },
+    {
+      "filename": "supplier-pack-02.pdf",
+      "purchase_request_number": "PR-2026-114",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "actual_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "APPROVE",
+      "actual_decision": "APPROVE",
+      "decision_correct": true,
+      "expected_rule_ids": [],
+      "actual_rule_ids": [],
+      "missing_rule_ids": [],
+      "extra_rule_ids": [],
+      "all_expected_rules_present": true,
+      "no_extra_rules": true,
+      "page_count": 1,
+      "extracted_text_characters": 1023,
+      "extracted_quoted_items": 1,
+      "extracted_field_status_counts": {
+        "extracted": 24,
+        "missing": 0,
+        "unclear": 0
+      },
+      "all_findings_have_evidence": false,
+      "findings": [],
+      "decision_summary": "All applicable policy checks passed; no reject or review condition was triggered.",
+      "expected_decision_rationale": "Item B is priced at 36.00 BDT against a 38.00 BDT maximum; quantity is 20,000 piece; there is no advance payment; delivery is 21 days; payment is 30 days after delivery; VAT is 15% shown separately; validity is 30 days; the 0.75% weekly penalty meets the minimum; TIN and BIN are present; calculations agree.",
+      "policy_ambiguity": "None identified.",
+      "verification_notes": []
+    },
+    {
+      "filename": "supplier-pack-03.pdf",
+      "purchase_request_number": "PR-2026-114",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "actual_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "REJECT",
+      "actual_decision": "REJECT",
+      "decision_correct": true,
+      "expected_rule_ids": [
+        "PRICE_ABOVE_3_PERCENT_REJECT"
+      ],
+      "actual_rule_ids": [
+        "PRICE_ABOVE_3_PERCENT_REJECT"
+      ],
+      "missing_rule_ids": [],
+      "extra_rule_ids": [],
+      "all_expected_rules_present": true,
+      "no_extra_rules": true,
+      "page_count": 1,
+      "extracted_text_characters": 974,
+      "extracted_quoted_items": 1,
+      "extracted_field_status_counts": {
+        "extracted": 24,
+        "missing": 0,
+        "unclear": 0
+      },
+      "all_findings_have_evidence": true,
+      "findings": [
+        {
+          "finding_id": "finding_1",
+          "rule_id": "PRICE_ABOVE_3_PERCENT_REJECT",
+          "severity": "FindingSeverity.REJECT",
+          "status": "TRIGGERED",
+          "title": "Unit price is more than 3% above the maximum",
+          "message": "Quoted unit price 229.00 BDT is more than 3% above the PR maximum of 210.00 BDT.",
+          "confirmed": true,
+          "observed_value": "229.00 BDT",
+          "expected_value": "4% no; more than 3% above 210.00 BDT rejects",
+          "page_number": 1,
+          "evidence_text": "ments Ltd (fictional) Reference PR-2026-114 Item Description Qty Unit Unit price (BDT) Amount (BDT) C Polyester sewing thread, cone 800 cone 229.00 183,200.00 Subtotal 183,200.00 VAT 15% 27,480.00 Total 210,680.00 Supplier TIN: 103458033391 BIN: 000370341-01"
+        }
+      ],
+      "decision_summary": "Reject recommended because: Unit price is more than 3% above the maximum.",
+      "expected_decision_rationale": "Item C is priced at 229.00 BDT against a 210.00 BDT maximum, a 9.05% increase, which is more than 3% above the maximum. Other terms are within policy.",
+      "policy_ambiguity": "None identified.",
+      "verification_notes": []
+    },
+    {
+      "filename": "supplier-pack-04.pdf",
+      "purchase_request_number": "PR-2026-114",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "actual_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "NEEDS_HUMAN_REVIEW",
+      "actual_decision": "NEEDS_HUMAN_REVIEW",
+      "decision_correct": true,
+      "expected_rule_ids": [
+        "PRICE_ABOVE_MAX_REVIEW_BAND"
+      ],
+      "actual_rule_ids": [
+        "PRICE_ABOVE_MAX_REVIEW_BAND"
+      ],
+      "missing_rule_ids": [],
+      "extra_rule_ids": [],
+      "all_expected_rules_present": true,
+      "no_extra_rules": true,
+      "page_count": 1,
+      "extracted_text_characters": 957,
+      "extracted_quoted_items": 1,
+      "extracted_field_status_counts": {
+        "extracted": 24,
+        "missing": 0,
+        "unclear": 0
+      },
+      "all_findings_have_evidence": true,
+      "findings": [
+        {
+          "finding_id": "finding_1",
+          "rule_id": "PRICE_ABOVE_MAX_REVIEW_BAND",
+          "severity": "FindingSeverity.REVIEW",
+          "status": "TRIGGERED",
+          "title": "Unit price is above the maximum within the 3% review band",
+          "message": "Quoted unit price 6.65 BDT is 2.31% above the PR maximum of 6.50 BDT.",
+          "confirmed": true,
+          "observed_value": "6.65 BDT",
+          "expected_value": "6.50 BDT, review up to 3% above",
+          "page_number": 1,
+          "evidence_text": "ments Ltd (fictional) Reference PR-2026-114 Item Description Qty Unit Unit price (BDT) Amount (BDT) D Poly bag, 30 x 40 cm 50,000 piece 6.65 332,500.00 Subtotal 332,500.00 VAT 15% 49,875.00 Total 382,375.00 Supplier TIN: 104458043391 BIN: 000470441-01"
+        }
+      ],
+      "decision_summary": "Human review recommended because: Unit price is above the maximum within the 3% review band.",
+      "expected_decision_rationale": "Item D is priced at 6.65 BDT against a 6.50 BDT maximum, a 2.31% increase, within the maximum-plus-3% review band. All other checked terms are within policy.",
+      "policy_ambiguity": "None identified.",
+      "verification_notes": []
+    },
+    {
+      "filename": "supplier-pack-05.pdf",
+      "purchase_request_number": "PR-2026-114",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "actual_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "REJECT",
+      "actual_decision": "REJECT",
+      "decision_correct": true,
+      "expected_rule_ids": [
+        "ADVANCE_PAYMENT_ABOVE_LIMIT_REJECT"
+      ],
+      "actual_rule_ids": [
+        "ADVANCE_PAYMENT_ABOVE_LIMIT_REJECT"
+      ],
+      "missing_rule_ids": [],
+      "extra_rule_ids": [],
+      "all_expected_rules_present": true,
+      "no_extra_rules": true,
+      "page_count": 1,
+      "extracted_text_characters": 976,
+      "extracted_quoted_items": 1,
+      "extracted_field_status_counts": {
+        "extracted": 24,
+        "missing": 0,
+        "unclear": 0
+      },
+      "all_findings_have_evidence": true,
+      "findings": [
+        {
+          "finding_id": "finding_1",
+          "rule_id": "ADVANCE_PAYMENT_ABOVE_LIMIT_REJECT",
+          "severity": "FindingSeverity.REJECT",
+          "status": "TRIGGERED",
+          "title": "Advance payment exceeds the limit",
+          "message": "The advance payment is 40%, above the 20% limit.",
+          "confirmed": true,
+          "observed_value": "40%",
+          "expected_value": "20% or less",
+          "page_number": 1,
+          "evidence_text": "00 Total 317,400.00 Supplier TIN: 105458053391 BIN: 000570541-0101 TERMS AND CONDITIONS 1. Payment. 40% advance payable with the purchase order. 40% advance with the purchase order, balance 60% within 30 days of"
+        }
+      ],
+      "decision_summary": "Reject recommended because: Advance payment exceeds the limit.",
+      "expected_decision_rationale": "Item E is priced below the maximum, but the terms state a 40% advance payment, which exceeds the 20% limit.",
+      "policy_ambiguity": "The payment section repeats the advance percentages inconsistently (40% advance followed by balance 60%). The source should be interpreted as requiring a 40% advance, which triggers rejection; if the duplicated wording were intended to mean a different payment schedule, it would need clarification.",
+      "verification_notes": []
+    },
+    {
+      "filename": "supplier-pack-06.pdf",
+      "purchase_request_number": "PR-2026-114",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "actual_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "REJECT",
+      "actual_decision": "REJECT",
+      "decision_correct": true,
+      "expected_rule_ids": [
+        "LATE_PENALTY_MISSING_REJECT"
+      ],
+      "actual_rule_ids": [
+        "LATE_PENALTY_MISSING_REJECT"
+      ],
+      "missing_rule_ids": [],
+      "extra_rule_ids": [],
+      "all_expected_rules_present": true,
+      "no_extra_rules": true,
+      "page_count": 1,
+      "extracted_text_characters": 890,
+      "extracted_quoted_items": 1,
+      "extracted_field_status_counts": {
+        "extracted": 22,
+        "missing": 2,
+        "unclear": 0
+      },
+      "all_findings_have_evidence": false,
+      "findings": [
+        {
+          "finding_id": "finding_1",
+          "rule_id": "LATE_PENALTY_MISSING_REJECT",
+          "severity": "FindingSeverity.REJECT",
+          "status": "TRIGGERED",
+          "title": "Late-delivery penalty clause is missing",
+          "message": "No late-delivery penalty clause is present, so the quotation is rejected.",
+          "confirmed": true,
+          "observed_value": "absent",
+          "expected_value": "Late-delivery penalty clause present",
+          "page_number": null,
+          "evidence_text": null
+        }
+      ],
+      "decision_summary": "Reject recommended because: Late-delivery penalty clause is missing.",
+      "expected_decision_rationale": "Item A is below the maximum price, but the quotation has no late-delivery penalty clause, which is a reject condition.",
+      "policy_ambiguity": "None identified.",
+      "verification_notes": []
+    },
+    {
+      "filename": "supplier-pack-07.pdf",
+      "purchase_request_number": "PR-2026-114",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "actual_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "NEEDS_HUMAN_REVIEW",
+      "actual_decision": "NEEDS_HUMAN_REVIEW",
+      "decision_correct": true,
+      "expected_rule_ids": [
+        "QUANTITY_VARIANCE_GREATER_THAN_5_REVIEW"
+      ],
+      "actual_rule_ids": [
+        "QUANTITY_VARIANCE_GREATER_THAN_5_REVIEW"
+      ],
+      "missing_rule_ids": [],
+      "extra_rule_ids": [],
+      "all_expected_rules_present": true,
+      "no_extra_rules": true,
+      "page_count": 1,
+      "extracted_text_characters": 926,
+      "extracted_quoted_items": 1,
+      "extracted_field_status_counts": {
+        "extracted": 24,
+        "missing": 0,
+        "unclear": 0
+      },
+      "all_findings_have_evidence": true,
+      "findings": [
+        {
+          "finding_id": "finding_1",
+          "rule_id": "QUANTITY_VARIANCE_GREATER_THAN_5_REVIEW",
+          "severity": "FindingSeverity.REVIEW",
+          "status": "TRIGGERED",
+          "title": "Quantity differs by more than 5%",
+          "message": "Quoted quantity 16500 differs from requested quantity 20000 by more than 5%.",
+          "confirmed": true,
+          "observed_value": "16500",
+          "expected_value": "20000",
+          "page_number": 1,
+          "evidence_text": "ments Ltd (fictional) Reference PR-2026-114 Item Description Qty Unit Unit price (BDT) Amount (BDT) B Metal zipper, 18 cm 16,500 piece 35.00 577,500.00 Subtotal 577,500.00 VAT 15% 86,625.00 Total 664,125.00 Supplier TIN: 107458073391 BIN: 000770741-01"
+        }
+      ],
+      "decision_summary": "Human review recommended because: Quantity differs by more than 5%.",
+      "expected_decision_rationale": "Item B is priced below the maximum, but the quoted quantity is 16,500 piece against a requested 20,000 piece, a 17.5% variance, which requires review.",
+      "policy_ambiguity": "None identified.",
+      "verification_notes": []
+    },
+    {
+      "filename": "supplier-pack-08.pdf",
+      "purchase_request_number": "PR-2026-114",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "actual_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "REJECT",
+      "actual_decision": "REJECT",
+      "decision_correct": true,
+      "expected_rule_ids": [
+        "SUPPLIER_BIN_MISSING_REJECT",
+        "SUPPLIER_TIN_MISSING_REJECT"
+      ],
+      "actual_rule_ids": [
+        "SUPPLIER_BIN_MISSING_REJECT",
+        "SUPPLIER_TIN_MISSING_REJECT"
+      ],
+      "missing_rule_ids": [],
+      "extra_rule_ids": [],
+      "all_expected_rules_present": true,
+      "no_extra_rules": true,
+      "page_count": 1,
+      "extracted_text_characters": 950,
+      "extracted_quoted_items": 1,
+      "extracted_field_status_counts": {
+        "extracted": 22,
+        "missing": 2,
+        "unclear": 0
+      },
+      "all_findings_have_evidence": false,
+      "findings": [
+        {
+          "finding_id": "finding_1",
+          "rule_id": "SUPPLIER_TIN_MISSING_REJECT",
+          "severity": "FindingSeverity.REJECT",
+          "status": "TRIGGERED",
+          "title": "Supplier TIN is missing",
+          "message": "The supplier TIN is missing, so the quotation is rejected under the TIN/BIN rule.",
+          "confirmed": true,
+          "observed_value": "missing",
+          "expected_value": "Supplier TIN present",
+          "page_number": null,
+          "evidence_text": null
+        },
+        {
+          "finding_id": "finding_2",
+          "rule_id": "SUPPLIER_BIN_MISSING_REJECT",
+          "severity": "FindingSeverity.REJECT",
+          "status": "TRIGGERED",
+          "title": "Supplier BIN is missing",
+          "message": "The supplier BIN is missing, so the quotation is rejected under the TIN/BIN rule.",
+          "confirmed": true,
+          "observed_value": "missing",
+          "expected_value": "Supplier BIN present",
+          "page_number": null,
+          "evidence_text": null
+        }
+      ],
+      "decision_summary": "Reject recommended because: Supplier TIN is missing; Supplier BIN is missing.",
+      "expected_decision_rationale": "Item C is below the maximum price, but the document states that supplier registration details are available on request and provides no TIN or BIN, which triggers rejection.",
+      "policy_ambiguity": "None identified.",
+      "verification_notes": []
+    },
+    {
+      "filename": "supplier-pack-09.pdf",
+      "purchase_request_number": "PR-2026-114",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "actual_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "NEEDS_HUMAN_REVIEW",
+      "actual_decision": "NEEDS_HUMAN_REVIEW",
+      "decision_correct": true,
+      "expected_rule_ids": [
+        "DELIVERY_DAYS_UNCLEAR_REVIEW",
+        "LINE_TOTAL_MISMATCH_REVIEW",
+        "PAYMENT_DAYS_UNCLEAR_REVIEW"
+      ],
+      "actual_rule_ids": [
+        "DELIVERY_DAYS_UNCLEAR_REVIEW",
+        "LINE_TOTAL_MISMATCH_REVIEW",
+        "PAYMENT_DAYS_UNCLEAR_REVIEW"
+      ],
+      "missing_rule_ids": [],
+      "extra_rule_ids": [],
+      "all_expected_rules_present": true,
+      "no_extra_rules": true,
+      "page_count": 1,
+      "extracted_text_characters": 963,
+      "extracted_quoted_items": 1,
+      "extracted_field_status_counts": {
+        "extracted": 22,
+        "missing": 0,
+        "unclear": 2
+      },
+      "all_findings_have_evidence": true,
+      "findings": [
+        {
+          "finding_id": "finding_1",
+          "rule_id": "PAYMENT_DAYS_UNCLEAR_REVIEW",
+          "severity": "FindingSeverity.REVIEW",
+          "status": "TRIGGERED",
+          "title": "Payment days are unclear",
+          "message": "Payment terms are unclear or their number of days after delivery could not be evaluated.",
+          "confirmed": false,
+          "observed_value": "unclear",
+          "expected_value": "30 to 60 days after delivery",
+          "page_number": 1,
+          "evidence_text": "15% 48,300.00 Total 370,300.00 Supplier TIN: 109458093391 BIN: 000970941-0101 TERMS AND CONDITIONS 1. Payment. 5% advance payable with the purchase order. Payment within 30 to 90 days as agreed by both parties. 2. Delivery. Delivery within 4 weeks of PO. 3. Delay. Late deliver..."
+        },
+        {
+          "finding_id": "finding_2",
+          "rule_id": "DELIVERY_DAYS_UNCLEAR_REVIEW",
+          "severity": "FindingSeverity.REVIEW",
+          "status": "TRIGGERED",
+          "title": "Delivery days are unclear",
+          "message": "Delivery is stated in weeks or could not be converted to days after the purchase order.",
+          "confirmed": false,
+          "observed_value": "unclear",
+          "expected_value": "30 days or fewer preferred; more than 45 days rejected",
+          "page_number": 1,
+          "evidence_text": "5% advance payable with the purchase order. Payment within 30 to 90 days as agreed by both parties. 2. Delivery. Delivery within 4 weeks of PO. 3. Delay. Late delivery penalty of 0.5% of order value per week. 4. Validity. This quotation is val"
+        },
+        {
+          "finding_id": "finding_3",
+          "rule_id": "LINE_TOTAL_MISMATCH_REVIEW",
+          "severity": "FindingSeverity.REVIEW",
+          "status": "TRIGGERED",
+          "title": "Line total does not agree with quantity and unit price",
+          "message": "Stated line total 322000.00 does not equal 50000 x 6.40 = 320000.00.",
+          "confirmed": true,
+          "observed_value": "322000.00",
+          "expected_value": "320000.00",
+          "page_number": 1,
+          "evidence_text": "ments Ltd (fictional) Reference PR-2026-114 Item Description Qty Unit Unit price (BDT) Amount (BDT) D Poly bag, 30 x 40 cm 50,000 piece 6.40 322,000.00 Subtotal 322,000.00 VAT 15% 48,300.00 Total 370,300.00 Supplier TIN: 109458093391 BIN: 000970941-01"
+        }
+      ],
+      "decision_summary": "Human review recommended because: Payment days are unclear; Delivery days are unclear; Line total does not agree with quantity and unit price.",
+      "expected_decision_rationale": "Item D is below the maximum price at 6.40 BDT, but its payment term is a 30 to 90 day range, which is unclear/outside 30 to 60 days; delivery is stated as 4 weeks, so it needs conversion and human review; and the stated line total of 322,000.00 BDT does not equal 50,000 times 6.40 BDT, which equals 320,000.00 BDT.",
+      "policy_ambiguity": "The delivery term uses weeks while policy thresholds are in days. QUVI should not silently assume the conversion in a confirmed violation; the converted value needs human confirmation.",
+      "verification_notes": []
+    },
+    {
+      "filename": "supplier-pack-10.pdf",
+      "purchase_request_number": "PR-2026-114",
+      "expected_processing_status": "TEXT_EXTRACTED",
+      "actual_processing_status": "TEXT_EXTRACTED",
+      "expected_decision": "REJECT",
+      "actual_decision": "REJECT",
+      "decision_correct": true,
+      "expected_rule_ids": [
+        "DELIVERY_LATER_THAN_45_DAYS_REJECT",
+        "VAT_UNCLEAR_REVIEW"
+      ],
+      "actual_rule_ids": [
+        "DELIVERY_LATER_THAN_45_DAYS_REJECT",
+        "VAT_UNCLEAR_REVIEW"
+      ],
+      "missing_rule_ids": [],
+      "extra_rule_ids": [],
+      "all_expected_rules_present": true,
+      "no_extra_rules": true,
+      "page_count": 1,
+      "extracted_text_characters": 944,
+      "extracted_quoted_items": 1,
+      "extracted_field_status_counts": {
+        "extracted": 23,
+        "missing": 1,
+        "unclear": 0
+      },
+      "all_findings_have_evidence": false,
+      "findings": [
+        {
+          "finding_id": "finding_1",
+          "rule_id": "DELIVERY_LATER_THAN_45_DAYS_REJECT",
+          "severity": "FindingSeverity.REJECT",
+          "status": "TRIGGERED",
+          "title": "Delivery is later than 45 days",
+          "message": "Delivery is promised in 60 days, later than the 45-day limit.",
+          "confirmed": true,
+          "observed_value": "60 days after PO",
+          "expected_value": "45 days or fewer",
+          "page_number": 1,
+          "evidence_text": "ITIONS 1. Payment. 10% advance payable with the purchase order. Payment within 45 days of delivery. 2. Delivery. Delivery within 60 days of PO. 3. Delay. Late delivery penalty of 0.5% of order value per week. 4. Validity. This quotation is val"
+        },
+        {
+          "finding_id": "finding_2",
+          "rule_id": "VAT_UNCLEAR_REVIEW",
+          "severity": "FindingSeverity.REVIEW",
+          "status": "TRIGGERED",
+          "title": "VAT presentation is unclear",
+          "message": "VAT was not identified as separately shown at 15%.",
+          "confirmed": false,
+          "observed_value": "missing",
+          "expected_value": "15% separately shown",
+          "page_number": null,
+          "evidence_text": null
+        }
+      ],
+      "decision_summary": "Reject recommended because: Delivery is later than 45 days.",
+      "expected_decision_rationale": "Item E is below the maximum price at 94.00 BDT, but delivery is promised in 60 days, which exceeds the 45-day reject limit. VAT is included in the total rather than separately shown at 15%, which is a review condition but subordinate to the reject finding.",
+      "policy_ambiguity": "The price is marked 'BDT, VAT included', so the separately shown 15% VAT rule cannot be evaluated against a standalone VAT line.",
+      "verification_notes": []
+    }
+  ]
+}
