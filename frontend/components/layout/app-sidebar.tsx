@@ -118,11 +118,11 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
       <div className="flex h-16 items-center border-b border-border px-4">
         <div className="flex flex-col justify-center gap-1">
           <Image
-            src="/QUVI_logo.svg"
+            src={mounted && resolvedTheme === "dark" ? "/QUVI_logo_2.svg" : "/QUVI_logo.svg"}
             alt="QUVI"
             width={220}
             height={80}
-            className="h-10 w-auto max-w-[200px] object-contain dark:brightness-0 dark:invert"
+            className="h-10 w-auto max-w-[200px] object-contain "
           />
         </div>
       </div>
