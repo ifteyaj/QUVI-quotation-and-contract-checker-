@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: quvi-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: CORS_ORIGINS
+        value: https://your-app.vercel.app
+        # Set the real frontend origin in the Render dashboard.
+      - key: QUVI_DATA_DIR
+        value: /var/data/quvi
+      - key: PYTHON_VERSION
+        value: "3.9.6"
+    disk:
+      name: quvi-data
+      mountPath: /var/data/quvi
+      sizeGB: 1
