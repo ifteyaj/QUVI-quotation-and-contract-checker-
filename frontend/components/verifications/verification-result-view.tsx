@@ -318,6 +318,14 @@ export default function VerificationResultView({ batchId }: { batchId: string })
 
       <div className="flex h-16 shrink-0 items-center divide-x divide-border rounded-2xl border border-border bg-card px-4">
         <MetaItem
+          icon={Building2}
+          label="Supplier"
+          value={supplierName.text}
+          warning={supplierName.missing}
+          title={supplierName.missing ? undefined : supplierName.text}
+          className="flex-1 min-w-0 px-2"
+        />
+        <MetaItem
           icon={FileText}
           label="Quotation"
           value={quotationNumber.text}
@@ -328,14 +336,6 @@ export default function VerificationResultView({ batchId }: { batchId: string })
           icon={CalendarDays}
           label="Checked on"
           value={formatCheckedOn(document.created_at)}
-          className="flex-1 min-w-0 px-2"
-        />
-        <MetaItem
-          icon={Building2}
-          label="Supplier"
-          value={supplierName.text}
-          warning={supplierName.missing}
-          title={supplierName.missing ? undefined : supplierName.text}
           className="flex-1 min-w-0 px-2"
         />
         <MetaItem
