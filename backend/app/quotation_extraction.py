@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 from decimal import Decimal, InvalidOperation
-from typing import Any, Callable, List, Sequence, Tuple
+from typing import Any, Callable, List, Optional, Sequence, Tuple
 
 from app.pdf_extraction import ExtractedPage
 from app.schemas import (
@@ -70,13 +70,54 @@ def _missing() -> ExtractedField:
     return ExtractedField(status=ExtractionStatus.MISSING)
 
 
+def _not_located() -> ExtractedField:
+    return ExtractedField(status=ExtractionStatus.NOT_LOCATED)
+
+
+TIN_KEYWORD = re.compile(r"\bTIN\b|Tax Identification", re.IGNORECASE)
+BIN_KEYWORD = re.compile(r"\bBIN\b|Business Identification", re.IGNORECASE)
+PENALTY_WORD = re.compile(r"\b(?:penalty|penalties|delay|late)\b", re.IGNORECASE)
+TERMS_HEADING = re.compile(r"TERMS AND CONDITIONS", re.IGNORECASE)
+
+
+def _extract_identifier(
+    pages: Sequence[ExtractedPage],
+    value_pattern: re.Pattern[str],
+    keyword_pattern: re.Pattern[str],
+    absence_evidence: List[FieldEvidence],
+    can_confirm_absence: bool,
+) -> ExtractedField[str]:
+    """TIN/BIN: MISSING only when the label is absent and the header was readable."""
+    field = _extract_text_value(pages, value_pattern, "value")
+    if field.status != ExtractionStatus.NOT_LOCATED:
+        return field
+    if _search_pages(pages, keyword_pattern):
+        # The label is in the text but no value parsed: uncertain, not absent.
+        return _not_located()
+    if can_confirm_absence:
+        return ExtractedField(
+            status=ExtractionStatus.MISSING, value=None, evidence=absence_evidence
+        )
+    return _not_located()
+
+
+def _penalty_absence_basis(pages: Sequence[ExtractedPage]) -> Optional[FieldEvidence]:
+    """Return evidence that the penalty clause is absent, or None if not confirmable."""
+    if _search_pages(pages, PENALTY_WORD):
+        return None
+    terms = _search_pages(pages, TERMS_HEADING)
+    if not terms:
+        return None
+    return _page_for_match(pages, terms[0][1].group(0))
+
+
 def _extract_text_value(
     pages: Sequence[ExtractedPage], pattern: re.Pattern[str], group: str = "value"
 ) -> ExtractedField[str]:
     matches = _search_pages(pages, pattern)
 
     if not matches:
-        return _missing()
+        return _not_located()
 
     distinct_values = {match.group(group).strip() for _, match in matches}
 
@@ -103,7 +144,7 @@ def _extract_decimal_value(
     matches = _search_pages(pages, pattern)
 
     if not matches:
-        return _missing()
+        return _not_located()
 
     first_value_text = matches[0][1].group(group)
     evidence = _page_for_match(pages, matches[0][1].group(0))
@@ -142,7 +183,7 @@ def _extract_integer_value(
     matches = _search_pages(pages, pattern)
 
     if not matches:
-        return _missing()
+        return _not_located()
 
     first_text = matches[0][1].group(group)
     evidence = _page_for_match(pages, matches[0][1].group(0))
@@ -178,7 +219,7 @@ def _extract_boolean(
             value=value_when_present,
             evidence=[_page_for_match(pages, evidence_needle)],
         )
-    return _missing()
+    return _not_located()
 
 
 def _extract_text_field(
@@ -189,7 +230,7 @@ def _extract_text_field(
     matches = _search_pages(pages, regex)
 
     if not matches:
-        return _missing()
+        return _not_located()
 
     raw_value = matches[0][1].group(group).strip()
     evidence = _page_for_match(pages, matches[0][1].group(0))
@@ -212,7 +253,7 @@ def _match_with_status(
     matches = _search_pages(pages, regex)
 
     if not matches:
-        return ExtractionStatus.MISSING, None, None
+        return ExtractionStatus.NOT_LOCATED, None, None
 
     values = []
     for _, match in matches:
@@ -287,7 +328,7 @@ def extract_quotation_from_pages(
     reference_pr_number = _extract_text_value(pages, reference_pattern, "value")
     header_matches = _search_pages(pages, header_pattern)
     currency_matches = header_matches if header_matches else _search_pages(pages, token_pattern)
-    currency_status = ExtractionStatus.EXTRACTED if currency_matches else ExtractionStatus.MISSING
+    currency_status = ExtractionStatus.EXTRACTED if currency_matches else ExtractionStatus.NOT_LOCATED
     currency_value = currency_matches[0][1].group("value").upper() if currency_matches else None
     currency_evidence = (
     _page_for_match(pages, currency_matches[0][1].group(0)) if currency_matches else FieldEvidence(page_number=pages[0].page_number if pages else 1, snippet="")
@@ -295,7 +336,7 @@ def extract_quotation_from_pages(
 
     payment_match = payment_pattern.search(combined_text)
     payment_terms = ExtractedField[str](
-        status=ExtractionStatus.EXTRACTED if payment_match else ExtractionStatus.MISSING,
+        status=ExtractionStatus.EXTRACTED if payment_match else ExtractionStatus.NOT_LOCATED,
         value=_normalize_whitespace(payment_match.group("value")) if payment_match else None,
         evidence=[_page_for_match(pages, payment_match.group(0))] if payment_match else [],
     )
@@ -303,7 +344,7 @@ def extract_quotation_from_pages(
         notes.append("Payment terms were not found in the document text.")
 
     advance_percent = _extract_decimal_value(pages, advance_pattern, "value")
-    if advance_percent.status == ExtractionStatus.MISSING and re.search(
+    if advance_percent.status != ExtractionStatus.EXTRACTED and re.search(
         r"no advance payment", combined_text, re.IGNORECASE
     ):
         advance_percent = ExtractedField[Any](
@@ -312,7 +353,7 @@ def extract_quotation_from_pages(
             evidence=[_page_for_match(pages, "No advance payment")],
         )
 
-    payment_days = _missing()
+    payment_days = _not_located()
     if payment_match is not None:
         payment_days_candidate = payment_days_pattern.search(payment_match.group("value"))
         if payment_days_candidate is not None:
@@ -331,7 +372,7 @@ def extract_quotation_from_pages(
 
     delivery_match = delivery_pattern.search(combined_text)
     delivery_period = ExtractedField[str](
-        status=ExtractionStatus.EXTRACTED if delivery_match else ExtractionStatus.MISSING,
+        status=ExtractionStatus.EXTRACTED if delivery_match else ExtractionStatus.NOT_LOCATED,
         value=_normalize_whitespace(delivery_match.group("value")) if delivery_match else None,
         evidence=[_page_for_match(pages, delivery_match.group(0))] if delivery_match else [],
     )
@@ -359,13 +400,13 @@ def extract_quotation_from_pages(
             evidence=[_page_for_match(pages, delivery_match.group(0))] if delivery_match else [],
         )
     else:
-        delivery_days = _missing()
+        delivery_days = _not_located()
 
     vat_rate = _extract_decimal_value(pages, vat_rate_pattern, "value")
     vat_present = vat_present_pattern.search(combined_text) is not None
     vat_line_evidence = _page_for_match(pages, "VAT") if vat_present else _page_for_match(pages, "")
     vat_separately_shown = ExtractedField[bool](
-        status=ExtractionStatus.EXTRACTED if vat_present else ExtractionStatus.MISSING,
+        status=ExtractionStatus.EXTRACTED if vat_present else ExtractionStatus.NOT_LOCATED,
         value=True if "VAT 15%" in combined_text else None,
         evidence=[vat_line_evidence] if vat_present and "VAT 15%" in combined_text else [],
     )
@@ -378,7 +419,7 @@ def extract_quotation_from_pages(
     late_rate = _extract_decimal_value(pages, late_rate_pattern, "value")
     late_rate_evidence = late_rate.evidence
 
-    if late_clause and late_rate.status == ExtractionStatus.MISSING:
+    if late_clause and late_rate.status != ExtractionStatus.EXTRACTED:
         notes.append("A late-delivery penalty clause is mentioned, but its rate is not clear.")
         late_clause_present = ExtractedField[bool](
             status=ExtractionStatus.EXTRACTED,
@@ -392,13 +433,20 @@ def extract_quotation_from_pages(
             evidence=late_rate_evidence,
         )
     else:
-        notes.append("No late-delivery penalty clause was found.")
-        late_clause_present = ExtractedField[bool](
-            status=ExtractionStatus.MISSING, value=False, evidence=[]
-        )
+        absence_basis = _penalty_absence_basis(pages)
+        if absence_basis is not None:
+            notes.append("No late-delivery penalty clause was found in a readable terms section.")
+            late_clause_present = ExtractedField[bool](
+                status=ExtractionStatus.MISSING, value=False, evidence=[absence_basis]
+            )
+        else:
+            notes.append("Late-delivery penalty clause could not be located.")
+            late_clause_present = ExtractedField[bool](
+                status=ExtractionStatus.NOT_LOCATED, value=None, evidence=[]
+            )
 
     if not late_clause:
-        late_rate = ExtractedField[Any](status=ExtractionStatus.MISSING, value=None, evidence=[])
+        late_rate = ExtractedField[Any](status=ExtractionStatus.NOT_LOCATED, value=None, evidence=[])
 
     quoted_items: List[ExtractedLineItem] = []
     seen_rows = set()
@@ -480,15 +528,34 @@ def extract_quotation_from_pages(
         notes.append("No quoted line item table was found in the PDF text.")
 
     supplier = ExtractedField[str](
-        status=ExtractionStatus.EXTRACTED if supplier_field.value is not None else ExtractionStatus.MISSING,
+        status=ExtractionStatus.EXTRACTED if supplier_field.value is not None else ExtractionStatus.NOT_LOCATED,
         value=supplier_field.value,
         evidence=supplier_field.evidence,
     )
 
+    can_confirm_identifier_absence = (
+        supplier.status == ExtractionStatus.EXTRACTED
+        and quotation_number.status == ExtractionStatus.EXTRACTED
+    )
+    supplier_tin = _extract_identifier(
+        pages,
+        re.compile(r"Supplier TIN:[ \t]*(?P<value>[A-Za-z0-9-]+)", re.I),
+        TIN_KEYWORD,
+        supplier.evidence,
+        can_confirm_identifier_absence,
+    )
+    supplier_bin = _extract_identifier(
+        pages,
+        re.compile(r"BIN:[ \t]*(?P<value>[A-Za-z0-9-]+)", re.I),
+        BIN_KEYWORD,
+        supplier.evidence,
+        can_confirm_identifier_absence,
+    )
+
     return ExtractedQuotation(
         supplier_name=supplier,
-        supplier_tin=_extract_text_value(pages, re.compile(r"Supplier TIN:\s*(?P<value>[A-Za-z0-9-]+)", re.I), "value"),
-        supplier_bin=_extract_text_value(pages, re.compile(r"BIN:\s*(?P<value>[A-Za-z0-9-]+)", re.I), "value"),
+        supplier_tin=supplier_tin,
+        supplier_bin=supplier_bin,
         quotation_number=quotation_number,
         quotation_date=quotation_date,
         reference_pr_number=reference_pr_number,

@@ -17,7 +17,7 @@ import { flattenAndSortDocuments, getDecision } from "@/lib/dashboard";
 import { extractedFieldValue, formatCheckedOn } from "@/lib/verification-result";
 import { Button } from "@/components/ui/button";
 
-const ROWS_PER_PAGE = 5;
+const ROWS_PER_PAGE = 10;
 
 const STATUS_PARAM_TO_DECISION = {
   approve: "APPROVE",
@@ -59,7 +59,7 @@ function decisionStyles(
 function SkeletonRows() {
   return (
     <tbody>
-      {Array.from({ length: 5 }).map((_, index) => (
+      {Array.from({ length: 10 }).map((_, index) => (
         <tr key={index} className="border-b border-border last:border-b-0">
           {Array.from({ length: 6 }).map((__, cell) => (
             <td key={cell} className="px-4 py-4">

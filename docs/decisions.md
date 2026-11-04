@@ -73,3 +73,11 @@ This log records the currently proposed decisions. Update it when a decision is 
 **Decision:** Label `docs/evaluation/ground-truth.json` honestly as authored by the QUVI implementer (AI coding assistant), not as an independent assessment.  
 **Context:** The same AI coding assistant implemented the extraction/rule engine and wrote the expected decisions afterwards. The expectations were derived from the policy, purchase-request CSV, and PDF text rather than copied from engine output, but they are not an independent human review.  
 **Consequences:** A 10/10 result demonstrates internal consistency and guards against regressions. It does not prove correctness. Independent validation requires a person who has not seen the implementation to re-derive the expected decisions.
+
+
+## ADR-013 — Separate unreadable fields from confirmed absence
+**Status:** Accepted
+**Decision:** Add `NOT_LOCATED` to `ExtractionStatus`. A reject fires only on EXTRACTED values that break a limit, or on `MISSING` fields carrying absence evidence. `NOT_LOCATED` and `UNCLEAR` findings are `REVIEW`, titled `Could not read [field] from this quotation`.
+**Context:** The brief says to stop and ask a person when unsure. Treating every unclear field as a reject was unsafe, especially for unfamiliar layouts.
+**Consequences:** TIN/BIN reject needs a readable keyword with no value, or confirmed absence from an otherwise readable header. Ambiguous evidence routes to review. Pack 08 remains a reject because no TIN/BIN keyword/value is present in a readable document.
+**Deviations:** Only TIN, BIN, and late penalty use exact "Could not read" title; thresholds and rule text unchanged; keyword absence is treated as confirmed absence only when the header is otherwise readable.

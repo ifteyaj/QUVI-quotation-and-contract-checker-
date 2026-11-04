@@ -12,8 +12,10 @@ T = TypeVar("T")
 
 class ExtractionStatus(str, Enum):
     EXTRACTED = "EXTRACTED"
-    MISSING = "MISSING"
+    MISSING = "MISSING"          # absence confirmed by the document
     UNCLEAR = "UNCLEAR"
+    NOT_LOCATED = "NOT_LOCATED"  # no pattern matched; absence not confirmed
+
 
 
 class FieldEvidence(BaseModel):

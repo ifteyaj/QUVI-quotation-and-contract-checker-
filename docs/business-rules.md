@@ -25,6 +25,14 @@ If no confirmed reject condition applies, any of the following results in `NEEDS
 ## Approve
 Approve only when no reject or review condition applies and all applicable checks have been evaluated.
 
+## Extraction status definitions
+
+An extracted field carries one of these four statuses:
+- `EXTRACTED`: a value was read from the document.
+- `MISSING`: absence is confirmed by the document (for example a `TIN:` line with a blank value, or an explicit "No advance payment required"). A reject needs absence evidence; otherwise use `UNCLEAR` or `NOT_LOCATED`.
+- `UNCLEAR`: a value was found but cannot be read reliably.
+- `NOT_LOCATED`: no pattern matched and absence is not confirmed. This is an uncertainty that routes to `NEEDS_HUMAN_REVIEW`, never `REJECT`.
+
 ## Additional note
 Late-delivery penalty must be at least **0.5% of order value per week of delay**. The source does not explicitly say whether a present-but-below-threshold penalty is Reject or Review. The safe implementation is **Needs human review**, and this policy ambiguity should be disclosed rather than silently inventing a hard rejection.
 

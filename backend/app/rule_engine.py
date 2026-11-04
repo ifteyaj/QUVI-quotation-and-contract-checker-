@@ -28,6 +28,8 @@ PAYMENT_MAX_DAYS = 60
 VAT_REQUIRED_PERCENT = Decimal("15")
 VALIDITY_MIN_DAYS = 30
 PENALTY_MIN_PERCENT = Decimal("0.5")
+UNREADABLE_STATUSES = {"MISSING", "UNCLEAR", "NOT_LOCATED"}
+
 
 
 def _as_decimal(value: object) -> Optional[Decimal]:
@@ -129,6 +131,58 @@ def _add_finding(
     )
 
 
+
+
+def _identifier_finding(
+    findings: List[BusinessFinding],
+    field,
+    label: str,
+    field_path: str,
+    reject_rule: str,
+    unclear_rule: str,
+) -> None:
+    status = _field_status(field)
+    evidence = _field_evidence(field)
+    if status == "MISSING" and evidence is not None:
+        _add_finding(
+            findings,
+            rule_id=reject_rule,
+            title=f"Supplier {label} is missing",
+            message=f"The supplier {label} is missing, so the quotation is rejected under the TIN/BIN rule.",
+            severity="REJECT",
+            confirmed=True,
+            field_path=field_path,
+            observed_value="missing",
+            expected_value=f"Supplier {label} present",
+            evidence=evidence,
+        )
+    elif status == "UNCLEAR":
+        _add_finding(
+            findings,
+            rule_id=unclear_rule,
+            title=f"Supplier {label} is unclear",
+            message=f"The supplier {label} could not be interpreted reliably from the quotation.",
+            severity="REVIEW",
+            confirmed=False,
+            field_path=field_path,
+            observed_value="unclear",
+            expected_value=f"Supplier {label} present",
+            evidence=evidence,
+        )
+    elif status in {"MISSING", "NOT_LOCATED"}:
+        _add_finding(
+            findings,
+            rule_id=f"SUPPLIER_{label}_NOT_LOCATED_REVIEW",
+            title=f"Could not read supplier {label} from this quotation",
+            message=f"The supplier {label} could not be located in this quotation, so a person must check it.",
+            severity="REVIEW",
+            confirmed=False,
+            field_path=field_path,
+            observed_value=status.lower(),
+            expected_value=f"Supplier {label} present",
+            evidence=evidence,
+        )
+
 def evaluate_quotation_rules(
     extraction: ExtractedQuotation,
     match_result: "MatchResult",
@@ -173,73 +227,23 @@ def evaluate_quotation_rules(
                 related_quoted_item_code=match.quoted_item_code,
             )
 
-    # Missing or unclear supplier TIN.
-    tin_field = extraction.supplier_tin
-    tin_evidence = _field_evidence(tin_field)
-    if _field_status(tin_field) == "MISSING":
-        _add_finding(
-            findings,
-            rule_id="SUPPLIER_TIN_MISSING_REJECT",
-            title="Supplier TIN is missing",
-            message="The supplier TIN is missing, so the quotation is rejected under the TIN/BIN rule.",
-            severity="REJECT",
-            confirmed=True,
-            field_path="supplier_tin",
-            observed_value="missing",
-            expected_value="Supplier TIN present",
-            evidence=tin_evidence,
-        )
-    elif _field_status(tin_field) == "UNCLEAR":
-        _add_finding(
-            findings,
-            rule_id="SUPPLIER_TIN_UNCLEAR_REVIEW",
-            title="Supplier TIN is unclear",
-            message="The supplier TIN could not be interpreted reliably from the quotation.",
-            severity="REVIEW",
-            confirmed=False,
-            field_path="supplier_tin",
-            observed_value="unclear",
-            expected_value="Supplier TIN present",
-            evidence=tin_evidence,
-        )
-
-    # Missing or unclear supplier BIN.
-    bin_field = extraction.supplier_bin
-    bin_evidence = _field_evidence(bin_field)
-    if _field_status(bin_field) == "MISSING":
-        _add_finding(
-            findings,
-            rule_id="SUPPLIER_BIN_MISSING_REJECT",
-            title="Supplier BIN is missing",
-            message="The supplier BIN is missing, so the quotation is rejected under the TIN/BIN rule.",
-            severity="REJECT",
-            confirmed=True,
-            field_path="supplier_bin",
-            observed_value="missing",
-            expected_value="Supplier BIN present",
-            evidence=bin_evidence,
-        )
-    elif _field_status(bin_field) == "UNCLEAR":
-        _add_finding(
-            findings,
-            rule_id="SUPPLIER_BIN_UNCLEAR_REVIEW",
-            title="Supplier BIN is unclear",
-            message="The supplier BIN could not be interpreted reliably from the quotation.",
-            severity="REVIEW",
-            confirmed=False,
-            field_path="supplier_bin",
-            observed_value="unclear",
-            expected_value="Supplier BIN present",
-            evidence=bin_evidence,
-        )
+    _identifier_finding(
+        findings, extraction.supplier_tin, "TIN", "supplier_tin",
+        "SUPPLIER_TIN_MISSING_REJECT", "SUPPLIER_TIN_UNCLEAR_REVIEW",
+    )
+    _identifier_finding(
+        findings, extraction.supplier_bin, "BIN", "supplier_bin",
+        "SUPPLIER_BIN_MISSING_REJECT", "SUPPLIER_BIN_UNCLEAR_REVIEW",
+    )
 
     # Late-delivery penalty clause.
     clause_field = extraction.late_penalty_clause_present
     clause_evidence = _field_evidence(clause_field)
-    clause_present: Optional[bool] = None
-    if _field_status(clause_field) == "EXTRACTED":
+    clause_status = _field_status(clause_field)
+    clause_present: Optional[bool]
+    if clause_status == "EXTRACTED":
         clause_present = _field_value(clause_field) is True
-    elif _field_status(clause_field) == "MISSING":
+    elif clause_status == "MISSING" and clause_evidence is not None:
         clause_present = False
     else:
         clause_present = None
@@ -258,15 +262,20 @@ def evaluate_quotation_rules(
             evidence=clause_evidence,
         )
     elif clause_present is None:
+        unreadable = clause_status in {"MISSING", "NOT_LOCATED"}
         _add_finding(
             findings,
             rule_id="LATE_PENALTY_UNCLEAR_REVIEW",
-            title="Late-delivery penalty clause is unclear",
+            title=(
+                "Could not read late-delivery penalty clause from this quotation"
+                if unreadable
+                else "Late-delivery penalty clause is unclear"
+            ),
             message="The presence of a late-delivery penalty clause could not be confirmed.",
             severity="REVIEW",
             confirmed=False,
             field_path="late_penalty_clause_present",
-            observed_value="unclear",
+            observed_value=clause_status.lower(),
             expected_value="Confirmed late-delivery penalty clause",
             evidence=clause_evidence,
         )
@@ -275,7 +284,7 @@ def evaluate_quotation_rules(
     if clause_present is True:
         rate_field = extraction.late_penalty_rate_per_week_percent
         rate_value = _as_decimal(_field_value(rate_field))
-        if _field_status(rate_field) in {"MISSING", "UNCLEAR"}:
+        if _field_status(rate_field) in UNREADABLE_STATUSES:
             _add_finding(
                 findings,
                 rule_id="LATE_PENALTY_RATE_UNCLEAR_REVIEW",
@@ -352,7 +361,7 @@ def evaluate_quotation_rules(
     # Payment days.
     payment_days_field = extraction.payment_days_after_delivery
     payment_days = _as_int(_field_value(payment_days_field))
-    if _field_status(payment_days_field) in {"MISSING", "UNCLEAR"}:
+    if _field_status(payment_days_field) in UNREADABLE_STATUSES:
         _add_finding(
             findings,
             rule_id="PAYMENT_DAYS_UNCLEAR_REVIEW",
@@ -395,7 +404,7 @@ def evaluate_quotation_rules(
     # Delivery.
     delivery_days_field = extraction.delivery_days
     delivery_days = _as_int(_field_value(delivery_days_field))
-    if _field_status(delivery_days_field) in {"MISSING", "UNCLEAR"}:
+    if _field_status(delivery_days_field) in UNREADABLE_STATUSES:
         _add_finding(
             findings,
             rule_id="DELIVERY_DAYS_UNCLEAR_REVIEW",
@@ -487,7 +496,7 @@ def evaluate_quotation_rules(
     # Quotation validity.
     validity_field = extraction.quotation_validity_days
     validity = _as_int(_field_value(validity_field))
-    if _field_status(validity_field) in {"MISSING", "UNCLEAR"}:
+    if _field_status(validity_field) in UNREADABLE_STATUSES:
         _add_finding(
             findings,
             rule_id="VALIDITY_UNCLEAR_REVIEW",
@@ -583,7 +592,7 @@ def evaluate_quotation_rules(
         pr_max = match.maximum_unit_price
         pr_quantity = match.requested_quantity
 
-        if _field_status(price_field) in {"MISSING", "UNCLEAR"} or quoted_price is None or pr_max is None:
+        if _field_status(price_field) in UNREADABLE_STATUSES or quoted_price is None or pr_max is None:
             _add_finding(
                 findings,
                 rule_id="PRICE_NOT_EVALUABLE_REVIEW",
@@ -639,7 +648,7 @@ def evaluate_quotation_rules(
             if _normalize_text(match.quoted_unit) != _normalize_text(match.matched_pr_unit):
                 pass  # already converted to ambiguous during matching
 
-        if _field_status(quantity_field) in {"MISSING", "UNCLEAR"} or quoted_quantity is None or pr_quantity is None:
+        if _field_status(quantity_field) in UNREADABLE_STATUSES or quoted_quantity is None or pr_quantity is None:
             _add_finding(
                 findings,
                 rule_id="QUANTITY_NOT_EVALUABLE_REVIEW",

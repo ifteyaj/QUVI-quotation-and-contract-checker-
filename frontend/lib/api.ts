@@ -7,7 +7,7 @@ export interface ExtractedPageResponse {
 }
 
 export interface ExtractedFieldResponse<T = string | number | boolean | null> {
-  status: "EXTRACTED" | "MISSING" | "UNCLEAR";
+  status: "EXTRACTED" | "MISSING" | "UNCLEAR" | "NOT_LOCATED";
   value: T | null;
   evidence: FieldEvidenceResponse[];
 }

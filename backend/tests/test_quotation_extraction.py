@@ -52,7 +52,7 @@ TERMS AND CONDITIONS
     assert result.quotation_number.value == "QT-123"
     assert result.quotation_date.value == "2026-01-02"
     assert result.reference_pr_number.value == "PR-2026-114"
-    assert result.currency.status == "MISSING"
+    assert result.currency.status == "NOT_LOCATED"
     assert result.payment_terms.status == "EXTRACTED"
     assert result.advance_percent.value == Decimal("10")
     assert result.payment_days_after_delivery.value == 40
@@ -89,9 +89,9 @@ Random text with no quotation fields or terms.
 
     assert result.supplier_name.status == "EXTRACTED"
     assert result.supplier_name.value == "Example Supplier"
-    assert result.quotation_number.status == "MISSING"
+    assert result.quotation_number.status == "NOT_LOCATED"
     assert result.quotation_number.value is None
-    assert result.supplier_tin.status == "MISSING"
+    assert result.supplier_tin.status == "NOT_LOCATED"
     assert result.quoted_items == []
     assert any("No quoted line item" in note for note in result.extraction_notes)
 
@@ -209,3 +209,62 @@ TERMS AND CONDITIONS
     assert result.advance_percent.value == Decimal("0")
     assert result.late_penalty_rate_per_week_percent.status == "EXTRACTED"
     assert result.late_penalty_rate_per_week_percent.value == Decimal("1")
+
+
+def test_tin_absent_from_readable_header_is_missing_with_evidence() -> None:
+    text = """Supplier Ltd
+QUOTATION
+Quotation no. QT-1
+Date 2026-01-02
+Reference PR-2026-114
+TERMS AND CONDITIONS
+1. Payment. 10% advance payable with the purchase order. Balance within 40 days of delivery.
+2. Delivery. Delivery within 30 days of PO.
+3. Delay. Late delivery penalty: 0.5% of order value per week.
+4. Validity. This quotation is valid for 45 days from the date above.
+"""
+    result = extract_quotation_from_pages([_page(text)])
+    assert result.supplier_tin.status == "MISSING"
+    assert result.supplier_tin.evidence
+
+
+def test_blank_tin_label_is_not_located_not_missing() -> None:
+    text = """Supplier Ltd
+QUOTATION
+Quotation no. QT-1
+Supplier TIN:
+Supplier BIN: B1
+"""
+    result = extract_quotation_from_pages([_page(text)])
+    assert result.supplier_tin.status == "NOT_LOCATED"
+    assert result.supplier_tin.value is None
+    assert result.supplier_bin.value == "B1"
+
+
+def test_penalty_absent_from_readable_terms_is_missing_with_evidence() -> None:
+    text = """Supplier Ltd
+QUOTATION
+Quotation no. QT-1
+Supplier TIN: 1 BIN: B1
+TERMS AND CONDITIONS
+1. Payment. 10% advance payable with the purchase order. Balance within 30 days of delivery.
+2. Delivery. Delivery within 30 days of PO.
+3. Validity. This quotation is valid for 45 days from the date above.
+"""
+    result = extract_quotation_from_pages([_page(text)])
+    assert result.late_penalty_clause_present.status == "MISSING"
+    assert result.late_penalty_clause_present.value is False
+    assert result.late_penalty_clause_present.evidence
+
+
+def test_continuation_without_tin_is_missing() -> None:
+    text = """Supplier Ltd
+QUOTATION
+Quotation no. QT-1
+Reference PR-2026-114
+The terms continue with continuation wording and no reference label.
+"""
+    result = extract_quotation_from_pages([_page(text)])
+    assert result.supplier_name.status == "EXTRACTED"
+    assert result.quotation_number.status == "EXTRACTED"
+    assert result.supplier_tin.status == "MISSING"

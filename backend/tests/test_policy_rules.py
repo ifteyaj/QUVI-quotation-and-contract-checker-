@@ -80,10 +80,6 @@ def make_extraction(
     return extraction
 
 
-def rule_ids(result):
-    return {f.rule_id for f in result.decision and result.findings or []}
-
-
 def test_price_exact_boundary_reviews() -> None:
     # Exact +3% is review, not reject.
     result = build_verification_result(
@@ -217,8 +213,8 @@ def test_vat_and_arithmetic() -> None:
     assert "VAT_NOT_SEPARATELY_SHOWN_AT_15_REVIEW" in {f.rule_id for f in result.findings}
 
     missing_vat = make_extraction(vat_rate=None, vat_shown=None)
-    missing_vat.vat_rate_percent.status = ExtractionStatus.MISSING
-    missing_vat.vat_separately_shown.status = ExtractionStatus.MISSING
+    missing_vat.vat_rate_percent.status = ExtractionStatus.NOT_LOCATED
+    missing_vat.vat_separately_shown.status = ExtractionStatus.NOT_LOCATED
     result = build_verification_result(missing_vat, "PR-2026-114")
     assert "VAT_UNCLEAR_REVIEW" in {f.rule_id for f in result.findings}
 
@@ -312,3 +308,31 @@ def test_multiple_quoted_items() -> None:
     assert len(result.match_results) == 2
     assert result.match_results[1].matched_pr_item_code == "B"
     assert "PRICE_ABOVE_3_PERCENT_REJECT" in {f.rule_id for f in result.findings}
+
+
+def test_not_located_tin_reviews_with_exact_title() -> None:
+    extraction = make_extraction()
+    extraction.supplier_tin = ExtractedField(status=ExtractionStatus.NOT_LOCATED)
+    result = build_verification_result(extraction, "PR-2026-114")
+    ids = {f.rule_id for f in result.findings}
+    titles = {f.title for f in result.findings}
+    assert result.decision.decision == "NEEDS_HUMAN_REVIEW"
+    assert "Could not read supplier TIN from this quotation" in titles
+    assert "SUPPLIER_TIN_MISSING_REJECT" not in ids
+
+
+def test_missing_tin_without_absence_evidence_reviews() -> None:
+    extraction = make_extraction()
+    extraction.supplier_tin = ExtractedField(status=ExtractionStatus.MISSING, value=None, evidence=[])
+    result = build_verification_result(extraction, "PR-2026-114")
+    assert result.decision.decision == "NEEDS_HUMAN_REVIEW"
+
+
+def test_penalty_not_located_reviews() -> None:
+    extraction = make_extraction()
+    extraction.late_penalty_clause_present = ExtractedField(status=ExtractionStatus.NOT_LOCATED)
+    extraction.late_penalty_rate_per_week_percent = ExtractedField(status=ExtractionStatus.NOT_LOCATED)
+    result = build_verification_result(extraction, "PR-2026-114")
+    ids = {f.rule_id for f in result.findings}
+    assert result.decision.decision == "NEEDS_HUMAN_REVIEW"
+    assert "LATE_PENALTY_UNCLEAR_REVIEW" in ids
