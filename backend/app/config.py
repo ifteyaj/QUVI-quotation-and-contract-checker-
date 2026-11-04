@@ -3,7 +3,7 @@ from pathlib import Path
 
 APP_DIR = Path(__file__).resolve().parent
 BACKEND_DIR = APP_DIR.parent
-REPO_ROOT = BACKEND_DIR.parent.parent
+REPO_ROOT = BACKEND_DIR.parent
 UPLOAD_DIR = BACKEND_DIR / "uploads"
 ASSESSMENT_DATA_DIR = Path(
     os.environ.get("QUVI_ASSESSMENT_DATA_DIR", str(REPO_ROOT / "docs" / "assessment"))

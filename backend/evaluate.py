@@ -31,7 +31,7 @@ def _git_revision() -> str:
     try:
         result = subprocess.run(
             ["git", "rev-parse", "--short", "HEAD"],
-            cwd=Path(__file__).resolve().parents[2],
+            cwd=Path(__file__).resolve().parents[1],
             capture_output=True,
             text=True,
             check=False,
@@ -257,17 +257,17 @@ def main() -> int:
     parser.add_argument(
         "--ground-truth",
         type=Path,
-        default=Path(__file__).resolve().parents[2] / "docs" / "evaluation" / "ground-truth.json",
+        default=Path(__file__).resolve().parents[1] / "docs" / "evaluation" / "ground-truth.json",
     )
     parser.add_argument(
         "--assessment-dir",
         type=Path,
-        default=Path(__file__).resolve().parents[2] / "docs" / "assessment",
+        default=Path(__file__).resolve().parents[1] / "docs" / "assessment",
     )
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=Path(__file__).resolve().parents[2] / "docs" / "evaluation",
+        default=Path(__file__).resolve().parents[1] / "docs" / "evaluation",
     )
     parser.add_argument("--fail-on-mismatch", action="store_true")
     args = parser.parse_args()

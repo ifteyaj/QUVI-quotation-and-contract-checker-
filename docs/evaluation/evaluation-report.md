@@ -1,9 +1,9 @@
 # QUVI assessment evaluation report
 
-- Generated: 2026-11-04T06:20:56.284636+00:00
+- Generated: 2026-11-04T08:00:43.383009+00:00
 - Evaluation version: 1.0.0
 - Rule version: aamar-garments-rules-v1
-- Source revision: ad68e55
+- Source revision: ec088f9
 - Ground truth: `/Users/ifteyajahmed/Desktop/BIAI-AI-Engineer-Round2-Pack/QUVI/QUVI-quotation-and-contract-checker-/docs/evaluation/ground-truth.json`
 - Assessment directory: `/Users/ifteyajahmed/Desktop/BIAI-AI-Engineer-Round2-Pack/QUVI/QUVI-quotation-and-contract-checker-/docs/assessment`
 
