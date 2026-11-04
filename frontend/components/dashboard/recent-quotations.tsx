@@ -43,16 +43,16 @@ export function RecentQuotations({
   onClearSearch: () => void;
 }) {
   return (
-    <div className="flex h-[416px] min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+    <div className="flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm">
       <div className="flex h-9 shrink-0 items-center justify-between gap-6 px-4 pt-4">
         <div>
-          <h2 className="text-[15px] font-semibold tracking-tight text-foreground">
+          <h2 className="text-[16px] font-semibold tracking-tight text-foreground">
             Recent Quotations
           </h2>
         </div>
         <Link
           href="/verifications"
-          className="inline-flex shrink-0 items-center gap-1.5 text-[13px] font-medium text-primary hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+          className="inline-flex shrink-0 items-center gap-1.5 text-[14px] font-medium text-primary hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
         >
           View All
           <ArrowRight className="size-4" />
@@ -87,9 +87,9 @@ export function RecentQuotations({
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[640px] text-[13px]">
+            <table className="w-full min-w-[640px] text-[14px]">
               <thead>
-                <tr className="h-10 bg-muted/50 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                <tr className="h-11 bg-muted/50 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">
                   <th className="rounded-l-lg px-4 py-2.5 font-medium">Supplier</th>
                   <th className="px-4 py-2.5 font-medium">Quotation ID</th>
                   <th className="px-4 py-2.5 font-medium">Submitted</th>
@@ -103,7 +103,7 @@ export function RecentQuotations({
                 {rows.map((row) => (
                   <tr
                     key={row.document.document_id}
-                    className="h-10 border-b border-border/70 last:border-b-0"
+                    className="h-11 border-b border-border/70 last:border-b-0"
                   >
                     <td className="px-4 py-2.5 font-medium text-foreground">
                       {fieldLabel(row.document.quotation_extraction.supplier_name)}

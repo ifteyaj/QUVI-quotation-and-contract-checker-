@@ -9,16 +9,16 @@ import {
 
 export function NeedsAttention({ rows }: { rows: DashboardDocument[] }) {
   return (
-    <div className="flex h-[416px] min-w-0 flex-col overflow-hidden rounded-2xl border border-[#F3E2C7] bg-[#FFF8EE] p-4 shadow-sm dark:border-warning/20 dark:bg-warning/5">
+    <div className="flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-[#F3E2C7] bg-[#FFF8EE] p-5 shadow-sm dark:border-warning/20 dark:bg-warning/5">
       <div className="flex items-start gap-3">
         <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-warning/15 text-warning">
           <TriangleAlert className="size-4" />
         </div>
         <div>
-          <h2 className="text-[15px] font-semibold tracking-tight text-foreground">
+          <h2 className="text-[16px] font-semibold tracking-tight text-foreground">
             Needs Attention
           </h2>
-          <p className="mt-0.5 text-[13px] text-muted-foreground">
+          <p className="mt-0.5 text-[14px] text-muted-foreground">
             These quotations need your review.
           </p>
         </div>

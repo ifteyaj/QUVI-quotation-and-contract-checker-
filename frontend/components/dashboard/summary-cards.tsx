@@ -93,17 +93,17 @@ export function SummaryCards({
                 card.iconSurfaceClassName
               )}
             >
-              <Icon className={cn("size-4", card.iconClassName)} />
+              <Icon className={cn("size-6", card.iconClassName)} />
             </div>
 
             <div className="min-w-0 flex-1">
               <p className="text-[13px] font-medium text-foreground">
                 {card.label}
               </p>
-              <p className="mt-0.5 text-[24px] font-semibold leading-none tracking-tight text-foreground">
+              <p className="mt-1 text-[28px] font-semibold leading-none tracking-tight text-foreground">
                 {card.value}
               </p>
-              <p className="mt-1 text-[11px] text-muted-foreground">
+              <p className="mt-1 text-[12px] text-muted-foreground">
                 {card.subtitle}
               </p>
             </div>
@@ -111,7 +111,7 @@ export function SummaryCards({
             <Link
               href={card.href}
               aria-label={`View ${card.label.toLowerCase()}`}
-              className="flex size-6 shrink-0 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+              className="flex size-8 shrink-0 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
             >
               <ArrowRight className="size-3.5 md:size-4" />
             </Link>

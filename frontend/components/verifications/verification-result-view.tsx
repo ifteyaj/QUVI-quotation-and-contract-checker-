@@ -171,7 +171,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
 
   if (loading) {
     return (
-      <section className="mx-auto w-full max-w-6xl space-y-4 px-6 py-4">
+      <section className="flex h-screen w-full flex-col gap-5 overflow-hidden px-6 py-5">
         <p className="text-sm text-muted-foreground" role="status">
           Loading verification...
         </p>
@@ -181,7 +181,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
 
   if (error || !batch) {
     return (
-      <section className="mx-auto w-full max-w-6xl space-y-4 px-6 py-4">
+      <section className="flex h-screen w-full flex-col gap-5 overflow-hidden px-6 py-5">
         <div className="rounded-2xl border border-danger/30 bg-danger/5 p-6">
           <p className="text-sm font-medium text-danger">
             This verification could not be loaded.
@@ -205,7 +205,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
 
   if (!document) {
     return (
-      <section className="mx-auto w-full max-w-6xl space-y-4 px-6 py-4">
+      <section className="flex h-screen w-full flex-col gap-5 overflow-hidden px-6 py-5">
         <Link
           href="/verifications"
           className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground"
@@ -268,8 +268,8 @@ export default function VerificationResultView({ batchId }: { batchId: string })
   const sourcePdfUrl = `${API_BASE_URL}/api/batches/${batch.batch_id}/documents/${document.document_id}/file`;
 
   return (
-    <section className="mx-auto w-full max-w-6xl space-y-4 px-6 py-4">
-      <header className="flex h-14 items-center justify-between gap-4">
+    <section className="flex h-screen w-full flex-col gap-5 overflow-hidden px-6 py-5">
+      <header className="flex h-16 shrink-0 items-center justify-between gap-4">
         <Link
           href="/verifications"
           className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
@@ -279,7 +279,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
         </Link>
       </header>
 
-      <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
+      <div className="flex h-[120px] shrink-0 items-center gap-6">
         <div
           className={cn(
             "flex size-16 shrink-0 items-center justify-center rounded-full sm:size-20",
@@ -290,10 +290,10 @@ export default function VerificationResultView({ batchId }: { batchId: string })
         </div>
 
         <div className="min-w-0 flex-1">
-          <h1 className="text-[20px] font-semibold tracking-tight text-foreground">
+          <h1 className="text-[26px] font-semibold tracking-tight text-foreground">
             {heroTitle}
           </h1>
-          <p className="mt-1 text-[13px] text-muted-foreground">{heroSubline}</p>
+          <p className="mt-1 text-[14px] text-muted-foreground">{heroSubline}</p>
         </div>
 
         <span
@@ -310,7 +310,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
         </span>
       </div>
 
-      <div className="grid h-14 items-center gap-4 rounded-2xl border border-border bg-card px-4 py-2 shadow-sm sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-border">
+      <div className="grid h-16 shrink-0 items-center gap-4 rounded-2xl border border-border bg-card px-4 shadow-sm sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-border">
         <MetaItem
           icon={FileText}
           label="Quotation"
@@ -333,16 +333,16 @@ export default function VerificationResultView({ batchId }: { batchId: string })
         />
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-[1.45fr_1fr]">
-        <div className="flex h-[418px] min-w-0 flex-col overflow-hidden overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-sm">
-          <h2 className="text-[15px] font-semibold tracking-tight text-foreground">
+      <div className="grid min-h-0 flex-1 gap-5 lg:grid-cols-[1.45fr_1fr]">
+        <div className="flex h-full min-w-0 flex-col overflow-hidden overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm">
+          <h2 className="text-[16px] font-semibold tracking-tight text-foreground">
             Comparison Overview
           </h2>
 
           <div className="mt-2 max-h-80 flex-1 overflow-y-auto overflow-x-auto">
-            <table className="w-full min-w-[520px] text-[13px]">
+            <table className="w-full min-w-[520px] text-[14px]">
               <thead>
-                <tr className="bg-muted/60 text-left text-[11px] font-medium text-muted-foreground">
+                <tr className="h-11 bg-muted/60 text-left text-[11px] font-medium text-muted-foreground">
                   <th className="rounded-l-lg px-4 py-2 font-medium">Check</th>
                   <th className="px-4 py-2 font-medium">Purchase Request</th>
                   <th className="px-4 py-2 font-medium">Supplier Quotation</th>
@@ -355,7 +355,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
                 {rows.map((row, index) => (
                   <tr
                     key={`${row.label}-${index}`}
-                    className="h-10 border-b border-border/70 last:border-b-0"
+                    className="h-11 border-b border-border/70 last:border-b-0"
                   >
                     <td className="px-4 py-2.5 font-medium text-foreground">
                       {row.label}
@@ -383,7 +383,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
 
         <div
           className={cn(
-            "flex h-[418px] min-w-0 flex-col overflow-hidden overflow-hidden rounded-2xl border p-4 shadow-sm",
+            "flex h-full min-w-0 flex-col overflow-hidden overflow-hidden rounded-2xl border p-5 shadow-sm",
             style.panelClassName
           )}
         >
@@ -396,13 +396,13 @@ export default function VerificationResultView({ batchId }: { batchId: string })
             >
               <HeroIcon className={cn("size-4", style.heroIconClassName)} />
             </div>
-            <h2 className="text-[15px] font-semibold tracking-tight text-foreground">
+            <h2 className="text-[16px] font-semibold tracking-tight text-foreground">
               Key Findings
             </h2>
           </div>
 
           {findings.length === 0 ? (
-            <p className="mt-3 text-[12px] text-muted-foreground">
+            <p className="mt-3 text-[14px] text-muted-foreground">
               No findings were triggered. This does not by itself approve a
               quotation.
             </p>
@@ -422,10 +422,10 @@ export default function VerificationResultView({ batchId }: { batchId: string })
                       <ResultMark tone={findingTone} />
                     </span>
                     <div className="min-w-0">
-                      <p className="text-[13px] font-medium text-foreground">
+                      <p className="text-[14px] font-medium text-foreground">
                         {finding.title}
                       </p>
-                      <p className="mt-1 text-[12px] text-muted-foreground">
+                      <p className="mt-1 text-[14px] text-muted-foreground">
                         {finding.message}
                       </p>
                       {finding.page_number !== null && (
@@ -445,8 +445,8 @@ export default function VerificationResultView({ batchId }: { batchId: string })
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 rounded-2xl border border-border bg-primary-light/60 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3 text-[13px] text-foreground">
+      <div className="flex h-14 shrink-0 items-center justify-between gap-3 rounded-2xl border border-border bg-primary-light/60 px-5 py-3 sm:flex-row">
+        <div className="flex items-center gap-3 text-[14px] text-foreground">
           <Info className="size-4 shrink-0 text-primary" />
           <span>{bottomText}</span>
         </div>
@@ -455,7 +455,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
           href={sourcePdfUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex h-9 shrink-0 items-center gap-2 rounded-lg border border-border bg-card px-3 text-[13px] font-medium text-foreground transition-colors hover:bg-muted"
+          className="inline-flex h-9 shrink-0 items-center gap-2 rounded-lg border border-border bg-card px-3 text-[14px] font-medium text-foreground transition-colors hover:bg-muted"
         >
           View Source PDF
           <ArrowRight className="size-4" />

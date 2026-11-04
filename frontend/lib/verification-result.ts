@@ -137,6 +137,10 @@ export function evidenceLine(evidenceText: string | null): string {
     return "Source line unavailable";
   }
 
+  if (/^[A-Z]{3,12}\s+\d/.test(value)) {
+    return "Source line unavailable";
+  }
+
   if (/[A-Za-z]-$/.test(value)) {
     return "Source line unavailable";
   }
@@ -297,7 +301,7 @@ export function buildComparisonRows(
 
   rows.push({
     label: "Payment terms",
-    purchaseRequest: paymentTerms.text,
+    purchaseRequest: "Not in purchase request",
     supplierQuotation: paymentTerms.text,
     note: null,
     tone: toneForRules(verification.findings, PAYMENT_RULES),

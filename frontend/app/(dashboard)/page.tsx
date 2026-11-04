@@ -111,9 +111,9 @@ export default function OverviewPage() {
   }, [documents]);
 
   return (
-    <section className="mx-auto w-full max-w-7xl space-y-4 px-6 py-4">
-      <header className="flex h-14 items-center gap-4 md:justify-between">
-        <h1 className="text-[20px] font-semibold leading-6 tracking-tight text-foreground">
+    <section className="flex h-screen w-full flex-col gap-5 overflow-hidden px-6 py-5">
+      <header className="flex h-16 shrink-0 items-center gap-4 md:justify-between">
+        <h1 className="text-[22px] font-semibold leading-7 tracking-tight text-foreground">
           Overview
         </h1>
 
@@ -128,7 +128,7 @@ export default function OverviewPage() {
             onChange={(event) => setSearchQuery(event.target.value)}
             placeholder="Search quotations, suppliers..."
             aria-label="Search quotations and suppliers"
-            className="h-9 w-full rounded-lg border border-border bg-card pl-10 pr-9 text-sm text-foreground shadow-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15 [&::-webkit-search-cancel-button]:appearance-none"
+            className="h-10 w-full rounded-lg border border-border bg-card pl-10 pr-9 text-sm text-foreground shadow-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15 [&::-webkit-search-cancel-button]:appearance-none"
           />
           {searchQuery ? (
             <button
@@ -171,7 +171,7 @@ export default function OverviewPage() {
             needsReview={counts.needsReview}
           />
 
-          <div className="grid gap-4 lg:grid-cols-[1.85fr_1fr]">
+          <div className="grid min-h-0 flex-1 gap-5 lg:grid-cols-[1.85fr_1fr]">
             <RecentQuotations
               rows={recentRows}
               totalDocuments={documents.length}

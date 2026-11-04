@@ -55,20 +55,20 @@ export function OverviewHero() {
         className="pointer-events-none absolute -bottom-32 right-40 size-[300px] rounded-full bg-[#D7E5FF]/60"
       />
 
-      <div className="relative z-10 flex h-full flex-col items-start gap-4 sm:flex-row sm:items-center md:gap-6">
+      <div className="relative z-10 flex h-full flex-col items-center gap-6 sm:flex-row sm:items-center md:gap-8">
         <HeroIllustration />
 
         <div className="max-w-xl">
-          <h2 className="text-[20px] font-semibold tracking-tight text-foreground">
+          <h2 className="text-[22px] font-semibold tracking-tight text-foreground">
             Ready to verify a quotation?
           </h2>
-          <p className="mt-1 max-w-md text-[13px] leading-5 text-slate-600">
+          <p className="mt-2 max-w-md text-[14px] leading-5 text-slate-600">
             Upload a supplier quotation and check it against your purchase
             requirements and company rules.
           </p>
           <Link
             href="/verifications/new"
-            className="mt-2 inline-flex h-9 items-center gap-2 rounded-lg bg-primary px-4 text-[13px] font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-2"
+            className="mt-3 inline-flex h-10 items-center gap-2 rounded-lg bg-primary px-5 text-[14px] font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-2"
           >
             Start New Verification
             <ArrowRight className="size-4" />

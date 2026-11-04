@@ -66,7 +66,7 @@ function NavigationRow({
     return (
       <div
         aria-disabled="true"
-        className="flex h-9 cursor-not-allowed items-center gap-3 rounded-lg px-3 text-sm font-medium text-muted-foreground/60"
+        className="flex h-10 cursor-not-allowed items-center gap-3 rounded-lg px-3 text-sm font-medium text-muted-foreground/60"
       >
         <Icon className="size-[18px] shrink-0" />
         <span className="whitespace-nowrap">{item.label}</span>
@@ -83,7 +83,7 @@ function NavigationRow({
       onClick={onNavigate}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "flex h-9 items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors",
+        "flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors",
         active
           ? "bg-primary-light text-primary"
           : "text-foreground hover:bg-muted"
@@ -106,7 +106,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <>
-      <div className="flex h-14 items-center border-b border-border px-4">
+      <div className="flex h-16 items-center border-b border-border px-4">
         <div className="flex items-center gap-2.5">
           <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <ShieldCheck className="size-5" />
@@ -149,7 +149,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           type="button"
           aria-label="Toggle colour theme"
           onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-          className="flex h-8 w-full items-center gap-3 rounded-lg border border-border bg-card px-3 text-[13px] font-medium text-foreground transition-colors hover:bg-muted"
+          className="flex h-10 w-full items-center gap-3 rounded-lg border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
         >
           <span className="flex size-5 shrink-0 items-center justify-center text-muted-foreground">
             {mounted && resolvedTheme === "dark" ? (
@@ -185,7 +185,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
 export function AppSidebar() {
   return (
-    <aside className="hidden w-[258px] shrink-0 flex-col border-r border-border bg-card lg:flex">
+    <aside className="hidden h-screen w-[258px] shrink-0 flex-col border-r border-border bg-card lg:flex">
       <SidebarContent />
     </aside>
   );
