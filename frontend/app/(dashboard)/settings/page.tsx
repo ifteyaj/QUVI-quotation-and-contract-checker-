@@ -48,7 +48,7 @@ export default function SettingsPage() {
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-3">
-          <Card className="rounded-xl border-border shadow-sm">
+          <Card className="rounded-xl border-border">
             <CardHeader>
               <CardTitle className="text-base font-semibold text-foreground">Backend</CardTitle>
               <CardDescription>FastAPI connection.</CardDescription>
@@ -57,7 +57,7 @@ export default function SettingsPage() {
               {health}
             </CardContent>
           </Card>
-          <Card className="rounded-xl border-border shadow-sm">
+          <Card className="rounded-xl border-border">
             <CardHeader>
               <CardTitle className="text-base font-semibold text-foreground">
                 Purchase Requests
@@ -68,7 +68,7 @@ export default function SettingsPage() {
               {requestCount}
             </CardContent>
           </Card>
-          <Card className="rounded-xl border-border shadow-sm">
+          <Card className="rounded-xl border-border">
             <CardHeader>
               <CardTitle className="text-base font-semibold text-foreground">
                 Rule Version

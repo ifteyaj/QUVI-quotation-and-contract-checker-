@@ -58,7 +58,7 @@ export function OverviewHero() {
         <HeroIllustration />
 
         <div className="min-w-0 flex-1">
-          <h2 className="text-[22px] font-semibold tracking-tight text-foreground">
+          <h2 className="text-[22px] font-semibold tracking-tight text-[#111827]">
             Ready to verify a quotation?
           </h2>
           <p className="mt-2 max-w-2xl text-[14px] leading-6 text-slate-600">
@@ -69,7 +69,7 @@ export function OverviewHero() {
 
         <Link
           href="/verifications/new"
-          className="inline-flex h-11 shrink-0 items-center gap-2 rounded-lg bg-primary px-6 text-[14px] font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-2"
+          className="inline-flex h-11 shrink-0 items-center gap-2 rounded-lg bg-primary px-6 text-[14px] font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-2"
         >
           Start New Verification →
         </Link>

@@ -250,7 +250,7 @@ export function MobileSidebar() {
             aria-label="Close navigation"
             className="absolute inset-0 bg-black/30"
           />
-          <div className="absolute inset-y-0 left-0 flex w-[280px] flex-col overflow-y-auto border-r border-border bg-card shadow-xl">
+          <div className="absolute inset-y-0 left-0 flex w-[280px] flex-col overflow-y-auto border-r border-border bg-card">
             <button
               type="button"
               onClick={() => setOpen(false)}

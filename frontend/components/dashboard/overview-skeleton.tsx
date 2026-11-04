@@ -7,7 +7,7 @@ export function OverviewSkeleton() {
         {Array.from({ length: 4 }).map((_, index) => (
           <div
             key={index}
-            className="flex animate-pulse items-center gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm"
+            className="flex animate-pulse items-center gap-4 rounded-2xl border border-border bg-card p-5"
           >
             <div className="size-12 shrink-0 rounded-full bg-muted" />
             <div className="min-w-0 flex-1 space-y-2">
@@ -21,7 +21,7 @@ export function OverviewSkeleton() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.85fr_1fr]">
-        <div className="animate-pulse rounded-2xl border border-border bg-card p-6 shadow-sm">
+        <div className="animate-pulse rounded-2xl border border-border bg-card p-6">
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-2">
               <div className="h-5 w-40 rounded bg-muted" />
@@ -47,7 +47,7 @@ export function OverviewSkeleton() {
           </div>
         </div>
 
-        <div className="animate-pulse rounded-2xl border border-border bg-card p-6 shadow-sm">
+        <div className="animate-pulse rounded-2xl border border-border bg-card p-6">
           <div className="flex items-start gap-3">
             <div className="size-10 shrink-0 rounded-full bg-muted" />
             <div className="space-y-2">

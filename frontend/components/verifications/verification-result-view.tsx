@@ -310,7 +310,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
         </span>
       </div>
 
-      <div className="grid h-16 shrink-0 items-center gap-4 rounded-2xl border border-border bg-card px-4 shadow-sm sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-border">
+      <div className="grid h-16 shrink-0 items-center gap-4 rounded-2xl border border-border bg-card px-4 sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-border">
         <MetaItem
           icon={FileText}
           label="Quotation"
@@ -334,7 +334,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
       </div>
 
       <div className="grid min-h-0 flex-1 gap-5 lg:grid-cols-[1.45fr_1fr]">
-        <div className="flex min-h-[320px] lg:h-full min-w-0 flex-col overflow-hidden overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm">
+        <div className="flex min-h-[320px] lg:h-full min-w-0 flex-col overflow-hidden overflow-hidden rounded-2xl border border-border bg-card p-5">
           <h2 className="text-[16px] font-semibold tracking-tight text-foreground">
             Comparison Overview
           </h2>
@@ -383,7 +383,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
 
         <div
           className={cn(
-            "flex min-h-[320px] lg:h-full min-w-0 flex-col overflow-hidden overflow-hidden rounded-2xl border p-5 shadow-sm",
+            "flex min-h-[320px] lg:h-full min-w-0 flex-col overflow-hidden overflow-hidden rounded-2xl border p-5",
             style.panelClassName
           )}
         >

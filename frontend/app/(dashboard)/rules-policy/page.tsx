@@ -51,14 +51,14 @@ export default function RulesPolicyPage() {
         <p className="text-sm text-muted-foreground">Loading rules...</p>
       ) : (
         <div className="space-y-6">
-          <Card className="rounded-xl border-border shadow-sm">
+          <Card className="rounded-xl border-border">
             <CardHeader>
               <CardTitle className="text-lg font-semibold text-foreground">Approval condition</CardTitle>
               <CardDescription>{rules.approval}</CardDescription>
             </CardHeader>
           </Card>
 
-          <Card className="rounded-xl border-border shadow-sm">
+          <Card className="rounded-xl border-border">
             <CardHeader>
               <CardTitle className="text-lg font-semibold text-foreground">
                 Reject rules
@@ -79,7 +79,7 @@ export default function RulesPolicyPage() {
             </CardContent>
           </Card>
 
-          <Card className="rounded-xl border-border shadow-sm">
+          <Card className="rounded-xl border-border">
             <CardHeader>
               <CardTitle className="text-lg font-semibold text-foreground">
                 Human-review rules
@@ -100,7 +100,7 @@ export default function RulesPolicyPage() {
             </CardContent>
           </Card>
 
-          <Card className="rounded-xl border-border shadow-sm">
+          <Card className="rounded-xl border-border">
             <CardHeader>
               <CardTitle className="text-lg font-semibold text-foreground">
                 Additional notes

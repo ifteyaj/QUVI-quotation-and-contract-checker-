@@ -87,7 +87,7 @@ export default function PurchaseRequestsPage() {
               </SelectContent>
             </Select>
           </div>
-          <Card className="rounded-xl border-border shadow-sm">
+          <Card className="rounded-xl border-border">
             <CardHeader>
               <CardTitle className="text-lg font-semibold text-foreground">
                 {purchaseRequest?.title ?? selectedPr}

@@ -9,7 +9,7 @@ import {
 
 export function NeedsAttention({ rows }: { rows: DashboardDocument[] }) {
   return (
-    <div className="flex min-h-[320px] lg:h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-[#F3E2C7] bg-[#FFF8EE] p-5 shadow-sm dark:border-warning/20 dark:bg-warning/5">
+    <div className="flex min-h-[320px] lg:h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-[#F3E2C7] bg-[#FFF8EE] p-5 dark:border-warning/20 dark:bg-warning/5">
       <div className="flex items-start gap-3">
         <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-warning/15 text-warning">
           <TriangleAlert className="size-4" />
@@ -38,7 +38,7 @@ export function NeedsAttention({ rows }: { rows: DashboardDocument[] }) {
           {rows.map((row) => (
             <div
               key={row.document.document_id}
-              className="rounded-lg border border-[#EFE0C9] bg-card p-2.5 shadow-sm dark:border-warning/15"
+              className="rounded-lg border border-[#EFE0C9] bg-card p-2.5 dark:border-warning/15"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">

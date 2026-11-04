@@ -43,7 +43,7 @@ export function RecentQuotations({
   onClearSearch: () => void;
 }) {
   return (
-    <div className="flex min-h-[320px] lg:h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm">
+    <div className="flex min-h-[320px] lg:h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card p-5">
       <div className="flex h-9 shrink-0 items-center justify-between gap-6 px-4 pt-4">
         <div>
           <h2 className="text-[16px] font-semibold tracking-tight text-foreground">

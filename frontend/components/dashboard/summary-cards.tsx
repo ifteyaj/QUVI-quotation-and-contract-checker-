@@ -85,7 +85,7 @@ export function SummaryCards({
         return (
           <div
             key={card.label}
-            className="flex h-24 items-center gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm"
+            className="flex h-24 items-center gap-3 rounded-2xl border border-border bg-card p-4"
           >
             <div
               className={cn(

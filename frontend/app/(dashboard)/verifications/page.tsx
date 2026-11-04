@@ -209,7 +209,7 @@ function VerificationsContent() {
             onChange={(event) => setSearchQuery(event.target.value)}
             placeholder="Search by supplier, quotation number or purchase request..."
             aria-label="Search verifications"
-            className="h-10 w-full rounded-lg border border-border bg-card pl-10 pr-9 text-sm text-foreground shadow-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15 [&::-webkit-search-cancel-button]:appearance-none"
+            className="h-10 w-full rounded-lg border border-border bg-card pl-10 pr-9 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15 [&::-webkit-search-cancel-button]:appearance-none"
           />
           {searchQuery ? (
             <button
@@ -261,7 +261,7 @@ function VerificationsContent() {
           </Button>
         </div>
       ) : loading ? (
-        <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+        <div className="overflow-hidden rounded-2xl border border-border bg-card">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[900px] text-sm">
             <thead>
@@ -279,7 +279,7 @@ function VerificationsContent() {
             </div>
         </div>
       ) : documents.length === 0 ? (
-        <div className="rounded-2xl border border-border bg-card p-10 text-center shadow-sm">
+        <div className="rounded-2xl border border-border bg-card p-10 text-center">
           <p className="text-sm font-medium text-foreground">
             No verifications yet.
           </p>
@@ -291,7 +291,7 @@ function VerificationsContent() {
           </Button>
         </div>
       ) : filteredDocuments.length === 0 ? (
-        <div className="rounded-2xl border border-border bg-card p-10 text-center shadow-sm">
+        <div className="rounded-2xl border border-border bg-card p-10 text-center">
           <p className="text-sm font-medium text-foreground">
             No results match your search or filter.
           </p>
@@ -305,7 +305,7 @@ function VerificationsContent() {
         </div>
       ) : (
         <>
-          <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+          <div className="overflow-hidden rounded-2xl border border-border bg-card">
             <div className="overflow-x-auto">
               <table className="w-full min-w-[900px] text-sm">
               <thead>

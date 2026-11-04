@@ -289,7 +289,7 @@ export function NewVerificationForm() {
         </p>
       </header>
 
-      <Card className="rounded-xl border-border shadow-sm">
+      <Card className="rounded-xl border-border">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base font-semibold text-foreground">
             <span className="flex size-6 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
@@ -408,7 +408,7 @@ export function NewVerificationForm() {
         </CardContent>
       </Card>
 
-      <Card className="rounded-xl border-border shadow-sm">
+      <Card className="rounded-xl border-border">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base font-semibold text-foreground">
             <span className="flex size-6 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">

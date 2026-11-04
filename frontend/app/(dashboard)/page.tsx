@@ -128,7 +128,7 @@ export default function OverviewPage() {
             onChange={(event) => setSearchQuery(event.target.value)}
             placeholder="Search quotations, suppliers..."
             aria-label="Search quotations and suppliers"
-            className="h-10 w-full rounded-lg border border-border bg-card pl-10 pr-9 text-sm text-foreground shadow-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15 [&::-webkit-search-cancel-button]:appearance-none"
+            className="h-10 w-full rounded-lg border border-border bg-card pl-10 pr-9 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15 [&::-webkit-search-cancel-button]:appearance-none"
           />
           {searchQuery ? (
             <button
