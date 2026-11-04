@@ -1,11 +1,15 @@
 {
   "evaluation_version": "1.0.0",
   "rule_version": "aamar-garments-rules-v1",
-  "generated_at": "2026-11-04T08:00:43.383009+00:00",
-  "source_revision": "ec088f9",
+  "generated_at": "2026-11-04T08:43:16.250042+00:00",
+  "source_revision": "5ff73e9",
   "ground_truth_path": "/Users/ifteyajahmed/Desktop/BIAI-AI-Engineer-Round2-Pack/QUVI/QUVI-quotation-and-contract-checker-/docs/evaluation/ground-truth.json",
   "assessment_directory": "/Users/ifteyajahmed/Desktop/BIAI-AI-Engineer-Round2-Pack/QUVI/QUVI-quotation-and-contract-checker-/docs/assessment",
   "ground_truth_name": "QUVI supplier quotation verification assessment samples",
+  "ground_truth_reviewer": "QUVI implementer (AI coding assistant) \u2014 not an independent reviewer",
+  "ground_truth_reviewed_at": "2026-11-04",
+  "ground_truth_independence": "NOT INDEPENDENT. These expected outcomes were written by the same AI coding assistant that implemented the QUVI extraction and rule engine, after that engine already existed. They were derived rule-by-rule from docs/assessment/company-rules.md, docs/assessment/purchase-request.csv, and the 10 supplier PDFs rather than copied from engine output, but they are a regression baseline, not independent human validation. A genuinely independent check requires a person who has not seen the implementation to re-derive the expected decisions.",
+  "ground_truth_notes": "Derivation order: the rule engine was implemented first, then this file was authored from the policy, purchase request, and PDF text. No expected value was taken from evaluation-results.json. Because the author and implementer are the same, treat the 10/10 result as evidence of internal consistency, not as proof of correctness.",
   "metrics": {
     "documents_evaluated": 10,
     "correct_decisions": 10,
@@ -18,9 +22,9 @@
     "missed_human_reviews": 0,
     "correct_human_review_decisions": 3,
     "extracted_field_status_totals": {
-      "extracted": 233,
+      "extracted": 234,
       "missing": 5,
-      "unclear": 2
+      "unclear": 1
     },
     "documents_with_findings_missing_evidence": 3
   },
@@ -221,7 +225,7 @@
       ],
       "decision_summary": "Reject recommended because: Advance payment exceeds the limit.",
       "expected_decision_rationale": "Item E is priced below the maximum, but the terms state a 40% advance payment, which exceeds the 20% limit.",
-      "policy_ambiguity": "The payment section repeats the advance percentages inconsistently (40% advance followed by balance 60%). The source should be interpreted as requiring a 40% advance, which triggers rejection; if the duplicated wording were intended to mean a different payment schedule, it would need clarification.",
+      "policy_ambiguity": "Judgment call: the payment clause repeats itself ('40% advance payable with the purchase order. 40% advance with the purchase order, balance 60% within 30 days of delivery.'). The two statements agree on 40% advance and the balance makes the schedule add up to 100%, so this is treated as redundant wording rather than a contradiction. The 40% figure is clearly stated and deterministically extractable, therefore ADVANCE_PAYMENT_ABOVE_LIMIT_REJECT applies. The alternative strict reading \u2014 that duplicated wording is ambiguous enough to send to a person \u2014 is defensible; it was not chosen because both copies state the same advance percentage and nothing in the clause contradicts 40%.",
       "verification_notes": []
     },
     {
@@ -389,12 +393,10 @@
       "actual_decision": "NEEDS_HUMAN_REVIEW",
       "decision_correct": true,
       "expected_rule_ids": [
-        "DELIVERY_DAYS_UNCLEAR_REVIEW",
         "LINE_TOTAL_MISMATCH_REVIEW",
         "PAYMENT_DAYS_UNCLEAR_REVIEW"
       ],
       "actual_rule_ids": [
-        "DELIVERY_DAYS_UNCLEAR_REVIEW",
         "LINE_TOTAL_MISMATCH_REVIEW",
         "PAYMENT_DAYS_UNCLEAR_REVIEW"
       ],
@@ -406,9 +408,9 @@
       "extracted_text_characters": 963,
       "extracted_quoted_items": 1,
       "extracted_field_status_counts": {
-        "extracted": 22,
+        "extracted": 23,
         "missing": 0,
-        "unclear": 2
+        "unclear": 1
       },
       "all_findings_have_evidence": true,
       "findings": [
@@ -427,19 +429,6 @@
         },
         {
           "finding_id": "finding_2",
-          "rule_id": "DELIVERY_DAYS_UNCLEAR_REVIEW",
-          "severity": "FindingSeverity.REVIEW",
-          "status": "TRIGGERED",
-          "title": "Delivery days are unclear",
-          "message": "Delivery is stated in weeks or could not be converted to days after the purchase order.",
-          "confirmed": false,
-          "observed_value": "unclear",
-          "expected_value": "30 days or fewer preferred; more than 45 days rejected",
-          "page_number": 1,
-          "evidence_text": "5% advance payable with the purchase order. Payment within 30 to 90 days as agreed by both parties. 2. Delivery. Delivery within 4 weeks of PO. 3. Delay. Late delivery penalty of 0.5% of order value per week. 4. Validity. This quotation is val"
-        },
-        {
-          "finding_id": "finding_3",
           "rule_id": "LINE_TOTAL_MISMATCH_REVIEW",
           "severity": "FindingSeverity.REVIEW",
           "status": "TRIGGERED",
@@ -452,9 +441,9 @@
           "evidence_text": "ments Ltd (fictional) Reference PR-2026-114 Item Description Qty Unit Unit price (BDT) Amount (BDT) D Poly bag, 30 x 40 cm 50,000 piece 6.40 322,000.00 Subtotal 322,000.00 VAT 15% 48,300.00 Total 370,300.00 Supplier TIN: 109458093391 BIN: 000970941-01"
         }
       ],
-      "decision_summary": "Human review recommended because: Payment days are unclear; Delivery days are unclear; Line total does not agree with quantity and unit price.",
-      "expected_decision_rationale": "Item D is below the maximum price at 6.40 BDT, but its payment term is a 30 to 90 day range, which is unclear/outside 30 to 60 days; delivery is stated as 4 weeks, so it needs conversion and human review; and the stated line total of 322,000.00 BDT does not equal 50,000 times 6.40 BDT, which equals 320,000.00 BDT.",
-      "policy_ambiguity": "The delivery term uses weeks while policy thresholds are in days. QUVI should not silently assume the conversion in a confirmed violation; the converted value needs human confirmation.",
+      "decision_summary": "Human review recommended because: Payment days are unclear; Line total does not agree with quantity and unit price.",
+      "expected_decision_rationale": "Item D is below the maximum price at 6.40 BDT, but its payment term is a 30 to 90 day range, which is unclear against the 30 to 60 day policy; and the stated line total of 322,000.00 BDT does not equal 50,000 times 6.40 BDT, which equals 320,000.00 BDT. Delivery is 4 weeks, an exact conversion to 28 days, which is inside the 30-day preferred limit and does not trigger a review.",
+      "policy_ambiguity": "The delivery term uses weeks while policy thresholds are in days. A week-to-day conversion is exact (4 weeks = 28 days), so it is normalized deterministically rather than treated as unclear. Delivery does not contribute a finding for this document.",
       "verification_notes": []
     },
     {

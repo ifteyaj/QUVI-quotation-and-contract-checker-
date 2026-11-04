@@ -250,7 +250,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A[Collect available supplier packs] --> B[Create independent ground truth]
+    A[Collect available supplier packs] --> B[Create separate ground truth and record its author]
     B --> C[Label fields, decisions, findings, and evidence]
     C --> D[Review labels / resolve ambiguities]
     D --> E[Freeze evaluation set and rule version]

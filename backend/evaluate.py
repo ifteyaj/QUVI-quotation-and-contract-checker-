@@ -176,6 +176,14 @@ def build_markdown(results: Dict[str, Any]) -> str:
         f"- Source revision: {results['source_revision']}",
         f"- Ground truth: `{results['ground_truth_path']}`",
         f"- Assessment directory: `{results['assessment_directory']}`",
+        f"- Ground-truth reviewer: {results.get('ground_truth_reviewer') or 'unknown'}",
+        f"- Ground-truth authored: {results.get('ground_truth_reviewed_at') or 'unknown'}",
+        "",
+        "## Ground-truth provenance",
+        "",
+        results.get("ground_truth_independence") or "Independence was not recorded.",
+        "",
+        results.get("ground_truth_notes") or "",
         "",
         "## Summary",
         "",
@@ -221,6 +229,18 @@ def build_markdown(results: Dict[str, Any]) -> str:
             lines.append(f"- Decision summary: {record['decision_summary']}")
             lines.append("")
 
+    lines.extend(["", "## Judgment calls and ambiguities", ""])
+    ambiguity_notes = [
+        record
+        for record in results["documents"]
+        if record.get("policy_ambiguity") and record["policy_ambiguity"] != "None identified."
+    ]
+    if not ambiguity_notes:
+        lines.append("None identified.")
+    else:
+        for record in ambiguity_notes:
+            lines.append(f"- **{record['filename']}**: {record['policy_ambiguity']}")
+
     lines.extend(["", "## Rule and defect notes", ""])
     all_notes = []
     for record in results["documents"]:
@@ -231,7 +251,7 @@ def build_markdown(results: Dict[str, Any]) -> str:
         if not record["all_findings_have_evidence"] and record["actual_rule_ids"]:
             all_notes.append(f"{record['filename']}: at least one finding has no page or evidence snippet.")
     if not all_notes:
-        all_notes.append("No mismatches were detected. This indicates current implementation outputs align with the independent expected outcomes for all 10 documents.")
+        all_notes.append("No mismatches were detected. This means the implementation output matches the recorded expectations for all 10 documents. Because the same author wrote both the engine and the expectations, this is a regression check, not independent validation.")
     for note in all_notes:
         lines.append(f"- {note}")
 
@@ -307,6 +327,10 @@ def main() -> int:
         "ground_truth_path": str(ground_truth_path),
         "assessment_directory": str(assessment_dir),
         "ground_truth_name": ground_truth.get("dataset_name"),
+        "ground_truth_reviewer": ground_truth.get("reviewer"),
+        "ground_truth_reviewed_at": ground_truth.get("reviewed_at"),
+        "ground_truth_independence": ground_truth.get("independence"),
+        "ground_truth_notes": ground_truth.get("notes"),
         "metrics": summary,
         "documents": records,
     }

@@ -4,12 +4,14 @@
 Measure how accurately the system extracts supplier quote details, matches them to the purchase request, applies policy, and provides evidence on the supplied sample set.
 
 ## Dataset
-The brief and sample README describe ten fictional supplier quote/contract PDFs (`supplier-pack-01.pdf` through `supplier-pack-10.pdf`), with each pack corresponding to one PR item. The files currently available in this working package are packs 01 and 02 only. Obtain packs 03–10 before claiming a full ten-document evaluation.
+The brief and sample README describe ten fictional supplier quote/contract PDFs (`supplier-pack-01.pdf` through `supplier-pack-10.pdf`), with each pack corresponding to one PR item. All ten files are present in `docs/assessment/`.
+
+Supplier mapping: 01 Padma Textile Mills, 02 Jamuna Trims and Accessories, 03 Karnaphuli Yarn Traders, 04 Surma Packaging Industries, 05 Meghna Carton Works, 06 Teesta Fabrics Ltd, 07 Rupsha Zipper Factory, 08 Bhairab Thread and Co, 09 Dhaleshwari Poly Pack, 10 Kushiyara Box Industries.
 
 Do not use real company/customer documents.
 
 ## Ground truth
-Create a manually reviewed, separate ground-truth file before evaluating model output. For each document record:
+`docs/evaluation/ground-truth.json` records, for each document:
 - Correct supplier identity and tax identifiers.
 - Correct quoted item, quantity, unit, unit price, line total.
 - Delivery, payment, VAT, validity, and penalty terms.
@@ -17,7 +19,7 @@ Create a manually reviewed, separate ground-truth file before evaluating model o
 - Expected decision and all applicable rule findings.
 - Any policy ambiguity noted for human interpretation.
 
-Ground truth should not be inferred from the model's prediction. Have a second pass verify the labels where possible.
+**Independence:** the file was authored by the QUVI implementer (AI coding assistant) after the rule engine existed. It was derived from the policy, purchase request, and PDF text rather than copied from engine output, but it is not an independent human assessment. Treat it as a regression baseline. Independent validation requires a person who has not seen the implementation to re-derive the expected decisions.
 
 ## Metrics
 - **Decision accuracy:** correct final decisions / evaluated documents.

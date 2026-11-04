@@ -345,11 +345,13 @@ def extract_quotation_from_pages(
 
     if week_match and not day_match:
         delivery_days = ExtractedField[Any](
-            status=ExtractionStatus.UNCLEAR,
-            value=None,
+            status=ExtractionStatus.EXTRACTED,
+            value=int(week_match.group(1)) * 7,
             evidence=[_page_for_match(pages, delivery_match.group(0))] if delivery_match else [],
         )
-        notes.append("Delivery is stated in weeks; exact days are left for normalization.")
+        notes.append(
+            "Delivery was stated in weeks and converted exactly to days (1 week = 7 days)."
+        )
     elif day_match:
         delivery_days = ExtractedField[Any](
             status=ExtractionStatus.EXTRACTED,

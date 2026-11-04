@@ -41,7 +41,10 @@ QUVI is being built to make those checks more consistent and explainable.
 14. [Test report](docs/assessment/test-report.md) — test execution template and evaluation records.
 
 ## Important source-data note
-The challenge brief/README describes ten supplier packs. At the time these documents were prepared, only `supplier-pack-01.pdf` and `supplier-pack-02.pdf` were present in the working files. Do not claim a full ten-file evaluation until packs 03–10 are available and evaluated.
+The challenge brief/README describes ten supplier packs. All ten (`supplier-pack-01.pdf` through `supplier-pack-10.pdf`) are present in `docs/assessment/`. They are fictional sample documents and are processed only when the evaluation command is explicitly run.
+
+## Evaluation status
+The evaluation harness runs the 10 supplied PDFs against `docs/evaluation/ground-truth.json` and currently reports 10/10 decisions and 10/10 rule-ID sets. The ground truth was authored by the QUVI implementer (AI coding assistant) after the rule engine existed, so this is a regression baseline, not independent human validation. See `docs/evaluation/evaluation-report.md` and `docs/decisions.md` (ADR-012).
 
 ## Suggested build order
 1. Repository skeleton, configuration, typed models, and policy tests.

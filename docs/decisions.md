@@ -55,3 +55,21 @@ This log records the currently proposed decisions. Update it when a decision is 
 **Decision:** Do not claim a ten-pack evaluation until all ten packs are present and processed.  
 **Context:** The brief references ten supplier packs, but only packs 01 and 02 were available at documentation preparation time.  
 **Consequences:** Report current dataset size and limitations accurately.
+
+## ADR-010 — Normalize week-based delivery terms to exact days
+**Status:** Accepted  
+**Decision:** Convert delivery terms stated in weeks to days using the exact factor 1 week = 7 days (for example, 4 weeks = 28 days) before applying policy thresholds.  
+**Context:** Pack 09 states "Delivery within 4 weeks of PO." The policy thresholds are expressed in days (30 days preferred, 31–45 review, more than 45 reject). Treating an exact week-to-day conversion as unclear produced a spurious review finding: 4 weeks is 28 days, below the 31-day review band.  
+**Consequences:** Week-based terms are evaluated deterministically. Non-exact or vague terms (for example, "delivery as agreed" or a range) still route to `DELIVERY_DAYS_UNCLEAR_REVIEW`. Pack 09 is now reviewed for its payment range and line-total mismatch only.
+
+## ADR-011 — Treat pack 05's duplicated advance wording as redundant, not contradictory
+**Status:** Accepted  
+**Decision:** Interpret pack 05's payment clause as a clearly stated 40% advance and reject under `ADVANCE_PAYMENT_ABOVE_LIMIT_REJECT`.  
+**Context:** The clause reads "40% advance payable with the purchase order. 40% advance with the purchase order, balance 60% within 30 days of delivery." The duplication is untidy, but both statements name the same advance percentage and the balance completes a 100% schedule.  
+**Consequences:** The deterministic extraction reads 40%, which exceeds the 20% limit. A stricter reading — duplicated wording is ambiguous enough to send to human review — is defensible but was not chosen because no value conflicts. This is recorded as a judgment call in the evaluation report and is a suitable Loom discussion point.
+
+## ADR-012 — Evaluation ground truth is a regression baseline, not independent validation
+**Status:** Accepted  
+**Decision:** Label `docs/evaluation/ground-truth.json` honestly as authored by the QUVI implementer (AI coding assistant), not as an independent assessment.  
+**Context:** The same AI coding assistant implemented the extraction/rule engine and wrote the expected decisions afterwards. The expectations were derived from the policy, purchase-request CSV, and PDF text rather than copied from engine output, but they are not an independent human review.  
+**Consequences:** A 10/10 result demonstrates internal consistency and guards against regressions. It does not prove correctness. Independent validation requires a person who has not seen the implementation to re-derive the expected decisions.

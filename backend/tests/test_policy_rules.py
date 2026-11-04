@@ -169,11 +169,23 @@ def test_delivery_boundaries() -> None:
         assert result.decision.decision == expected, days
 
 
-def test_week_delivery_is_review() -> None:
+def test_week_delivery_is_converted_before_policy() -> None:
+    extraction = make_extraction(delivery=28)
+    extraction.delivery_days.status = ExtractionStatus.EXTRACTED
+    extraction.delivery_days.value = 28
+    extraction.delivery_period = make_field(ExtractionStatus.EXTRACTED, "Delivery within 4 weeks of PO.")
+    result = build_verification_result(extraction, "PR-2026-114")
+    ids = {f.rule_id for f in result.findings}
+    assert result.decision.decision == "APPROVE"
+    assert "DELIVERY_DAYS_UNCLEAR_REVIEW" not in ids
+    assert "DELIVERY_31_TO_45_DAYS_REVIEW" not in ids
+
+
+def test_unclear_delivery_still_reviews() -> None:
     extraction = make_extraction(delivery=28)
     extraction.delivery_days.status = ExtractionStatus.UNCLEAR
     extraction.delivery_days.value = None
-    extraction.delivery_period = make_field(ExtractionStatus.EXTRACTED, "Delivery within 4 weeks of PO.")
+    extraction.delivery_period = make_field(ExtractionStatus.EXTRACTED, "Delivery as agreed.")
     result = build_verification_result(extraction, "PR-2026-114")
     ids = {f.rule_id for f in result.findings}
     assert result.decision.decision == "NEEDS_HUMAN_REVIEW"

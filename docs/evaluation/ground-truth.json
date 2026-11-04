@@ -4,8 +4,22 @@
   "evaluation_version": "1.0.0",
   "rule_version_expected": "aamar-garments-rules-v1",
   "purchase_request_number": "PR-2026-114",
-  "reviewer": "Independent source-document assessment",
-  "notes": "Expected outcomes were reasoned directly from docs/assessment/company-rules.md, docs/assessment/purchase-request.csv, and the 10 supplier PDFs. They are not copied from QUVI output.",
+  "reviewer": "QUVI implementer (AI coding assistant) — not an independent reviewer",
+  "reviewed_at": "2026-11-04",
+  "independence": "NOT INDEPENDENT. These expected outcomes were written by the same AI coding assistant that implemented the QUVI extraction and rule engine, after that engine already existed. They were derived rule-by-rule from docs/assessment/company-rules.md, docs/assessment/purchase-request.csv, and the 10 supplier PDFs rather than copied from engine output, but they are a regression baseline, not independent human validation. A genuinely independent check requires a person who has not seen the implementation to re-derive the expected decisions.",
+  "notes": "Derivation order: the rule engine was implemented first, then this file was authored from the policy, purchase request, and PDF text. No expected value was taken from evaluation-results.json. Because the author and implementer are the same, treat the 10/10 result as evidence of internal consistency, not as proof of correctness.",
+  "supplier_pack_mapping": {
+    "supplier-pack-01.pdf": "Padma Textile Mills Ltd",
+    "supplier-pack-02.pdf": "Jamuna Trims and Accessories",
+    "supplier-pack-03.pdf": "Karnaphuli Yarn Traders",
+    "supplier-pack-04.pdf": "Surma Packaging Industries",
+    "supplier-pack-05.pdf": "Meghna Carton Works",
+    "supplier-pack-06.pdf": "Teesta Fabrics Ltd",
+    "supplier-pack-07.pdf": "Rupsha Zipper Factory",
+    "supplier-pack-08.pdf": "Bhairab Thread and Co",
+    "supplier-pack-09.pdf": "Dhaleshwari Poly Pack",
+    "supplier-pack-10.pdf": "Kushiyara Box Industries"
+  },
   "documents": [
     {
       "filename": "supplier-pack-01.pdf",
@@ -61,7 +75,7 @@
       "expected_reject_count": 1,
       "expected_review_count": 0,
       "decision_rationale": "Item E is priced below the maximum, but the terms state a 40% advance payment, which exceeds the 20% limit.",
-      "policy_ambiguity": "The payment section repeats the advance percentages inconsistently (40% advance followed by balance 60%). The source should be interpreted as requiring a 40% advance, which triggers rejection; if the duplicated wording were intended to mean a different payment schedule, it would need clarification."
+      "policy_ambiguity": "Judgment call: the payment clause repeats itself ('40% advance payable with the purchase order. 40% advance with the purchase order, balance 60% within 30 days of delivery.'). The two statements agree on 40% advance and the balance makes the schedule add up to 100%, so this is treated as redundant wording rather than a contradiction. The 40% figure is clearly stated and deterministically extractable, therefore ADVANCE_PAYMENT_ABOVE_LIMIT_REJECT applies. The alternative strict reading — that duplicated wording is ambiguous enough to send to a person — is defensible; it was not chosen because both copies state the same advance percentage and nothing in the clause contradicts 40%."
     },
     {
       "filename": "supplier-pack-06.pdf",
@@ -106,13 +120,12 @@
       "expected_decision": "NEEDS_HUMAN_REVIEW",
       "expected_rule_ids": [
         "PAYMENT_DAYS_UNCLEAR_REVIEW",
-        "DELIVERY_DAYS_UNCLEAR_REVIEW",
         "LINE_TOTAL_MISMATCH_REVIEW"
       ],
       "expected_reject_count": 0,
-      "expected_review_count": 3,
-      "decision_rationale": "Item D is below the maximum price at 6.40 BDT, but its payment term is a 30 to 90 day range, which is unclear/outside 30 to 60 days; delivery is stated as 4 weeks, so it needs conversion and human review; and the stated line total of 322,000.00 BDT does not equal 50,000 times 6.40 BDT, which equals 320,000.00 BDT.",
-      "policy_ambiguity": "The delivery term uses weeks while policy thresholds are in days. QUVI should not silently assume the conversion in a confirmed violation; the converted value needs human confirmation."
+      "expected_review_count": 2,
+      "decision_rationale": "Item D is below the maximum price at 6.40 BDT, but its payment term is a 30 to 90 day range, which is unclear against the 30 to 60 day policy; and the stated line total of 322,000.00 BDT does not equal 50,000 times 6.40 BDT, which equals 320,000.00 BDT. Delivery is 4 weeks, an exact conversion to 28 days, which is inside the 30-day preferred limit and does not trigger a review.",
+      "policy_ambiguity": "The delivery term uses weeks while policy thresholds are in days. A week-to-day conversion is exact (4 weeks = 28 days), so it is normalized deterministically rather than treated as unclear. Delivery does not contribute a finding for this document."
     },
     {
       "filename": "supplier-pack-10.pdf",
