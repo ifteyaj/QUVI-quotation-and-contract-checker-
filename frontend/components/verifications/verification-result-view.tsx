@@ -355,14 +355,14 @@ export default function VerificationResultView({ batchId }: { batchId: string })
       </div>
 
       <div className="grid min-h-0 flex-1 gap-5 lg:grid-cols-[1.45fr_1fr]">
-        <div className="flex min-h-[320px] lg:h-full min-w-0 flex-col overflow-hidden overflow-hidden rounded-2xl border border-border bg-card p-5">
+        <div className="flex min-h-0 w-full min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 lg:h-full">
           <h2 className="text-[16px] font-semibold tracking-tight text-foreground">
             Comparison Overview
           </h2>
 
-          <div className="mt-2 max-h-80 w-full min-w-0 max-w-full flex-1 overflow-x-auto overflow-y-auto">
-            <table className="w-full min-w-[520px] text-[14px]">
-              <thead>
+          <div className="mt-2 w-full min-w-0 max-w-full flex-1 min-h-0 overflow-x-auto overflow-y-auto">
+            <table className="h-full w-full min-w-[520px] text-[14px]">
+              <thead className="sticky top-0 z-10 bg-card">
                 <tr className="h-auto lg:h-11 bg-muted/60 text-left text-[11px] font-medium text-muted-foreground">
                   <th className="rounded-l-lg px-4 py-2 font-medium">Check</th>
                   <th className="px-4 py-2 font-medium">Purchase Request</th>
@@ -404,7 +404,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
 
         <div
           className={cn(
-            "flex min-h-[320px] lg:h-full min-w-0 flex-col overflow-hidden overflow-hidden rounded-2xl border p-5",
+            "flex min-h-0 w-full min-w-0 flex-col overflow-hidden rounded-2xl border p-5 lg:h-full",
             style.panelClassName
           )}
         >
@@ -428,7 +428,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
               quotation.
             </p>
           ) : (
-            <ul className="mt-2 max-h-80 w-full min-w-0 flex-1 space-y-3 overflow-y-auto pr-1">
+            <ul className="mt-2 w-full min-w-0 flex-1 min-h-0 space-y-3 overflow-y-auto pr-1">
               {findings.map((finding) => {
                 const findingTone: RowTone =
                   finding.severity === "REJECT"
