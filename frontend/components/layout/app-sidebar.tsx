@@ -48,6 +48,14 @@ function isActive(pathname: string, href: string) {
     return pathname === "/";
   }
 
+  if (href === "/verifications") {
+    return (
+      pathname === href ||
+      (pathname.startsWith(`${href}/`) &&
+        !pathname.startsWith("/verifications/new"))
+    );
+  }
+
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
