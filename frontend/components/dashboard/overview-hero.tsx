@@ -43,15 +43,15 @@ export function OverviewHero() {
     <section className="relative h-[180px] shrink-0 overflow-hidden rounded-2xl bg-gradient-to-r from-[#EEF4FF] via-[#E7F0FF] to-[#DCE9FF] px-8 py-0">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-24 -top-40 size-[420px] rounded-full bg-[#C6DAFF]/70"
+        className="pointer-events-none absolute -right-24 -top-40 hidden size-[420px] rounded-full bg-[#C6DAFF]/70 md:block"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-44 top-6 size-[380px] rounded-full bg-[#AFC9FF]/50"
+        className="pointer-events-none absolute -right-44 top-6 hidden size-[380px] rounded-full bg-[#AFC9FF]/50 md:block"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-32 right-40 size-[300px] rounded-full bg-[#D7E5FF]/60"
+        className="pointer-events-none absolute -bottom-32 right-40 hidden size-[300px] rounded-full bg-[#D7E5FF]/60 md:block"
       />
 
       <div className="relative z-10 flex h-full items-center gap-6">

@@ -43,7 +43,7 @@ export function RecentQuotations({
   onClearSearch: () => void;
 }) {
   return (
-    <div className="flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm">
+    <div className="flex min-h-[320px] lg:h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm">
       <div className="flex h-9 shrink-0 items-center justify-between gap-6 px-4 pt-4">
         <div>
           <h2 className="text-[16px] font-semibold tracking-tight text-foreground">
@@ -59,7 +59,7 @@ export function RecentQuotations({
         </Link>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 pb-3">
+      <div className="min-w-0 flex-1 overflow-x-auto overflow-y-auto px-4 pb-3">
         {totalDocuments === 0 ? (
           <div className="flex flex-col items-center justify-center py-6 text-center">
             <div className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
@@ -89,7 +89,7 @@ export function RecentQuotations({
           <div className="overflow-x-auto">
             <table className="w-full min-w-[640px] text-[14px]">
               <thead>
-                <tr className="h-11 bg-muted/50 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                <tr className="h-auto lg:h-11 bg-muted/50 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">
                   <th className="rounded-l-lg px-4 py-2.5 font-medium">Supplier</th>
                   <th className="px-4 py-2.5 font-medium">Quotation ID</th>
                   <th className="px-4 py-2.5 font-medium">Submitted</th>
@@ -103,7 +103,7 @@ export function RecentQuotations({
                 {rows.map((row) => (
                   <tr
                     key={row.document.document_id}
-                    className="h-11 border-b border-border/70 last:border-b-0"
+                    className="h-auto lg:h-11 border-b border-border/70 last:border-b-0"
                   >
                     <td className="px-4 py-2.5 font-medium text-foreground">
                       {fieldLabel(row.document.quotation_extraction.supplier_name)}

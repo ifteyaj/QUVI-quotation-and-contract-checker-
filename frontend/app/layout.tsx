@@ -18,7 +18,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
       className={cn("h-full", "antialiased", inter.variable, "font-sans")}
     >
-      <body className="min-h-full bg-background text-foreground">
+      <body className="min-h-full overflow-x-hidden bg-background text-foreground">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

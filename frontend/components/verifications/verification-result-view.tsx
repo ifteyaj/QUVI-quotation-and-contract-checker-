@@ -171,7 +171,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
 
   if (loading) {
     return (
-      <section className="flex h-screen w-full flex-col gap-5 overflow-hidden px-6 py-5">
+      <section className="flex min-h-screen w-full flex-col gap-5 overflow-x-hidden overflow-y-auto px-6 py-5 xl:h-screen xl:overflow-hidden">
         <p className="text-sm text-muted-foreground" role="status">
           Loading verification...
         </p>
@@ -181,7 +181,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
 
   if (error || !batch) {
     return (
-      <section className="flex h-screen w-full flex-col gap-5 overflow-hidden px-6 py-5">
+      <section className="flex min-h-screen w-full flex-col gap-5 overflow-x-hidden overflow-y-auto px-6 py-5 xl:h-screen xl:overflow-hidden">
         <div className="rounded-2xl border border-danger/30 bg-danger/5 p-6">
           <p className="text-sm font-medium text-danger">
             This verification could not be loaded.
@@ -205,7 +205,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
 
   if (!document) {
     return (
-      <section className="flex h-screen w-full flex-col gap-5 overflow-hidden px-6 py-5">
+      <section className="flex min-h-screen w-full flex-col gap-5 overflow-x-hidden overflow-y-auto px-6 py-5 xl:h-screen xl:overflow-hidden">
         <Link
           href="/verifications"
           className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground"
@@ -268,7 +268,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
   const sourcePdfUrl = `${API_BASE_URL}/api/batches/${batch.batch_id}/documents/${document.document_id}/file`;
 
   return (
-    <section className="flex h-screen w-full flex-col gap-5 overflow-hidden px-6 py-5">
+    <section className="flex min-h-screen w-full flex-col gap-5 overflow-x-hidden overflow-y-auto px-6 py-5 xl:h-screen xl:overflow-hidden">
       <header className="flex h-16 shrink-0 items-center justify-between gap-4">
         <Link
           href="/verifications"
@@ -334,15 +334,15 @@ export default function VerificationResultView({ batchId }: { batchId: string })
       </div>
 
       <div className="grid min-h-0 flex-1 gap-5 lg:grid-cols-[1.45fr_1fr]">
-        <div className="flex h-full min-w-0 flex-col overflow-hidden overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm">
+        <div className="flex min-h-[320px] lg:h-full min-w-0 flex-col overflow-hidden overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm">
           <h2 className="text-[16px] font-semibold tracking-tight text-foreground">
             Comparison Overview
           </h2>
 
-          <div className="mt-2 max-h-80 flex-1 overflow-y-auto overflow-x-auto">
+          <div className="mt-2 max-h-80 w-full min-w-0 max-w-full flex-1 overflow-x-auto overflow-y-auto">
             <table className="w-full min-w-[520px] text-[14px]">
               <thead>
-                <tr className="h-11 bg-muted/60 text-left text-[11px] font-medium text-muted-foreground">
+                <tr className="h-auto lg:h-11 bg-muted/60 text-left text-[11px] font-medium text-muted-foreground">
                   <th className="rounded-l-lg px-4 py-2 font-medium">Check</th>
                   <th className="px-4 py-2 font-medium">Purchase Request</th>
                   <th className="px-4 py-2 font-medium">Supplier Quotation</th>
@@ -355,7 +355,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
                 {rows.map((row, index) => (
                   <tr
                     key={`${row.label}-${index}`}
-                    className="h-11 border-b border-border/70 last:border-b-0"
+                    className="h-auto lg:h-11 border-b border-border/70 last:border-b-0"
                   >
                     <td className="px-4 py-2.5 font-medium text-foreground">
                       {row.label}
@@ -383,7 +383,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
 
         <div
           className={cn(
-            "flex h-full min-w-0 flex-col overflow-hidden overflow-hidden rounded-2xl border p-5 shadow-sm",
+            "flex min-h-[320px] lg:h-full min-w-0 flex-col overflow-hidden overflow-hidden rounded-2xl border p-5 shadow-sm",
             style.panelClassName
           )}
         >
@@ -407,7 +407,7 @@ export default function VerificationResultView({ batchId }: { batchId: string })
               quotation.
             </p>
           ) : (
-            <ul className="mt-2 max-h-80 flex-1 space-y-3 overflow-y-auto pr-1">
+            <ul className="mt-2 max-h-80 w-full min-w-0 flex-1 space-y-3 overflow-y-auto pr-1">
               {findings.map((finding) => {
                 const findingTone: RowTone =
                   finding.severity === "REJECT"

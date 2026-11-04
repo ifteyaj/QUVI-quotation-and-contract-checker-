@@ -179,7 +179,7 @@ function VerificationsContent() {
     key === "all" ? statusFilter === null : statusFilter === key;
 
   return (
-    <section className="mx-auto w-full max-w-6xl space-y-6 p-6 md:p-8">
+    <section className="mx-auto w-full max-w-6xl space-y-4 overflow-x-hidden px-4 py-4 md:px-6 md:py-6">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">
@@ -262,7 +262,8 @@ function VerificationsContent() {
         </div>
       ) : loading ? (
         <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
-          <table className="w-full min-w-[900px] text-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[900px] text-sm">
             <thead>
               <tr className="bg-muted/60 text-left text-xs font-medium text-muted-foreground">
                 <th className="px-4 py-3 font-medium">Quotation ID</th>
@@ -275,6 +276,7 @@ function VerificationsContent() {
             </thead>
             <SkeletonRows />
           </table>
+            </div>
         </div>
       ) : documents.length === 0 ? (
         <div className="rounded-2xl border border-border bg-card p-10 text-center shadow-sm">
@@ -304,7 +306,8 @@ function VerificationsContent() {
       ) : (
         <>
           <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
-            <table className="w-full min-w-[900px] text-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[900px] text-sm">
               <thead>
                 <tr className="bg-muted/60 text-left text-xs font-medium text-muted-foreground">
                   <th className="px-4 py-3 font-medium">Quotation ID</th>
@@ -377,6 +380,7 @@ function VerificationsContent() {
                 })}
               </tbody>
             </table>
+            </div>
           </div>
 
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

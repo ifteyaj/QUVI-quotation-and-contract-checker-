@@ -111,7 +111,7 @@ export default function OverviewPage() {
   }, [documents]);
 
   return (
-    <section className="flex h-screen w-full flex-col gap-5 overflow-hidden px-6 py-5">
+    <section className="flex min-h-screen w-full flex-col gap-5 overflow-x-hidden overflow-y-auto px-6 py-5 xl:h-screen xl:overflow-hidden">
       <header className="flex h-16 shrink-0 items-center gap-4 md:justify-between">
         <h1 className="text-[22px] font-semibold leading-7 tracking-tight text-foreground">
           Overview
