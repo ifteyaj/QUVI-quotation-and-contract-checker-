@@ -14,7 +14,6 @@ import {
   Menu,
   MessagesSquare,
   Moon,
-  Settings,
   ShieldCheck,
   Sun,
   X,
@@ -160,13 +159,6 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
             <Moon className="size-4" />
           )}
         </button>
-        <span
-          aria-disabled="true"
-          title="Settings (coming soon)"
-          className="inline-flex size-9 cursor-not-allowed items-center justify-center rounded-lg text-muted-foreground/60"
-        >
-          <Settings className="size-4 shrink-0" />
-        </span>
       </div>
 
       <div className="border-t border-border px-3 py-2">
