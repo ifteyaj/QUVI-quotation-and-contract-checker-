@@ -2,13 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useSyncExternalStore, useState } from "react";
+import { useTheme } from "next-themes";
 import {
   Building2,
   ClipboardList,
   FileSearch,
   FileText,
   House,
+  Moon,
+  Sun,
   Menu,
   MessagesSquare,
   Settings,
@@ -93,6 +96,12 @@ function NavigationRow({
 }
 
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
+  const { resolvedTheme, setTheme } = useTheme();
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
   const pathname = usePathname();
 
   return (
@@ -132,6 +141,26 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           />
         ))}
       </nav>
+
+      <div className="border-t border-border px-3 py-3">
+        <button
+          type="button"
+          aria-label="Toggle colour theme"
+          onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+          className="flex h-9 w-full items-center gap-3 rounded-lg border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+        >
+          <span className="flex size-5 shrink-0 items-center justify-center text-muted-foreground">
+            {mounted && resolvedTheme === "dark" ? (
+              <Sun className="size-4" />
+            ) : (
+              <Moon className="size-4" />
+            )}
+          </span>
+          <span className="min-w-0 truncate text-left">
+            {mounted && resolvedTheme === "dark" ? "Light mode" : "Dark mode"}
+          </span>
+        </button>
+      </div>
 
       <div className="border-t border-border px-3 py-4">
         <div className="flex items-center gap-3 rounded-lg bg-muted/50 px-3 py-2.5">
