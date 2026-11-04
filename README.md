@@ -24,6 +24,36 @@ QUVI is being built to make those checks more consistent and explainable.
 
 
 
+## Getting started (local prototype)
+
+Python 3.9.6 was used for backend tests and development. Using a newer Python may require dependency changes.
+
+Backend:
+```bash
+cd backend
+python3.9 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+.venv/bin/pytest
+source .venv/bin/activate && uvicorn main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Run the supplied evaluation samples (start the backend first; `real_run.py` expects it):
+```bash
+cd backend
+source .venv/bin/activate
+.venv/bin/python scripts/real_run.py --packs ../docs/assessment
+```
+Generated run summaries are written under `backend/real-run-results/` and are ignored by Git.
+
+Frontend:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Then open http://localhost:3000. The frontend calls the backend at http://localhost:8000 by default.
+
 ## Documents
 1. [Project overview](docs/project-overview.md) — purpose, scope, users, principles, and success criteria.
 2. [Technical architecture](docs/architecture.md) — components, fixed pipeline, stack, persistence, safety, and architecture decisions.
