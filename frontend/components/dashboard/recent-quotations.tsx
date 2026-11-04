@@ -59,7 +59,7 @@ export function RecentQuotations({
         </Link>
       </div>
 
-      <div className="min-w-0 flex-1 overflow-x-auto overflow-y-auto px-4 pb-3">
+      <div className="min-w-0 flex-1 overflow-x-auto overflow-y-auto px-4 pb-3 mt-4">
         {totalDocuments === 0 ? (
           <div className="flex flex-col items-center justify-center py-6 text-center">
             <div className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
