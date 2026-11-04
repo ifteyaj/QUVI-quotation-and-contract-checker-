@@ -91,7 +91,28 @@ Planned or future application areas described in earlier planning included `apps
 
 ## Getting started
 
-Run instructions will be added once the initial application scaffold is committed. At this stage, there is no runnable application in the repository yet.
+Backend:
+
+```bash
+cd backend
+source .venv/bin/activate
+uvicorn main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Frontend:
+
+```bash
+cd frontend
+npm run dev
+```
+
+Useful URLs:
+
+- Frontend: http://localhost:3000
+- New Verification: http://localhost:3000/verifications/new
+- Backend health: http://localhost:8000/health
+- Backend docs: http://localhost:8000/docs
+
 
 ## Evaluation
 
