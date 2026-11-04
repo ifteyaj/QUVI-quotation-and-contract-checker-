@@ -5,3 +5,7 @@ backend/real-run-results/
 backend/.pytest_cache/
 frontend/node_modules/
 frontend/.next/
+.vercel
+.env*
+
+.next/

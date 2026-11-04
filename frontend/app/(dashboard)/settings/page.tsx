@@ -15,7 +15,11 @@ export default function SettingsPage() {
 
   useEffect(() => {
     let active = true;
-    Promise.all([fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000"}/health`), getPurchaseRequest("PR-2026-114"), getPolicyRules(), listBatches()])
+    const apiBaseUrl =
+      process.env.NEXT_PUBLIC_API_BASE_URL ??
+      (process.env.NODE_ENV === "development" ? "http://localhost:8000" : "");
+
+    Promise.all([fetch(`${apiBaseUrl}/health`), getPurchaseRequest("PR-2026-114"), getPolicyRules(), listBatches()])
       .then(async ([healthResponse, pr, rules]) => {
         if (!active) return;
         const healthJson = await healthResponse.json();
