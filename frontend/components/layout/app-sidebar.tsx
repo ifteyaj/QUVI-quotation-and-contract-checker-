@@ -122,7 +122,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
         </div>
       </div>
 
-      <nav className="flex-1 space-y-0 px-3 py-0" aria-label="Primary navigation">
+      <nav className="flex-1 space-y-1 overflow-y-auto px-3 pt-3 pb-3" aria-label="Primary navigation">
         {primaryNavigation.map((item) => (
           <NavigationRow
             key={item.label}
