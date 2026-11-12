@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSyncExternalStore, useState } from "react";
+import { useEffect, useRef, useSyncExternalStore, useState } from "react";
 import { useTheme } from "next-themes";
 import {
   Building2,
@@ -28,7 +28,7 @@ type NavigationItem = {
 };
 
 const primaryNavigation: NavigationItem[] = [
-  { label: "Overview", href: "/", icon: House },
+  { label: "Overview", href: "/dashboard", icon: House },
   { label: "New Verification", href: "/verifications/new", icon: Zap },
   { label: "Verification List", href: "/verifications", icon: FileSearch },
   { label: "Purchase Requisitions", href: "/purchase-requests", icon: ClipboardList },
@@ -38,10 +38,6 @@ const primaryNavigation: NavigationItem[] = [
 const secondaryNavigation: NavigationItem[] = [];
 
 function isActive(pathname: string, href: string) {
-  if (href === "/") {
-    return pathname === "/";
-  }
-
   if (href === "/verifications") {
     return (
       pathname === href ||
@@ -115,7 +111,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
             alt="QUVI"
             width={242}
             height={88}
-            className="h-11 w-auto max-w-[215px] object-contain"
+            className="h-8 w-auto max-w-[150px] object-contain"
           />
         </div>
       </div>
@@ -176,7 +172,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 
 export function AppSidebar() {
   return (
-    <aside className="hidden h-screen w-[258px] shrink-0 flex-col border-r border-border bg-card lg:flex">
+    <aside className="hidden h-full w-[258px] shrink-0 flex-col border-r border-border bg-card lg:flex">
       <SidebarContent />
     </aside>
   );
@@ -184,11 +180,47 @@ export function AppSidebar() {
 
 export function MobileSidebar() {
   const [open, setOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    const scrollHost = document.querySelector<HTMLElement>("[data-app-scroll]");
+    const previousOverflowY = scrollHost?.style.overflowY ?? "";
+    if (scrollHost) {
+      scrollHost.style.overflowY = "hidden";
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    closeButtonRef.current?.focus();
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      if (scrollHost) {
+        scrollHost.style.overflowY = previousOverflowY;
+      }
+    };
+  }, [open]);
+
+  const closeNavigation = () => {
+    setOpen(false);
+    menuButtonRef.current?.focus();
+  };
 
   return (
     <>
       <header className="flex h-14 items-center justify-between border-b border-border bg-card px-4 lg:hidden">
-        <Link href="/" className="flex items-center gap-2.5">
+        <Link href="/dashboard" className="flex items-center gap-2.5">
           <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <ShieldCheck className="size-5" />
           </div>
@@ -197,41 +229,58 @@ export function MobileSidebar() {
           </span>
         </Link>
         <button
+          ref={menuButtonRef}
           type="button"
           onClick={() => setOpen(true)}
           aria-label="Open navigation"
+          aria-expanded={open}
+          aria-controls="mobile-navigation"
           className="inline-flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
         >
           <Menu className="size-5" />
         </button>
       </header>
 
-      {open ? (
+      <div
+        className={cn(
+          "fixed inset-0 z-50 lg:hidden",
+          open ? "pointer-events-auto" : "pointer-events-none"
+        )}
+        aria-hidden={!open}
+      >
+        <button
+          type="button"
+          tabIndex={open ? 0 : -1}
+          onClick={closeNavigation}
+          aria-label="Close navigation"
+          className={cn(
+            "absolute inset-0 bg-black/30 transition-opacity duration-200 motion-reduce:transition-none",
+            open ? "opacity-100" : "opacity-0"
+          )}
+        />
         <div
-          className="fixed inset-0 z-50 lg:hidden"
+          id="mobile-navigation"
           role="dialog"
           aria-modal="true"
           aria-label="Navigation"
+          inert={!open}
+          className={cn(
+            "absolute inset-y-0 left-0 flex w-[280px] max-w-[85vw] flex-col overflow-y-auto border-r border-border bg-card transition-transform duration-200 ease-out motion-reduce:transition-none",
+            open ? "translate-x-0" : "-translate-x-full"
+          )}
         >
           <button
+            ref={closeButtonRef}
             type="button"
-            onClick={() => setOpen(false)}
+            onClick={closeNavigation}
             aria-label="Close navigation"
-            className="absolute inset-0 bg-black/30"
-          />
-          <div className="absolute inset-y-0 left-0 flex w-[280px] flex-col overflow-y-auto border-r border-border bg-card">
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              aria-label="Close navigation"
-              className="absolute right-3 top-3 z-10 inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
-            >
-              <X className="size-4" />
-            </button>
-            <SidebarContent onNavigate={() => setOpen(false)} />
-          </div>
+            className="absolute right-3 top-3 z-10 inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
+          >
+            <X className="size-4" />
+          </button>
+          <SidebarContent onNavigate={closeNavigation} />
         </div>
-      ) : null}
+      </div>
     </>
   );
 }

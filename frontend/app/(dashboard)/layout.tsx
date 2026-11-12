@@ -5,11 +5,14 @@ import { AppSidebar, MobileSidebar } from "@/components/layout/app-sidebar";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex h-screen overflow-hidden bg-background">
       <Suspense fallback={<aside className="hidden w-[258px] shrink-0 border-r border-border bg-card lg:block" />}>
         <AppSidebar />
       </Suspense>
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden overflow-y-auto">
+      <div
+        data-app-scroll
+        className="flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden overflow-y-auto"
+      >
         <Suspense fallback={<div className="h-16 border-b border-border bg-card lg:hidden" />}>
           <MobileSidebar />
         </Suspense>

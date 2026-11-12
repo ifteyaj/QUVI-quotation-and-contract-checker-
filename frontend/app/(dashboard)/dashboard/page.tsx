@@ -111,13 +111,13 @@ export default function OverviewPage() {
   }, [documents]);
 
   return (
-    <section className="flex min-h-screen w-full flex-col gap-5 overflow-x-hidden overflow-y-auto px-6 py-5 xl:h-screen xl:overflow-hidden">
-      <header className="flex h-16 shrink-0 items-center gap-4 md:justify-between">
+    <section className="flex min-h-screen w-full flex-col gap-4 overflow-x-hidden overflow-y-auto px-4 py-4 sm:gap-5 sm:px-6 sm:py-5 xl:h-screen xl:overflow-hidden">
+      <header className="flex shrink-0 flex-col gap-3 sm:h-16 sm:flex-row sm:items-center sm:justify-between md:gap-4">
         <h1 className="text-[22px] font-semibold leading-7 tracking-tight text-foreground">
           Overview
         </h1>
 
-        <div className="relative w-full md:w-[340px]">
+        <div className="relative w-full sm:max-w-[340px] md:w-[340px]">
           <Search
             aria-hidden="true"
             className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"

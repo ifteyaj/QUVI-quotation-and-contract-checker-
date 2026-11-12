@@ -54,7 +54,7 @@ export default function PurchaseRequestsPage() {
   }, [selectedPr]);
 
   return (
-    <section className="mx-auto w-full max-w-6xl space-y-6 p-6 md:p-8">
+    <section className="mx-auto w-full max-w-6xl space-y-4 p-4 sm:space-y-6 sm:p-6 md:p-8">
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">
           Purchase Requests
@@ -72,10 +72,10 @@ export default function PurchaseRequestsPage() {
         <p className="text-sm text-muted-foreground">Loading purchase requests...</p>
       ) : (
         <>
-          <div className="flex items-center gap-3">
+          <div className="flex w-full flex-col items-start gap-2 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
             <span className="text-sm text-muted-foreground">Request</span>
             <Select value={selectedPr} onValueChange={setSelectedPr}>
-              <SelectTrigger className="w-[260px]">
+              <SelectTrigger className="w-full sm:w-[260px]">
                 <SelectValue placeholder="Select a purchase request" />
               </SelectTrigger>
               <SelectContent>
@@ -97,7 +97,32 @@ export default function PurchaseRequestsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto rounded-lg border border-border">
+              <ul className="divide-y divide-border overflow-hidden rounded-lg border border-border sm:hidden">
+                {purchaseRequest?.items.map((item) => (
+                  <li key={item.item_code} className="p-4 text-sm">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="min-w-0 font-medium text-foreground">
+                        {item.item_code}
+                      </p>
+                      <p className="shrink-0 text-xs text-muted-foreground">
+                        {item.unit}
+                      </p>
+                    </div>
+                    <p className="mt-1 text-muted-foreground">
+                      {item.description}
+                    </p>
+                    <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
+                      <span>
+                        Qty {Number(item.requested_quantity).toLocaleString()}
+                      </span>
+                      <span>
+                        Max BDT {Number(item.maximum_unit_price).toFixed(2)}
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              <div className="hidden overflow-x-auto rounded-lg border border-border sm:block">
                 <table className="w-full min-w-[720px] text-sm">
                   <thead>
                     <tr className="border-b border-border bg-muted/40 text-left text-xs text-muted-foreground">

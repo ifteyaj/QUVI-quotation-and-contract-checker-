@@ -60,7 +60,8 @@ npm run dev
 Open http://localhost:3000. The frontend calls the backend at http://localhost:8000 by default.
 
 Useful URLs:
-- Dashboard: http://localhost:3000
+- Welcome page: http://localhost:3000
+- Dashboard: http://localhost:3000/dashboard
 - New verification: http://localhost:3000/verifications/new
 - Backend health: http://localhost:8000/health
 - Backend API docs: http://localhost:8000/docs

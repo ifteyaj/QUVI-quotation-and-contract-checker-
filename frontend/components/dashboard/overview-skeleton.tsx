@@ -3,7 +3,7 @@ export function OverviewSkeleton() {
     <div className="space-y-6" aria-label="Loading overview" role="status">
       <span className="sr-only">Loading overview data...</span>
 
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4">
         {Array.from({ length: 4 }).map((_, index) => (
           <div
             key={index}

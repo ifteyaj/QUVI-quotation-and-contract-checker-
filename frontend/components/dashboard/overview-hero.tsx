@@ -6,7 +6,7 @@ function HeroIllustration() {
       viewBox="0 0 150 150"
       role="img"
       aria-label="Document with a verified shield"
-      className="h-24 w-24 shrink-0"
+      className="h-16 w-16 shrink-0 md:h-24 md:w-24"
     >
       <path
         d="M35 18h58l22 22v82a8 8 0 0 1-8 8H35a8 8 0 0 1-8-8V26a8 8 0 0 1 8-8Z"
@@ -40,7 +40,7 @@ function HeroIllustration() {
 
 export function OverviewHero() {
   return (
-    <section className="relative h-[180px] shrink-0 overflow-hidden rounded-2xl bg-gradient-to-r from-[#EEF4FF] via-[#E7F0FF] to-[#DCE9FF] px-8 py-0">
+    <section className="relative shrink-0 overflow-hidden rounded-2xl bg-gradient-to-r from-[#EEF4FF] via-[#E7F0FF] to-[#DCE9FF] px-5 py-5 md:h-[180px] md:px-8 md:py-0">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-24 -top-40 hidden size-[420px] rounded-full bg-[#C6DAFF]/70 md:block"
@@ -54,7 +54,7 @@ export function OverviewHero() {
         className="pointer-events-none absolute -bottom-32 right-40 hidden size-[300px] rounded-full bg-[#D7E5FF]/60 md:block"
       />
 
-      <div className="relative z-10 flex h-full items-center gap-6">
+      <div className="relative z-10 flex h-full flex-col items-start gap-4 md:flex-row md:items-center md:gap-6">
         <HeroIllustration />
 
         <div className="min-w-0 flex-1">
@@ -69,7 +69,7 @@ export function OverviewHero() {
 
         <Link
           href="/verifications/new"
-          className="inline-flex h-11 shrink-0 items-center gap-2 rounded-lg bg-primary px-6 text-[14px] font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-2"
+          className="inline-flex h-11 w-full shrink-0 items-center justify-center gap-2 rounded-lg bg-primary px-6 text-[14px] font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-2 md:w-auto"
         >
           Start New Verification →
         </Link>

@@ -180,7 +180,7 @@ function VerificationsContent() {
 
   return (
     <section className="mx-auto w-full max-w-6xl space-y-4 overflow-x-hidden px-4 py-4 md:px-6 md:py-6">
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-1">
             <h1 className="text-2xl font-semibold tracking-tight text-foreground">
@@ -307,7 +307,77 @@ function VerificationsContent() {
         </div>
       ) : (
         <>
-          <div className="overflow-hidden rounded-2xl border border-border bg-card">
+          <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card lg:hidden">
+            {pageRows.map((row: DocRow) => {
+              const quotationId = extractedFieldValue(
+                row.document.quotation_extraction.quotation_number
+              );
+              const supplier = extractedFieldValue(
+                row.document.quotation_extraction.supplier_name
+              );
+              const purchaseRequest =
+                row.document.verification_result.purchase_request_number ?? "—";
+              const decision = getDecision(row.document);
+              const style = decisionStyles(decision);
+
+              return (
+                <li key={row.document.document_id} className="p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p
+                        className={`truncate text-sm font-medium ${
+                          quotationId.missing ? "text-warning" : "text-foreground"
+                        }`}
+                      >
+                        {quotationId.text}
+                      </p>
+                      <p
+                        className={`mt-0.5 truncate text-sm ${
+                          supplier.missing ? "text-warning" : "text-muted-foreground"
+                        }`}
+                      >
+                        {supplier.text}
+                      </p>
+                    </div>
+                    <span
+                      className={`inline-flex shrink-0 items-center gap-2 rounded-full px-3 py-1 text-xs font-medium ${style.pillClassName}`}
+                    >
+                      <span
+                        aria-hidden="true"
+                        className={`size-1.5 rounded-full ${style.dotClassName}`}
+                      />
+                      {style.label}
+                    </span>
+                  </div>
+
+                  <dl className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                    <div className="min-w-0">
+                      <dt className="text-muted-foreground">Purchase Request</dt>
+                      <dd className="mt-0.5 truncate font-medium text-foreground">
+                        {purchaseRequest}
+                      </dd>
+                    </div>
+                    <div className="min-w-0">
+                      <dt className="text-muted-foreground">Date</dt>
+                      <dd className="mt-0.5 font-medium text-foreground">
+                        {formatCheckedOn(row.document.created_at)}
+                      </dd>
+                    </div>
+                  </dl>
+
+                  <Link
+                    href={`/verifications/${row.batchId}?document=${encodeURIComponent(row.document.document_id)}`}
+                    className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-primary/80"
+                  >
+                    View Details
+                    <ArrowRight className="size-4" />
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+
+          <div className="hidden overflow-hidden rounded-2xl border border-border bg-card lg:block">
             <div className="overflow-x-auto">
               <table className="w-full min-w-[900px] text-sm">
               <thead>
@@ -390,7 +460,7 @@ function VerificationsContent() {
               Showing {showingFrom}–{showingTo} of{" "}
               {filteredDocuments.length} results
             </p>
-            <nav className="flex items-center gap-1" aria-label="Pagination">
+            <nav className="flex flex-wrap items-center gap-1" aria-label="Pagination">
               <button
                 type="button"
                 disabled={safePage <= 1}

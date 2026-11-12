@@ -33,7 +33,7 @@ export default function RulesPolicyPage() {
   }, []);
 
   return (
-    <section className="mx-auto w-full max-w-6xl space-y-6 p-6 md:p-8">
+    <section className="mx-auto w-full max-w-6xl space-y-4 p-4 sm:space-y-6 sm:p-6 md:p-8">
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">
           Rules &amp; Policy
@@ -72,7 +72,7 @@ export default function RulesPolicyPage() {
                 {rules.reject_rules.map((rule) => (
                   <li key={rule} className="flex gap-3">
                     <span className="mt-1 size-2 shrink-0 rounded-full bg-danger" />
-                    <span>{rule}</span>
+                    <span className="min-w-0 break-words">{rule}</span>
                   </li>
                 ))}
               </ul>
@@ -93,7 +93,7 @@ export default function RulesPolicyPage() {
                 {rules.review_rules.map((rule) => (
                   <li key={rule} className="flex gap-3">
                     <span className="mt-1 size-2 shrink-0 rounded-full bg-warning" />
-                    <span>{rule}</span>
+                    <span className="min-w-0 break-words">{rule}</span>
                   </li>
                 ))}
               </ul>
@@ -109,7 +109,7 @@ export default function RulesPolicyPage() {
             <CardContent>
               <ul className="space-y-3 text-sm text-muted-foreground">
                 {rules.notes.map((rule) => (
-                  <li key={rule}>• {rule}</li>
+                  <li key={rule} className="break-words">• {rule}</li>
                 ))}
               </ul>
             </CardContent>

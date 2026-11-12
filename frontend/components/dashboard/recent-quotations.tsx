@@ -86,51 +86,86 @@ export function RecentQuotations({
             </button>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[640px] text-[14px]">
-              <thead>
-                <tr className="h-auto lg:h-11 bg-muted/50 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                  <th className="rounded-l-lg px-4 py-2.5 font-medium">Supplier</th>
-                  <th className="px-4 py-2.5 font-medium">Quotation ID</th>
-                  <th className="px-4 py-2.5 font-medium">Submitted</th>
-                  <th className="px-4 py-2.5 font-medium">Status</th>
-                  <th className="rounded-r-lg px-4 py-2.5 text-right font-medium">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((row) => (
-                  <tr
-                    key={row.document.document_id}
-                    className="h-auto lg:h-11 border-b border-border/70 last:border-b-0"
-                  >
-                    <td className="px-4 py-2.5 font-medium text-foreground">
-                      {fieldLabel(row.document.quotation_extraction.supplier_name)}
-                    </td>
-                    <td className="px-4 py-2.5 text-muted-foreground">
-                      {fieldLabel(row.document.quotation_extraction.quotation_number)}
-                    </td>
-                    <td className="px-4 py-2.5 text-muted-foreground">
+          <>
+            <ul className="space-y-2 lg:hidden">
+              {rows.map((row) => (
+                <li
+                  key={row.document.document_id}
+                  className="rounded-lg border border-border/70 p-3"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="truncate text-[14px] font-medium text-foreground">
+                        {fieldLabel(row.document.quotation_extraction.supplier_name)}
+                      </p>
+                      <p className="mt-0.5 truncate text-[12px] text-muted-foreground">
+                        {fieldLabel(row.document.quotation_extraction.quotation_number)}
+                      </p>
+                    </div>
+                    <StatusPill row={row} />
+                  </div>
+                  <div className="mt-2 flex items-center justify-between gap-3">
+                    <p className="text-[12px] text-muted-foreground">
                       {formatSubmittedDate(row.document.created_at)}
-                    </td>
-                    <td className="px-4 py-2.5">
-                      <StatusPill row={row} />
-                    </td>
-                    <td className="px-4 py-2.5 text-right">
-                      <Link
-                        href={`/verifications/${row.batchId}?document=${encodeURIComponent(row.document.document_id)}`}
-                        className="inline-flex items-center gap-1.5 font-medium text-primary hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
-                      >
-                        View
-                        <ArrowRight className="size-4" />
-                      </Link>
-                    </td>
+                    </p>
+                    <Link
+                      href={`/verifications/${row.batchId}?document=${encodeURIComponent(row.document.document_id)}`}
+                      className="inline-flex items-center gap-1.5 text-[13px] font-medium text-primary hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                    >
+                      View
+                      <ArrowRight className="size-3.5" />
+                    </Link>
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            <div className="hidden overflow-x-auto lg:block">
+              <table className="w-full min-w-[640px] text-[14px]">
+                <thead>
+                  <tr className="h-auto lg:h-11 bg-muted/50 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    <th className="rounded-l-lg px-4 py-2.5 font-medium">Supplier</th>
+                    <th className="px-4 py-2.5 font-medium">Quotation ID</th>
+                    <th className="px-4 py-2.5 font-medium">Submitted</th>
+                    <th className="px-4 py-2.5 font-medium">Status</th>
+                    <th className="rounded-r-lg px-4 py-2.5 text-right font-medium">
+                      Action
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {rows.map((row) => (
+                    <tr
+                      key={row.document.document_id}
+                      className="h-auto lg:h-11 border-b border-border/70 last:border-b-0"
+                    >
+                      <td className="px-4 py-2.5 font-medium text-foreground">
+                        {fieldLabel(row.document.quotation_extraction.supplier_name)}
+                      </td>
+                      <td className="px-4 py-2.5 text-muted-foreground">
+                        {fieldLabel(row.document.quotation_extraction.quotation_number)}
+                      </td>
+                      <td className="px-4 py-2.5 text-muted-foreground">
+                        {formatSubmittedDate(row.document.created_at)}
+                      </td>
+                      <td className="px-4 py-2.5">
+                        <StatusPill row={row} />
+                      </td>
+                      <td className="px-4 py-2.5 text-right">
+                        <Link
+                          href={`/verifications/${row.batchId}?document=${encodeURIComponent(row.document.document_id)}`}
+                          className="inline-flex items-center gap-1.5 font-medium text-primary hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                        >
+                          View
+                          <ArrowRight className="size-4" />
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
     </div>

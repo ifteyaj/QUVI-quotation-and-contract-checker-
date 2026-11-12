@@ -36,7 +36,7 @@ export default function SettingsPage() {
   }, []);
 
   return (
-    <section className="mx-auto w-full max-w-6xl space-y-6 p-6 md:p-8">
+    <section className="mx-auto w-full max-w-6xl space-y-4 p-4 sm:space-y-6 sm:p-6 md:p-8">
       <header className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">
           Settings

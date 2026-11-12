@@ -261,10 +261,10 @@ export function NewVerificationForm() {
   const currentStep = selectedFiles.length ? 2 : 1;
 
   return (
-    <div className="mx-auto w-full max-w-6xl space-y-8 p-6 md:p-8">
+    <div className="mx-auto w-full max-w-6xl space-y-6 p-4 sm:space-y-8 sm:p-6 md:p-8">
       <div className="flex items-start justify-between gap-4">
         <Link
-          href="/"
+          href="/dashboard"
           className="inline-flex h-9 items-center gap-2 rounded-md px-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
         >
           <ArrowLeft className="size-4" />
@@ -493,7 +493,35 @@ export function NewVerificationForm() {
               <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 Supplied purchase request items
               </p>
-              <div className="overflow-x-auto">
+              <ul className="space-y-2 sm:hidden">
+                {purchaseRequestData.items.map((item) => (
+                  <li
+                    key={item.item_code}
+                    className="rounded-md border border-border bg-card p-3"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="min-w-0 font-medium text-foreground">
+                        {item.item_code}
+                      </p>
+                      <p className="shrink-0 text-xs text-muted-foreground">
+                        {item.unit}
+                      </p>
+                    </div>
+                    <p className="mt-1 text-muted-foreground">
+                      {item.description}
+                    </p>
+                    <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs">
+                      <span className="text-muted-foreground">
+                        Qty {Number(item.requested_quantity).toLocaleString()}
+                      </span>
+                      <span className="text-muted-foreground">
+                        Max BDT {Number(item.maximum_unit_price).toFixed(2)}
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              <div className="hidden overflow-x-auto sm:block">
                 <table className="w-full min-w-[480px] text-sm">
                   <thead>
                     <tr className="border-b border-border text-left text-xs text-muted-foreground">

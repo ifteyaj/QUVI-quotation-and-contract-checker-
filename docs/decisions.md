@@ -81,3 +81,15 @@ This log records the currently proposed decisions. Update it when a decision is 
 **Context:** The brief says to stop and ask a person when unsure. Treating every unclear field as a reject was unsafe, especially for unfamiliar layouts.
 **Consequences:** TIN/BIN reject needs a readable keyword with no value, or confirmed absence from an otherwise readable header. Ambiguous evidence routes to review. Pack 08 remains a reject because no TIN/BIN keyword/value is present in a readable document.
 **Deviations:** Only TIN, BIN, and late penalty use exact "Could not read" title; thresholds and rule text unchanged; keyword absence is treated as confirmed absence only when the header is otherwise readable.
+
+## ADR-014 — Mobile navigation is the same sidebar in a drawer
+**Status:** Accepted
+**Decision:** Keep one sidebar component for both desktop and mobile. Desktop renders it as the existing `258px` rail. Below `lg`, a header menu button opens the same navigation content in a `280px` drawer with an overlay, Escape-to-close, focus return, and background scroll lock.
+**Context:** The desktop design is the reference. Duplicating a separate mobile navigation would drift from it and risk removing navigation items or active states.
+**Consequences:** Navigation items, icons, active styles, and the account block stay identical across sizes. The app shell now owns scrolling (`h-screen` with an inner scroll column) so the drawer can lock the scroll host without touching `body`.
+
+## ADR-015 — Root URL is a welcome page; the dashboard lives at `/dashboard`
+**Status:** Accepted
+**Decision:** Serve a static welcome page at `/` and move the existing dashboard to `/dashboard`. Nothing else about the dashboard changes, and every sidebar/back link points at `/dashboard`.
+**Context:** The requested entry screen should explain QUVI before the working interface, without adding auth or onboarding.
+**Consequences:** `/` is outside the `(dashboard)` route group, so it renders without the sidebar. All existing application routes remain directly reachable and there is no redirect. The dashboard route is unchanged in content and was verified pixel-identical at `1280px` and `1440px`.
