@@ -40,28 +40,28 @@ function HeroIllustration() {
 
 export function OverviewHero() {
   return (
-    <section className="relative shrink-0 overflow-hidden rounded-2xl bg-gradient-to-r from-[#EEF4FF] via-[#E7F0FF] to-[#DCE9FF] px-5 py-5 md:h-[180px] md:px-8 md:py-0">
+    <section className="relative shrink-0 overflow-hidden rounded-2xl bg-gradient-to-r from-[#EEF4FF] via-[#E7F0FF] to-[#DCE9FF] px-5 py-5 dark:bg-gradient-to-r dark:from-[#18233C] dark:via-[#162036] dark:to-[#131C2F] md:h-[180px] md:px-8 md:py-0">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-24 -top-40 hidden size-[420px] rounded-full bg-[#C6DAFF]/70 md:block"
+        className="pointer-events-none absolute -right-24 -top-40 hidden size-[420px] rounded-full bg-[#C6DAFF]/70 dark:bg-primary/15 md:block"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-44 top-6 hidden size-[380px] rounded-full bg-[#AFC9FF]/50 md:block"
+        className="pointer-events-none absolute -right-44 top-6 hidden size-[380px] rounded-full bg-[#AFC9FF]/50 dark:bg-primary/10 md:block"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-32 right-40 hidden size-[300px] rounded-full bg-[#D7E5FF]/60 md:block"
+        className="pointer-events-none absolute -bottom-32 right-40 hidden size-[300px] rounded-full bg-[#D7E5FF]/60 dark:bg-primary/[0.07] md:block"
       />
 
       <div className="relative z-10 flex h-full flex-col items-start gap-4 md:flex-row md:items-center md:gap-6">
         <HeroIllustration />
 
         <div className="min-w-0 flex-1">
-          <h2 className="text-[22px] font-semibold tracking-tight text-[#111827]">
+          <h2 className="text-[22px] font-semibold tracking-tight text-[#111827] dark:text-foreground">
             Ready to verify a quotation?
           </h2>
-          <p className="mt-2 max-w-2xl text-[14px] leading-6 text-slate-600">
+          <p className="mt-2 max-w-2xl text-[14px] leading-6 text-slate-600 dark:text-muted-foreground">
             Upload a supplier quotation and check it against your purchase
             requirements and company rules.
           </p>
