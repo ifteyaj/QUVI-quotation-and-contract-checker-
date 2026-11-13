@@ -15,7 +15,7 @@ This repository was built for the BIAI AI Engineer Round 2 assessment, Task 1 (s
 - A Next.js dashboard, upload page, verification list and verification detail page.
 - Pytest tests and a 10-pack run script.
 
-No LLM or external AI API is called at runtime. The brief allowed AI coding tools during development; this project used an AI coding assistant (OpenCode with Claude) to write and review code.
+No LLM or external AI API is called at runtime.
 
 ## Requirements
 
