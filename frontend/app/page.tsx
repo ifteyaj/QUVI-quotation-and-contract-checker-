@@ -1,8 +1,8 @@
 import Image from "next/image";
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { DashboardPreviewFrame } from "@/components/welcome/dashboard-preview-frame";
+import { ShinyButton } from "@/components/ui/shiny-button";
 
 /** Faint hairline grid, faded out radially from the top centre of the hero. */
 const GRID_LIGHT_STYLE = {
@@ -77,13 +77,10 @@ export default function WelcomePage() {
         </p>
 
         <div className="relative z-20 mt-8 flex w-full justify-center sm:mt-9">
-          <Link
-            href="/dashboard"
-            className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-foreground px-8 text-[15px] font-medium text-background shadow-sm transition-colors hover:bg-foreground/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-2 sm:w-auto"
-          >
+          <ShinyButton href="/dashboard">
             Get Started
             <ArrowRight className="size-4" aria-hidden="true" />
-          </Link>
+          </ShinyButton>
         </div>
 
         <div
