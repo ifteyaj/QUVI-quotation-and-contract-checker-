@@ -21,6 +21,58 @@ const GRID_DARK_STYLE = {
     "linear-gradient(to right, rgba(255,255,255,0.045) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.045) 1px, transparent 1px)",
 } as const;
 
+/**
+ * Ambient blue atmosphere for the hero.
+ *
+ * One very large, very low-opacity radial falloff of a single hue. Three
+ * details keep it from looking like a stack of circles:
+ *  - every stop keeps the same blue and only its opacity changes, instead of
+ *    fading to `transparent` (which interpolates through transparent black and
+ *    produced the grey halo and band edges);
+ *  - the ellipse is far wider than the viewport, so there is no sideways
+ *    hotspot — only a gentle wash that is brightest behind the headline;
+ *  - the opacity follows (1 - t²)², a bell curve that reaches zero with zero
+ *    slope at both centre and rim, then keeps fading in small steps all the way
+ *    to 100%, so there is no edge, no seam and no concentrated spot anywhere.
+ * No blur filter is used either: blurring an oversized box reintroduces a hard
+ * clip at the box boundary.
+ */
+const AMBIENT_DARK_STYLE = {
+  backgroundImage: `
+    radial-gradient(140% 72% at 50% 26%,
+      rgba(59,130,246,0.130) 0%,
+      rgba(59,130,246,0.127) 10%,
+      rgba(59,130,246,0.120) 20%,
+      rgba(59,130,246,0.108) 30%,
+      rgba(59,130,246,0.092) 40%,
+      rgba(59,130,246,0.073) 50%,
+      rgba(59,130,246,0.053) 60%,
+      rgba(59,130,246,0.034) 70%,
+      rgba(59,130,246,0.017) 80%,
+      rgba(59,130,246,0.005) 90%,
+      rgba(59,130,246,0.000) 100%
+    )
+  `,
+} as const;
+
+const AMBIENT_LIGHT_STYLE = {
+  backgroundImage: `
+    radial-gradient(140% 72% at 50% 26%,
+      rgba(37,99,235,0.095) 0%,
+      rgba(37,99,235,0.093) 10%,
+      rgba(37,99,235,0.088) 20%,
+      rgba(37,99,235,0.079) 30%,
+      rgba(37,99,235,0.067) 40%,
+      rgba(37,99,235,0.053) 50%,
+      rgba(37,99,235,0.039) 60%,
+      rgba(37,99,235,0.025) 70%,
+      rgba(37,99,235,0.012) 80%,
+      rgba(37,99,235,0.003) 90%,
+      rgba(37,99,235,0.000) 100%
+    )
+  `,
+} as const;
+
 export default function WelcomePage() {
   return (
     <main className="relative min-h-dvh overflow-clip bg-background">
@@ -36,15 +88,18 @@ export default function WelcomePage() {
       />
 
       <section className="relative z-10 flex flex-col items-center px-6 pb-0 pt-16 text-center sm:pt-24">
-        {/* Ambient blue atmosphere: large overlapping radials, heavily blurred,
-            so there is no visible circle or hotspot — just a faint blue wash. */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0">
-          <div className="absolute left-1/2 top-[16%] h-[720px] w-[1240px] max-w-[150vw] -translate-x-1/2 -translate-y-1/2 bg-radial from-primary/[0.035] to-transparent to-70% blur-3xl" />
-          <div className="absolute left-1/2 top-[40%] h-[680px] w-[1120px] max-w-[140vw] -translate-x-1/2 -translate-y-1/2 bg-radial from-primary/[0.055] via-primary/[0.02] to-transparent to-75% blur-3xl" />
-          <div className="absolute left-1/2 top-[60%] h-[540px] w-[880px] -translate-x-1/2 -translate-y-1/2 bg-radial from-primary/[0.045] to-transparent to-70% blur-3xl" />
-          <div className="absolute left-1/2 top-[78%] h-[600px] w-[1160px] max-w-[140vw] -translate-x-1/2 -translate-y-1/2 bg-radial from-primary/[0.06] via-primary/[0.025] to-transparent to-75% blur-3xl" />
-          <div className="absolute left-1/2 top-[90%] h-[380px] w-[760px] -translate-x-1/2 -translate-y-1/2 bg-radial from-primary/[0.04] to-transparent to-70% blur-3xl" />
-        </div>
+        {/* Ambient blue atmosphere: see AMBIENT_*_STYLE above for why this is a
+            single continuous wash rather than stacked blurred circles. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-0 dark:hidden"
+          style={AMBIENT_LIGHT_STYLE}
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-0 hidden dark:block"
+          style={AMBIENT_DARK_STYLE}
+        />
 
         <div className="relative z-20 flex items-center justify-center">
           <Image
